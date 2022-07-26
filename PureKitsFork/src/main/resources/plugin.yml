@@ -1,0 +1,6 @@
+name: PureKitsNerdEdit
+version: '${project.version}'
+main: me.lifelessnerd.purekitsnerdedit.Main.PureKitsNerdEdit
+api-version: 1.19
+authors: [ PsionicPvP, LifelessNerd ]
+description: PureKits fork, customised
