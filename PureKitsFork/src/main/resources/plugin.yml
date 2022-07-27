@@ -1,6 +1,27 @@
-name: PureKitsNerdEdit
+name: PureKitPvP
 version: '${project.version}'
-main: me.lifelessnerd.purekitsnerdedit.Main.PureKitsNerdEdit
+main: me.lifelessnerd.purekitpvp.PureKitPvP
 api-version: 1.19
 authors: [ PsionicPvP, LifelessNerd ]
 description: PureKits fork, customised
+commands:
+  getkit:
+    description: Gives you a kit.
+    usage: /getkit <kitName>
+  resetkit:
+    description: Resets your kit.
+    usage: /resetkit
+  kit:
+    description: Shows kit selection GUI.
+    usage: /kit
+  createkit:
+    description: Creates a kit from your current inventory.
+    usage: /createkit <kitName> <displayName> <kitIcon> <kitPermission>
+  deletekit:
+    description: Removes a kit.
+    usage: /deletekit <kitName>
+    aliases:
+      - removekit
+
+
+
