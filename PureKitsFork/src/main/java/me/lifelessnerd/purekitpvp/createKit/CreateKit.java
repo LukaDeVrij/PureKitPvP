@@ -41,11 +41,12 @@ public class CreateKit implements TabExecutor {
         //Store arguments
         KitIcon kitIconLib = new KitIcon();
         String kitIcon = "STONE";
-        String kitPermission = "kits.other";
-        String kitName = args[0];
-        String displayName = args[1];
+        String kitPermission = "kit.other";
+        String kitName = args[0].toLowerCase();
+        kitName = kitName.substring(0, 1).toUpperCase() + kitName.substring(1);
+        String displayColor = args[1];
         if (Arrays.asList(kitIconLib.materialList).contains(args[2])){
-            kitIcon = args[2];
+            kitIcon = args[2].toUpperCase();
 
         }else {
             player.sendMessage(args[2] + " is not a valid option.");
@@ -62,14 +63,14 @@ public class CreateKit implements TabExecutor {
         ItemStack boots = player.getInventory().getBoots();
         ItemStack[] kitContents = player.getInventory().getContents();
 
-        player.sendMessage("Kit made with name: " + kitName + ", displayName: " + displayName + ", kitIcon: " + kitIcon + ", kitPermission: " + kitPermission);
+        player.sendMessage("Kit made with name: " + kitName + ", displayColor: " + displayColor + ", kitIcon: " + kitIcon + ", kitPermission: " + kitPermission);
 
         //Set permission
         plugin.getConfig().addDefault("kits." + kitName + ".permission", "");
         plugin.getConfig().set("kits." + kitName + ".permission", kitPermission);
 
         plugin.getConfig().addDefault("kits." + kitName + ".displayname", "");
-        plugin.getConfig().set("kits." + kitName + ".displayname", displayName);
+        plugin.getConfig().set("kits." + kitName + ".displayname", displayColor);
 
         plugin.getConfig().addDefault("kits." + kitName + ".guiitem", "");
         plugin.getConfig().set("kits." + kitName + ".guiitem", kitIcon);
@@ -109,7 +110,17 @@ public class CreateKit implements TabExecutor {
         }
         if (args.length == 2){
             List<String> arguments = new ArrayList<>();
-            arguments.add("<displayName>");
+            arguments.add("&1");
+            arguments.add("&2");
+            arguments.add("&3");
+            arguments.add("&4");
+            arguments.add("&5");
+            arguments.add("&6");
+            arguments.add("&7");
+            arguments.add("&8");
+            arguments.add("&9");
+            arguments.add("&0");
+
             return arguments;
         }
         if (args.length == 3){

@@ -31,8 +31,11 @@ public class GetKit implements TabExecutor, Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
 
-        Player player = e.getEntity();
-        player.sendMessage("DABDABDAB");
+        Player player = e.getPlayer();
+        if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+            return;
+        }
+
         hasKit.remove(player.getName());
 
     }
@@ -44,6 +47,7 @@ public class GetKit implements TabExecutor, Listener {
             return false;
         }
         Player player = (Player) sender;
+        String kitNameArg = args[0].substring(0, 1).toUpperCase() + args[0].substring(1);
 
         if (hasKit.contains(player.getName())){
             player.sendMessage(ChatColor.GRAY + "You already have a kit!");
@@ -55,27 +59,27 @@ public class GetKit implements TabExecutor, Listener {
             return false;
         }
 
-        if (!(plugin.getConfig().isSet("kits." + args[0]))){
+        if (!(plugin.getConfig().isSet("kits." + kitNameArg))){
             player.sendMessage(ChatColor.GRAY + "That kit does not exist.");
             return true;
         }
 
-        if(!plugin.getConfig().isSet("kits." + args[0] + ".permission")){
+        if(!plugin.getConfig().isSet("kits." + kitNameArg + ".permission")){
             player.sendMessage(ChatColor.GRAY + "That kit does not have a permission associated. Please report to your administrator.");
             //TODO: Make permissions optional without duplicating code ideally
             return true;
         }
 
-        if (!(player.hasPermission(plugin.getConfig().getString("kits." + args[0] + ".permission")))){ //IDEA lies
+        if (!(player.hasPermission(plugin.getConfig().getString("kits." + kitNameArg + ".permission")))){ //IDEA lies
             player.sendMessage(ChatColor.GRAY + "You do not have permission!");
             return true;
         }
 
         //Okay, if all checks are passed, player may get the kit
-        player.sendMessage(ChatColor.GRAY + "Kit " + ChatColor.BLUE + args[0] + ChatColor.GRAY + " given.");
+        player.sendMessage(ChatColor.GRAY + "Kit " + ChatColor.BLUE + kitNameArg + ChatColor.GRAY + " given.");
 
         FileConfiguration fileConfiguration = plugin.getConfig();
-        Object kitObject = fileConfiguration.get("kits." + args[0] + ".contents");
+        Object kitObject = fileConfiguration.get("kits." + kitNameArg + ".contents");
         List<ItemStack> kitItems = (List<ItemStack>) kitObject;
 
         //Remove any potion effects that make PvP unfair
@@ -89,13 +93,13 @@ public class GetKit implements TabExecutor, Listener {
                 item = new ItemStack(Material.AIR);
             }
             player.getInventory().setItem(index, item);
-            ItemStack helmet = fileConfiguration.getItemStack("kits." + args[0] + ".helmet");
+            ItemStack helmet = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
             player.getInventory().setHelmet(helmet);
-            ItemStack chestplate = fileConfiguration.getItemStack("kits." + args[0] + ".helmet");
+            ItemStack chestplate = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
             player.getInventory().setHelmet(chestplate);
-            ItemStack leggings = fileConfiguration.getItemStack("kits." + args[0] + ".helmet");
+            ItemStack leggings = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
             player.getInventory().setHelmet(leggings);
-            ItemStack boots = fileConfiguration.getItemStack("kits." + args[0] + ".helmet");
+            ItemStack boots = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
             player.getInventory().setHelmet(boots);
         }
 
@@ -109,10 +113,16 @@ public class GetKit implements TabExecutor, Listener {
 
         if (args.length == 1){
             List<String> autoComplete = new ArrayList<>();
-            autoComplete.addAll(this.plugin.getConfig().getConfigurationSection("kits.").getKeys(false));
+            for(String key : plugin.getConfig().getConfigurationSection("kits.").getKeys(false)){
+                key = key.toLowerCase();
+                autoComplete.add(key);
+            };
 
             return autoComplete;
         }
-        return null;
+
+
+
+        return new ArrayList<>();
     }
 }

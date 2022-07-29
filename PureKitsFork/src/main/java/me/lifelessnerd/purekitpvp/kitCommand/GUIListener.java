@@ -25,16 +25,30 @@ public class GUIListener implements Listener {
 
         if (player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world"))){
 
-            ItemStack clickedItem = e.getCurrentItem();
-            InventoryView inv = e.getView();
-            if (inv.title().toString().contains("Kits")) { //I hate component
-                e.setCancelled(true);
-                String displayName = clickedItem.getItemMeta().getDisplayName();
-                displayName = ChatColor.stripColor(displayName);
-                player.chat("/getkit " + displayName);
-                player.closeInventory();
-            }
+            if (!(e.getCurrentItem() == null && e.getRawSlot() >= 53)){
+                ItemStack clickedItem = e.getCurrentItem();
+                InventoryView inv = e.getView();
+                if (inv.title().toString().contains("Kits")) { //I hate component
 
+                    if (!(e.getRawSlot() == 53)){ // 53 is reset button
+                        e.setCancelled(true);
+                        String displayName = clickedItem.getItemMeta().getDisplayName();
+                        displayName = ChatColor.stripColor(displayName);
+                        player.chat("/getkit " + displayName);
+                        player.closeInventory();
+                    }
+                    else {
+                        e.setCancelled(true);
+                        if (player.hasPermission("purekitpvp.admin.resetkit")){
+                            player.chat("/resetkit");
+                        }
+                        else {
+                            player.setHealth(0);
+                        }
+                    }
+
+                }
+            }
         }
     }
 }
