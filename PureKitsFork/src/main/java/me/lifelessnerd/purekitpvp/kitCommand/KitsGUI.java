@@ -1,7 +1,7 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
 
-import me.lifelessnerd.purekitpvp.utils.StringUtils;
+import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
@@ -108,21 +108,21 @@ public class KitsGUI implements TabExecutor {
                 } else if (item.getType().toString().equalsIgnoreCase("SPLASH_POTION")){
                     //Do stuff with potions
                     String amount = String.valueOf(item.getAmount());
-                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + StringUtils.itemCamelCase(item.getType().toString()));
-                    lore.add("    " + ChatColor.GRAY + StringUtils.itemMetaToEffects(item.getItemMeta().toString()));
+                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(item.getType().toString()));
+                    lore.add("    " + ChatColor.GRAY + MyStringUtils.itemMetaToEffects(item.getItemMeta().toString()));
 
                 } else if (item.getType().toString().equalsIgnoreCase("POTION")){
                     //Do stuff with potions
                     String amount = String.valueOf(item.getAmount());
-                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + StringUtils.itemCamelCase(item.getType().toString()));
-                    lore.add("    " + ChatColor.GRAY + StringUtils.itemMetaToEffects(item.getItemMeta().toString()));
+                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(item.getType().toString()));
+                    lore.add("    " + ChatColor.GRAY + MyStringUtils.itemMetaToEffects(item.getItemMeta().toString()));
 
                 } else {
                     String amount = String.valueOf(item.getAmount());
-                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + StringUtils.itemCamelCase(item.getType().toString()));
+                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(item.getType().toString()));
                     //If it has enchants, view them
                     if (!(item.getEnchantments().isEmpty())){
-                        lore.add("    " + ChatColor.GRAY + StringUtils.mapStringToEnchantment(item.getEnchantments().toString()));
+                        lore.add("    " + ChatColor.GRAY + MyStringUtils.mapStringToEnchantment(item.getEnchantments().toString()));
                     }
 
                 }

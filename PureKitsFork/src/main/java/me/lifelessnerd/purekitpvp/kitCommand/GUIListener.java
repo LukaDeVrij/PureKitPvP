@@ -25,13 +25,16 @@ public class GUIListener implements Listener {
 
         if (player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world"))){
 
-            if (!(e.getCurrentItem() == null && e.getRawSlot() >= 53)){
+            if (!(e.getCurrentItem() == null && e.getRawSlot() >= 53)){ //NPE, idk why
                 ItemStack clickedItem = e.getCurrentItem();
                 InventoryView inv = e.getView();
                 if (inv.title().toString().contains("Kits")) { //I hate component
 
                     if (!(e.getRawSlot() == 53)){ // 53 is reset button
                         e.setCancelled(true);
+                        if(clickedItem == null){ //
+                            return;
+                        }
                         String displayName = clickedItem.getItemMeta().getDisplayName();
                         displayName = ChatColor.stripColor(displayName);
                         player.chat("/getkit " + displayName);

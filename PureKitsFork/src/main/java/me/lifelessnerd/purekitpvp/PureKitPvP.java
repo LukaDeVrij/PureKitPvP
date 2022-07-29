@@ -1,8 +1,10 @@
 package me.lifelessnerd.purekitpvp;
 
+import me.lifelessnerd.purekitpvp.combathandlers.KillHandler;
 import me.lifelessnerd.purekitpvp.createKit.CreateKit;
 import me.lifelessnerd.purekitpvp.createKit.DeleteKit;
-import me.lifelessnerd.purekitpvp.deathhandlers.DeathHandler;
+import me.lifelessnerd.purekitpvp.combathandlers.DeathHandler;
+import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.kitCommand.GUIListener;
 import me.lifelessnerd.purekitpvp.kitCommand.GetKit;
 import me.lifelessnerd.purekitpvp.kitCommand.KitsGUI;
@@ -13,10 +15,16 @@ public final class PureKitPvP extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getLogger().info("Enabled NerdKits");
+        getLogger().info("Enabled PureKitPvP");
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
+
+        //Kits config
+        KitConfig.setup();
+        KitConfig.get().addDefault("kits", null);
+        KitConfig.get().options().copyDefaults(true);
+        KitConfig.save();
 
         getCommand("getkit").setExecutor(new GetKit(this));
         getCommand("resetkit").setExecutor(new ResetKit());
@@ -26,6 +34,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GetKit(this), this);
         getServer().getPluginManager().registerEvents(new GUIListener(this), this);
         getServer().getPluginManager().registerEvents(new DeathHandler(this), this);
+        getServer().getPluginManager().registerEvents(new KillHandler(this), this);
 
     }
 

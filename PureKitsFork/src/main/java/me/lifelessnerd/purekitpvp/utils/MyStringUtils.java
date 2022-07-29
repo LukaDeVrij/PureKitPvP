@@ -1,6 +1,6 @@
 package me.lifelessnerd.purekitpvp.utils;
 
-public class StringUtils {
+public class MyStringUtils {
 
     public static String itemCamelCase(String string){
         //Input: IRON_SWORD
@@ -39,7 +39,7 @@ public class StringUtils {
             String levelString = splitAgain[1];
             int level = Integer.parseInt(String.valueOf(levelString.charAt(levelString.length() - 1)));
             word = splitAgain[0];
-            word = StringUtils.itemCamelCase(word);
+            word = MyStringUtils.itemCamelCase(word);
             result.append(word).append(level).append(" ");
         }
 
