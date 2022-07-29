@@ -137,7 +137,7 @@ public class DurationUtils {
      * @return The corresponding ChronoUnit.
      */
     static ChronoUnit toChronoUnit(final TimeUnit timeUnit) {
-        // TODO when using Java >= 9: Use TimeUnit.toChronoUnit().
+        // NOTE when using Java >= 9: Use TimeUnit.toChronoUnit().
         switch (Objects.requireNonNull(timeUnit)) {
         case NANOSECONDS:
             return ChronoUnit.NANOS;

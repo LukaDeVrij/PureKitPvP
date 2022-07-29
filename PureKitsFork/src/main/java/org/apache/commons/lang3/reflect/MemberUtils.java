@@ -31,7 +31,7 @@ import org.apache.commons.lang3.ClassUtils;
  * @since 2.5
  */
 final class MemberUtils {
-    // TODO extract an interface to implement compareParameterSets(...)?
+    // NOTE extract an interface to implement compareParameterSets(...)?
 
     private static final int ACCESS_TEST = Modifier.PUBLIC | Modifier.PROTECTED | Modifier.PRIVATE;
 

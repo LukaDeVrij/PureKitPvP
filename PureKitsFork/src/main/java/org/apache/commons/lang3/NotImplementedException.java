@@ -23,7 +23,7 @@ package org.apache.commons.lang3;
  *
  * <p>{@link NotImplementedException} represents the case where the
  * author has yet to implement the logic at this point in the program.
- * This can act as an exception based TODO tag. </p>
+ * This can act as an exception based T ODO tag. </p>
  *
  * <pre>
  * public void foo() {
@@ -31,7 +31,7 @@ package org.apache.commons.lang3;
  *     // do something that throws an Exception
  *   } catch (Exception ex) {
  *     // don't know what to do here yet
- *     throw new NotImplementedException("TODO", ex);
+ *     throw new NotImplementedException("T ODO", ex);
  *   }
  * }
  * </pre>

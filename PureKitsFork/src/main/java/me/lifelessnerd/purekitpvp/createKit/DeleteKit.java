@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.createKit;
 
+import me.lifelessnerd.purekitpvp.files.KitConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -40,15 +41,15 @@ public class DeleteKit implements TabExecutor {
         String kitName = args[0].toLowerCase();
         kitName = kitName.substring(0, 1).toUpperCase() + kitName.substring(1);
 
-        if(plugin.getConfig().get("kits." + kitName) == null){
+        if(KitConfig.get().get("kits." + kitName) == null){
 
             player.sendMessage(ChatColor.GRAY + "That kit does not exist.");
             return true;
         }
 
-        plugin.getConfig().getConfigurationSection("kits").set(kitName, null);
-        this.plugin.saveConfig();
-        this.plugin.reloadConfig();
+        KitConfig.get().getConfigurationSection("kits").set(kitName, null);
+        KitConfig.save();
+        KitConfig.reload();
         player.sendMessage("You removed kit " + ChatColor.BLUE + kitName);
 
 

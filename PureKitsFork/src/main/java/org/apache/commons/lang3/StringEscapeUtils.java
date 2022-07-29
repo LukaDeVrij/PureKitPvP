@@ -247,7 +247,7 @@ public class StringEscapeUtils {
      */
     public static final CharSequenceTranslator ESCAPE_CSV = new CsvEscaper();
 
-    // TODO: Create a parent class - 'SinglePassTranslator' ?
+    // NOTE: Create a parent class - 'SinglePassTranslator' ?
     //       It would handle the index checking + length returning,
     //       and could also have an optimization check method.
     static class CsvEscaper extends CharSequenceTranslator {
@@ -286,7 +286,7 @@ public class StringEscapeUtils {
      *
      * @since 3.0
      */
-    // TODO: throw "illegal character: \92" as an Exception if a \ on the end of the Java (as per the compiler)?
+    // NOTE: throw "illegal character: \92" as an Exception if a \ on the end of the Java (as per the compiler)?
     public static final CharSequenceTranslator UNESCAPE_JAVA =
         new AggregateTranslator(
             new OctalUnescaper(),     // .between('\1', '\377'),

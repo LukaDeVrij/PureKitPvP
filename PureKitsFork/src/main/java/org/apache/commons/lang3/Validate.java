@@ -796,7 +796,7 @@ public class Validate {
      * @since 3.0
      */
     public static void matchesPattern(final CharSequence input, final String pattern) {
-        // TODO when breaking BC, consider returning input
+        // NOTE when breaking BC, consider returning input
         if (!Pattern.matches(pattern, input)) {
             throw new IllegalArgumentException(String.format(DEFAULT_MATCHES_PATTERN_EX, input, pattern));
         }
@@ -820,7 +820,7 @@ public class Validate {
      * @since 3.0
      */
     public static void matchesPattern(final CharSequence input, final String pattern, final String message, final Object... values) {
-        // TODO when breaking BC, consider returning input
+        // NOTE when breaking BC, consider returning input
         if (!Pattern.matches(pattern, input)) {
             throw new IllegalArgumentException(String.format(message, values));
         }
@@ -919,7 +919,7 @@ public class Validate {
      * @since 3.0
      */
     public static <T> void inclusiveBetween(final T start, final T end, final Comparable<T> value) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value.compareTo(start) < 0 || value.compareTo(end) > 0) {
             throw new IllegalArgumentException(String.format(DEFAULT_INCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
         }
@@ -944,7 +944,7 @@ public class Validate {
      * @since 3.0
      */
     public static <T> void inclusiveBetween(final T start, final T end, final Comparable<T> value, final String message, final Object... values) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value.compareTo(start) < 0 || value.compareTo(end) > 0) {
             throw new IllegalArgumentException(String.format(message, values));
         }
@@ -965,7 +965,7 @@ public class Validate {
      */
     @SuppressWarnings("boxing")
     public static void inclusiveBetween(final long start, final long end, final long value) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value < start || value > end) {
             throw new IllegalArgumentException(String.format(DEFAULT_INCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
         }
@@ -988,7 +988,7 @@ public class Validate {
      * @since 3.3
      */
     public static void inclusiveBetween(final long start, final long end, final long value, final String message) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value < start || value > end) {
             throw new IllegalArgumentException(message);
         }
@@ -1009,7 +1009,7 @@ public class Validate {
      */
     @SuppressWarnings("boxing")
     public static void inclusiveBetween(final double start, final double end, final double value) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value < start || value > end) {
             throw new IllegalArgumentException(String.format(DEFAULT_INCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
         }
@@ -1032,7 +1032,7 @@ public class Validate {
      * @since 3.3
      */
     public static void inclusiveBetween(final double start, final double end, final double value, final String message) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value < start || value > end) {
             throw new IllegalArgumentException(message);
         }
@@ -1054,7 +1054,7 @@ public class Validate {
      * @since 3.0
      */
     public static <T> void exclusiveBetween(final T start, final T end, final Comparable<T> value) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value.compareTo(start) <= 0 || value.compareTo(end) >= 0) {
             throw new IllegalArgumentException(String.format(DEFAULT_EXCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
         }
@@ -1079,7 +1079,7 @@ public class Validate {
      * @since 3.0
      */
     public static <T> void exclusiveBetween(final T start, final T end, final Comparable<T> value, final String message, final Object... values) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value.compareTo(start) <= 0 || value.compareTo(end) >= 0) {
             throw new IllegalArgumentException(String.format(message, values));
         }
@@ -1100,7 +1100,7 @@ public class Validate {
      */
     @SuppressWarnings("boxing")
     public static void exclusiveBetween(final long start, final long end, final long value) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value <= start || value >= end) {
             throw new IllegalArgumentException(String.format(DEFAULT_EXCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
         }
@@ -1123,7 +1123,7 @@ public class Validate {
      * @since 3.3
      */
     public static void exclusiveBetween(final long start, final long end, final long value, final String message) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value <= start || value >= end) {
             throw new IllegalArgumentException(message);
         }
@@ -1144,7 +1144,7 @@ public class Validate {
      */
     @SuppressWarnings("boxing")
     public static void exclusiveBetween(final double start, final double end, final double value) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value <= start || value >= end) {
             throw new IllegalArgumentException(String.format(DEFAULT_EXCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
         }
@@ -1167,7 +1167,7 @@ public class Validate {
      * @since 3.3
      */
     public static void exclusiveBetween(final double start, final double end, final double value, final String message) {
-        // TODO when breaking BC, consider returning value
+        // NOTE when breaking BC, consider returning value
         if (value <= start || value >= end) {
             throw new IllegalArgumentException(message);
         }
@@ -1190,7 +1190,7 @@ public class Validate {
      * @since 3.0
      */
     public static void isInstanceOf(final Class<?> type, final Object obj) {
-        // TODO when breaking BC, consider returning obj
+        // NOTE when breaking BC, consider returning obj
         if (!type.isInstance(obj)) {
             throw new IllegalArgumentException(String.format(DEFAULT_IS_INSTANCE_OF_EX_MESSAGE, type.getName(),
                     obj == null ? "null" : obj.getClass().getName()));
@@ -1215,7 +1215,7 @@ public class Validate {
      * @since 3.0
      */
     public static void isInstanceOf(final Class<?> type, final Object obj, final String message, final Object... values) {
-        // TODO when breaking BC, consider returning obj
+        // NOTE when breaking BC, consider returning obj
         if (!type.isInstance(obj)) {
             throw new IllegalArgumentException(String.format(message, values));
         }
@@ -1238,7 +1238,7 @@ public class Validate {
      * @since 3.0
      */
     public static void isAssignableFrom(final Class<?> superType, final Class<?> type) {
-        // TODO when breaking BC, consider returning type
+        // NOTE when breaking BC, consider returning type
         if (type == null || superType == null || !superType.isAssignableFrom(type)) {
             throw new IllegalArgumentException(
                 String.format(DEFAULT_IS_ASSIGNABLE_EX_MESSAGE, ClassUtils.getName(type, "null type"), ClassUtils.getName(superType, "null type")));
@@ -1263,7 +1263,7 @@ public class Validate {
      * @see #isAssignableFrom(Class, Class)
      */
     public static void isAssignableFrom(final Class<?> superType, final Class<?> type, final String message, final Object... values) {
-        // TODO when breaking BC, consider returning type
+        // NOTE when breaking BC, consider returning type
         if (!superType.isAssignableFrom(type)) {
             throw new IllegalArgumentException(String.format(message, values));
         }

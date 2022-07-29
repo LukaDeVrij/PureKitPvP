@@ -301,7 +301,7 @@ public class ObjectUtils {
     /**
      * <p>Null safe comparison of Comparables.
      * {@code null} is assumed to be less than a non-{@code null} value.</p>
-     * <p>TODO Move to ComparableUtils.</p>
+     * <p>NOTE Move to ComparableUtils.</p>
      *
      * @param <T> type of the values processed by this method
      * @param c1  the first comparable, may be null
@@ -315,7 +315,7 @@ public class ObjectUtils {
 
     /**
      * <p>Null safe comparison of Comparables.</p>
-     * <p>TODO Move to ComparableUtils.</p>
+     * <p>NOTE Move to ComparableUtils.</p>
      *
      * @param <T> type of the values processed by this method
      * @param c1  the first comparable, may be null
@@ -599,7 +599,7 @@ public class ObjectUtils {
      * @param object  the {@link Object} to test, may be {@code null}
      * @param defaultValue  the default value to return, may be {@code null}
      * @return {@code object} if it is not {@code null}, defaultValue otherwise
-     * TODO Rename to getIfNull in 4.0
+     * NOTE Rename to getIfNull in 4.0
      */
     public static <T> T defaultIfNull(final T object, final T defaultValue) {
         return object != null ? object : defaultValue;
@@ -1085,7 +1085,7 @@ public class ObjectUtils {
 
     /**
      * <p>Null safe comparison of Comparables.</p>
-     * <p>TODO Move to ComparableUtils.</p>
+     * <p>NOTE Move to ComparableUtils.</p>
      *
      * @param <T> type of the values processed by this method
      * @param values the set of comparable values, may be null
@@ -1156,7 +1156,7 @@ public class ObjectUtils {
 
     /**
      * <p>Null safe comparison of Comparables.</p>
-     * <p>TODO Move to ComparableUtils.</p>
+     * <p>NOTE Move to ComparableUtils.</p>
      *
      * @param <T> type of the values processed by this method
      * @param values the set of comparable values, may be null

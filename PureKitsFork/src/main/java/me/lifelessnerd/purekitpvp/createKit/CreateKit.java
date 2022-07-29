@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.createKit;
 
+import me.lifelessnerd.purekitpvp.files.KitConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -63,35 +64,27 @@ public class CreateKit implements TabExecutor {
         ItemStack boots = player.getInventory().getBoots();
         ItemStack[] kitContents = player.getInventory().getContents();
 
-        player.sendMessage("Kit made with name: " + kitName + ", displayColor: " + displayColor + ", kitIcon: " + kitIcon + ", kitPermission: " + kitPermission);
-
         //Set permission
-        plugin.getConfig().addDefault("kits." + kitName + ".permission", "");
-        plugin.getConfig().set("kits." + kitName + ".permission", kitPermission);
+        KitConfig.get().addDefault("kits." + kitName + ".permission", "");
+        KitConfig.get().set("kits." + kitName + ".permission", kitPermission);
+        KitConfig.get().addDefault("kits." + kitName + ".displayname", "");
+        KitConfig.get().set("kits." + kitName + ".displayname", displayColor);
+        KitConfig.get().addDefault("kits." + kitName + ".guiitem", "");
+        KitConfig.get().set("kits." + kitName + ".guiitem", kitIcon);
+        KitConfig.get().addDefault("kits." + kitName, "");
+        KitConfig.get().addDefault("kits." + kitName + ".displayname", "&7" + args[0]);
+        KitConfig.get().addDefault("kits." + kitName + ".guiitem", "STONE");
+        KitConfig.get().addDefault("kits." + kitName + ".guilore", "");
+        KitConfig.get().set("kits." + kitName + ".helmet", helmet);
+        KitConfig.get().set("kits." + kitName + ".chestplate", chestplate);
+        KitConfig.get().set("kits." + kitName + ".leggings", leggings);
+        KitConfig.get().set("kits." + kitName + ".boots", boots);
+        KitConfig.get().addDefault("kits." + kitName + ".contents", kitContents);
+        KitConfig.get().options().copyDefaults(true);
+        KitConfig.save();
+        KitConfig.reload();
 
-        plugin.getConfig().addDefault("kits." + kitName + ".displayname", "");
-        plugin.getConfig().set("kits." + kitName + ".displayname", displayColor);
-
-        plugin.getConfig().addDefault("kits." + kitName + ".guiitem", "");
-        plugin.getConfig().set("kits." + kitName + ".guiitem", kitIcon);
-
-        //Add things to config
-        plugin.getConfig().addDefault("kits." + kitName, "");
-        plugin.getConfig().addDefault("kits." + kitName + ".displayname", "&7" + args[0]);
-        plugin.getConfig().addDefault("kits." + kitName + ".guiitem", "STONE");
-        plugin.getConfig().addDefault("kits." + kitName + ".guilore", "");
-        plugin.getConfig().set("kits." + kitName + ".helmet", helmet);
-        plugin.getConfig().set("kits." + kitName + ".chestplate", chestplate);
-        plugin.getConfig().set("kits." + kitName + ".leggings", leggings);
-        plugin.getConfig().set("kits." + kitName + ".boots", boots);
-
-        plugin.getConfig().addDefault("kits." + kitName + ".contents", kitContents);
-
-
-        plugin.getConfig().options().copyDefaults(true);
-        plugin.saveConfig();
-        plugin.reloadConfig();
-        player.sendMessage("Kit created.");
+        player.sendMessage("Kit made with name: " + kitName + ", displayColor: " + displayColor + ", kitIcon: " + kitIcon + ", kitPermission: " + kitPermission);
 
         return true;
     }

@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
 
+import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -40,7 +41,7 @@ public class KitsGUI implements TabExecutor {
         }
         Player player = (Player) sender;
 
-        if (!plugin.getConfig().isSet("kits.")) {
+        if (!KitConfig.get().isSet("kits.")) {
             player.sendMessage(ChatColor.GRAY + "There aren't any kits yet!");
             return true;
         }
@@ -52,7 +53,7 @@ public class KitsGUI implements TabExecutor {
         //Create inventory GUI
         TextComponent inventoryTitle = Component.text("Kits").color(TextColor.color(255, 150, 20));
         Inventory kits = Bukkit.createInventory(null, 54, inventoryTitle);
-        for (String key : plugin.getConfig().getConfigurationSection("kits").getKeys(false)) {
+        for (String key : KitConfig.get().getConfigurationSection("kits").getKeys(false)) {
 
             ItemStack itemStack = new ItemStack(Material.BARRIER);
             ItemMeta itemMeta = itemStack.getItemMeta();
@@ -60,19 +61,20 @@ public class KitsGUI implements TabExecutor {
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
             //NPE GALORE, TODO: idiot proof if these keys do not exist, instead of crashing entire plugin with an NPE
+            //TODO: Actually i have no idea what this is referring to, I get no NPE's in the GUI ever
             //Set block
 
-            itemStack.setType(Material.getMaterial(plugin.getConfig().getString("kits." + key + ".guiitem")));
+            itemStack.setType(Material.getMaterial(KitConfig.get().getString("kits." + key + ".guiitem")));
 
             //Set lore
 
-            String loreText = plugin.getConfig().getString("kits." + key + ".guilore");
+            String loreText = KitConfig.get().getString("kits." + key + ".guilore");
             loreText = ChatColor.translateAlternateColorCodes('&', loreText);
             ArrayList<String> lore = new ArrayList<>();
             lore.add(loreText);
 
             // Item lore that consists of contents of kit
-            FileConfiguration fileConfiguration = plugin.getConfig();
+            FileConfiguration fileConfiguration = KitConfig.get();
             Object kitObject = fileConfiguration.get("kits." + key + ".contents");
             List<ItemStack> kitItems = (List<ItemStack>) kitObject;
             lore.add(ChatColor.BLUE + "Weapons:");
@@ -132,7 +134,7 @@ public class KitsGUI implements TabExecutor {
             itemMeta.setLore(lore); //Heck you Component
 
             //Set meta
-            String kitDisplayColor = plugin.getConfig().getString("kits." + key + ".displayname");
+            String kitDisplayColor = KitConfig.get().getString("kits." + key + ".displayname");
             kitDisplayColor = ChatColor.translateAlternateColorCodes('&', kitDisplayColor);
             itemMeta.setDisplayName(kitDisplayColor + key); //Heck you Component
             itemStack.setItemMeta(itemMeta);

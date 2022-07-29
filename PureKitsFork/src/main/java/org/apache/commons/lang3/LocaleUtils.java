@@ -305,7 +305,7 @@ public class LocaleUtils {
      */
     public static Locale toLocale(final String str) {
         if (str == null) {
-            // TODO Should this return the default locale?
+            // NOTE Should this return the default locale?
             return null;
         }
         if (str.isEmpty()) { // LANG-941 - JDK 8 introduced an empty locale where all fields are blank

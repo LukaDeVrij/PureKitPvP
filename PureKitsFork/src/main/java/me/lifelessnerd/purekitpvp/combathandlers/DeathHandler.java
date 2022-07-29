@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp.combathandlers;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
@@ -32,37 +33,32 @@ public class DeathHandler implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e){
-        String killer;
+
+
         Player player = e.getPlayer();
-        if (e.getPlayer().getKiller() != null) {
-            killer = e.getPlayer().getKiller().getName();
-        }
-        else {
-            killer = "ENVIRONMENT";
-        }
+
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
             return;
         }
-        Bukkit.broadcast(Component.text(player.getName() + " was killed by " + killer));
-        //Check Streaks
+
+        //Check Streaks if player was lastPlayerBlow
         //streakChecker();
+
+        //Reset player
         e.setCancelled(true);
         player.teleport(new Location(player.getWorld(), 0, 145, 0));
         player.getInventory().clear();
         player.getActivePotionEffects().clear();
 
-        Component mainTitle = Component.text("You died!").color(TextColor.color(230,60,60));
-        Component subTitle = Component.text("The last blow was given by " + killer);
-        Title title = Title.title(mainTitle, subTitle);
-        player.showTitle(title);
 
-        //Get all damage info and do stuff with it
+        //Get all damage info and print to killed player
         NamespacedKey key = new NamespacedKey(plugin, "damageDistributionInfo");
         PlayerDamageDistribution data = player.getPersistentDataContainer().get(key, new PlayerDamageDistributionDataType());
         String message = "&c&lYou died!";
         player.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Death Recap:"));
+
         int totalDamageDone = 0;
         for (String hashmapKey : data.damageDistributionMap.keySet()){
             totalDamageDone += data.damageDistributionMap.get(hashmapKey);
@@ -73,6 +69,41 @@ public class DeathHandler implements Listener {
             String format = "&7- &a" + hashmapKey + "&7 did &a" + (int) damagePercentage + "%";
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', format));
         }
+
+        //Broadcasting and stuff
+        // use 'lastPlayerBlow' to determine kill message and such
+        DamageCauseLib damageCauseLib = new DamageCauseLib();
+        String deathMessage = player.getName();
+
+        String credit = " was killed by a mysterious force";
+        String lastEnvironmentHit;
+
+        //Check who should get credit
+        if (data.lastPlayerDamager == null && data.lastOtherDamager != null){
+            //This means the player was completely killed by environment, no player killer
+            lastEnvironmentHit = data.lastOtherDamager;
+            credit = damageCauseLib.deathMessages.get(lastEnvironmentHit); //TODO: not grabbing idk why?
+
+        }
+        if (data.lastPlayerDamager != null && data.lastOtherDamager != null){
+            //This means player got damage from both
+            credit = " was killed by " + data.lastPlayerDamager;
+
+        }
+        if (data.lastPlayerDamager != null && data.lastOtherDamager == null){
+            //Means player has only been hit by other players
+            credit = " was killed by " + data.lastPlayerDamager;
+
+        }
+
+        deathMessage = deathMessage + credit;
+        // Death message shows who got credit
+        player.sendMessage(deathMessage);
+        
+        Component mainTitle = Component.text("You died!").color(TextColor.color(230,60,60));
+        Title title = Title.title(mainTitle, Component.text(""));
+        player.showTitle(title);
+
 
         // Player was killed, all damage info reset
         player.getPersistentDataContainer().remove(key);
@@ -111,7 +142,7 @@ public class DeathHandler implements Listener {
 
         //Make new object with that player, is mostly empty
         PlayerDamageDistribution damageDistrib = new PlayerDamageDistribution(player);
-        damageDistrib.lastDamager = damager.getName();
+        damageDistrib.lastPlayerDamager = damager.getName();
 
 
         //If player has just started combat, make a dataContainer with the empty object above
@@ -136,6 +167,8 @@ public class DeathHandler implements Listener {
         } else {
             damageMap.put(damager.getName(), damageAmount);
         }
+
+        pulledPlayerData.lastPlayerDamager = damager.getName();
 
         //Put the edited object back in the player
         player.getPersistentDataContainer().set(key, new PlayerDamageDistributionDataType(), pulledPlayerData);
@@ -164,15 +197,16 @@ public class DeathHandler implements Listener {
         int damageAmount = (int) event.getDamage();
         EntityDamageEvent.DamageCause cause = event.getCause();
 
-        //Make new object with that player, is mostly empty
-        PlayerDamageDistribution damageDistrib = new PlayerDamageDistribution(player);
-        damageDistrib.lastDamager = cause.name();
+
 
 
         //If player has just started combat, make a dataContainer with the empty object above
         NamespacedKey key = new NamespacedKey(plugin, "damageDistributionInfo");
         if (!(player.getPersistentDataContainer().has(key,new PlayerDamageDistributionDataType()))){
             //Player does not have dataContainer, creating one with data from this hit
+            //Make new object with that player, is mostly empty
+            PlayerDamageDistribution damageDistrib = new PlayerDamageDistribution(player);
+            damageDistrib.lastPlayerDamager = cause.name();
             player.getPersistentDataContainer().set(key, new PlayerDamageDistributionDataType(), damageDistrib);
         }
 
@@ -192,6 +226,8 @@ public class DeathHandler implements Listener {
             damageMap.put(cause.name(), damageAmount);
         }
 
+        pulledPlayerData.lastOtherDamager = cause.name();
+
         //Put the edited object back in the player
         player.getPersistentDataContainer().set(key, new PlayerDamageDistributionDataType(), pulledPlayerData);
 
@@ -205,10 +241,31 @@ public class DeathHandler implements Listener {
             return;
         }
         Player player = (Player) event.getHitEntity();
-
+        Player shooter = null;
         if (event.getEntity() instanceof Snowball | event.getEntity() instanceof Egg){
-            player.sendMessage("SNOWBALL/EGG by" + event.getEntity().getShooter());
+            player.sendMessage("SNOWBALL/EGG by" + (Player) event.getEntity().getShooter());
+            shooter = (Player) event.getEntity().getShooter();
         }
+        else {
+            return;
+        }
+
+        //If player has just started combat, make a dataContainer with the empty object above
+        NamespacedKey key = new NamespacedKey(plugin, "damageDistributionInfo");
+        if (!(player.getPersistentDataContainer().has(key,new PlayerDamageDistributionDataType()))){
+            //Player does not have dataContainer, creating one with data from this hit
+            //Make new object with that player, is mostly empty
+            PlayerDamageDistribution damageDistrib = new PlayerDamageDistribution(player);
+            damageDistrib.lastPlayerDamager = shooter.getName();
+            player.getPersistentDataContainer().set(key, new PlayerDamageDistributionDataType(), damageDistrib);
+        }
+
+        //We get the data that either already existed or has just been created
+        PersistentDataContainer data = player.getPersistentDataContainer();
+        PlayerDamageDistribution pulledPlayerData = data.get(key, new PlayerDamageDistributionDataType());
+
+
+
 
     }
 

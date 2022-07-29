@@ -55,7 +55,7 @@ public class NumericEntityUnescaper extends CharSequenceTranslator {
         errorIfNoSemiColon
     }
 
-    // TODO?: Create an OptionsSet class to hide some of the conditional logic below
+    // NOTE?: Create an OptionsSet class to hide some of the conditional logic below
     private final EnumSet<OPTION> options;
 
     /**

@@ -35,7 +35,7 @@ import org.apache.commons.lang3.Validate;
  *
  * @since 3.0
  */
-// TODO: Before making public move from getDateTimeInstance(Integer, ...) to int; or some other approach.
+// NOTE: Before making public move from getDateTimeInstance(Integer, ...) to int; or some other approach.
 abstract class FormatCache<F extends Format> {
 
     /**

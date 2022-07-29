@@ -8,7 +8,8 @@ import java.util.HashMap;
 public class PlayerDamageDistribution implements Serializable {
 
     String owner;
-    String lastDamager = "Environment"; // Could be name of player or "lava", "fire", "environment"
+    String lastPlayerDamager; // Either null if never hit by player, or player.getName
+    String lastOtherDamager; // Either null if never hit by environment, or damageCause.toString
     HashMap<String, Integer> damageDistributionMap = new HashMap<>();
 
     public PlayerDamageDistribution(Player owner) {

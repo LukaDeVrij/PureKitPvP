@@ -1,6 +1,5 @@
 package me.lifelessnerd.purekitpvp;
 
-import me.lifelessnerd.purekitpvp.combathandlers.KillHandler;
 import me.lifelessnerd.purekitpvp.createKit.CreateKit;
 import me.lifelessnerd.purekitpvp.createKit.DeleteKit;
 import me.lifelessnerd.purekitpvp.combathandlers.DeathHandler;
@@ -22,7 +21,10 @@ public final class PureKitPvP extends JavaPlugin {
 
         //Kits config
         KitConfig.setup();
-        KitConfig.get().addDefault("kits", null);
+        KitConfig.get().addDefault("kits", "");
+        //Might make problems, I tried to just keep value null but then the entire value didn't show up until I created a kit
+        //Which is not too bad either so whatever, if there are any problems ever change this and hope for the best
+        //Otherwise find a way to make a path without a value, like: kits: , instead of kits: ''
         KitConfig.get().options().copyDefaults(true);
         KitConfig.save();
 
@@ -34,7 +36,6 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GetKit(this), this);
         getServer().getPluginManager().registerEvents(new GUIListener(this), this);
         getServer().getPluginManager().registerEvents(new DeathHandler(this), this);
-        getServer().getPluginManager().registerEvents(new KillHandler(this), this);
 
     }
 

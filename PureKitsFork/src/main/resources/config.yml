@@ -1,1 +1,6 @@
+# PureKitPvP by LifelessNerd
+# Partially based on PureKits
+# 2022
+
+# World in which the plugin should be active: i.e. kits, deaths, stats and such
 world: pvp

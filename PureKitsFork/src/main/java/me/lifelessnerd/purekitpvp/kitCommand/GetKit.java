@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
+import me.lifelessnerd.purekitpvp.files.KitConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -59,18 +60,18 @@ public class GetKit implements TabExecutor, Listener {
             return false;
         }
 
-        if (!(plugin.getConfig().isSet("kits." + kitNameArg))){
+        if (!(KitConfig.get().isSet("kits." + kitNameArg))){
             player.sendMessage(ChatColor.GRAY + "That kit does not exist.");
             return true;
         }
 
-        if(!plugin.getConfig().isSet("kits." + kitNameArg + ".permission")){
+        if(!KitConfig.get().isSet("kits." + kitNameArg + ".permission")){
             player.sendMessage(ChatColor.GRAY + "That kit does not have a permission associated. Please report to your administrator.");
             //TODO: Make permissions optional without duplicating code ideally
             return true;
         }
 
-        if (!(player.hasPermission(plugin.getConfig().getString("kits." + kitNameArg + ".permission")))){ //IDEA lies
+        if (!(player.hasPermission(KitConfig.get().getString("kits." + kitNameArg + ".permission")))){ //IDEA lies
             player.sendMessage(ChatColor.GRAY + "You do not have permission!");
             return true;
         }
@@ -78,7 +79,7 @@ public class GetKit implements TabExecutor, Listener {
         //Okay, if all checks are passed, player may get the kit
         player.sendMessage(ChatColor.GRAY + "Kit " + ChatColor.BLUE + kitNameArg + ChatColor.GRAY + " given.");
 
-        FileConfiguration fileConfiguration = plugin.getConfig();
+        FileConfiguration fileConfiguration = KitConfig.get();
         Object kitObject = fileConfiguration.get("kits." + kitNameArg + ".contents");
         List<ItemStack> kitItems = (List<ItemStack>) kitObject;
 
@@ -113,7 +114,7 @@ public class GetKit implements TabExecutor, Listener {
 
         if (args.length == 1){
             List<String> autoComplete = new ArrayList<>();
-            for(String key : plugin.getConfig().getConfigurationSection("kits.").getKeys(false)){
+            for(String key : KitConfig.get().getConfigurationSection("kits.").getKeys(false)){
                 key = key.toLowerCase();
                 autoComplete.add(key);
             };

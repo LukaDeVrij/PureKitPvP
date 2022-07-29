@@ -95,9 +95,9 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     private static final long serialVersionUID = 7628716375283629643L;
 
     /** Internal data storage. */
-    protected char[] buffer; // TODO make private?
+    protected char[] buffer; // NOTE make private?
     /** Current size of the buffer. */
-    protected int size; // TODO make private?
+    protected int size; // NOTE make private?
     /** The new line. */
     private String newLine;
     /** The null text. */
