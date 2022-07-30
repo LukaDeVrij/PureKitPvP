@@ -1,17 +1,13 @@
 package me.lifelessnerd.purekitpvp.combathandlers;
 
+import me.lifelessnerd.purekitpvp.utils.DoubleUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Egg;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
+import net.md_5.bungee.api.ChatMessageType;
+import org.bukkit.*;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -20,8 +16,13 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class DeathHandler implements Listener {
 
@@ -42,8 +43,6 @@ public class DeathHandler implements Listener {
             return;
         }
 
-        //Check Streaks if player was lastPlayerBlow
-        //streakChecker();
 
         //Reset player
         e.setCancelled(true);
@@ -52,64 +51,182 @@ public class DeathHandler implements Listener {
         player.getActivePotionEffects().clear();
 
 
+        DamageCauseLib damageCauseLib = new DamageCauseLib();
+
         //Get all damage info and print to killed player
         NamespacedKey key = new NamespacedKey(plugin, "damageDistributionInfo");
-        PlayerDamageDistribution data = player.getPersistentDataContainer().get(key, new PlayerDamageDistributionDataType());
+        PlayerDamageDistribution damageData = player.getPersistentDataContainer().get(key, new PlayerDamageDistributionDataType());
         String message = "&c&lYou died!";
         player.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Death Recap:"));
 
         int totalDamageDone = 0;
-        for (String hashmapKey : data.damageDistributionMap.keySet()){
-            totalDamageDone += data.damageDistributionMap.get(hashmapKey);
+        for (String hashmapKey : damageData.damageDistributionMap.keySet()){
+            totalDamageDone += damageData.damageDistributionMap.get(hashmapKey);
         }
-        for (String hashmapKey : data.damageDistributionMap.keySet()){
-            int damageValue = data.damageDistributionMap.get(hashmapKey);
+        for (String hashmapKey : damageData.damageDistributionMap.keySet()){
+            int damageValue = damageData.damageDistributionMap.get(hashmapKey);
             double damagePercentage = (double) damageValue / (double) totalDamageDone * 100.0;
-            String format = "&7- &a" + hashmapKey + "&7 did &a" + (int) damagePercentage + "%";
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', format));
+
+            if (damageCauseLib.damageCauseTranslations.containsKey(hashmapKey)){
+                // hashMapKey is a damageCause object
+                String damageCauseTranslation = damageCauseLib.damageCauseTranslations.get(hashmapKey);
+                String format = "&7-&e" + damageCauseTranslation + "&7 did &a" + (int) damagePercentage + "%";
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', format));
+
+            }
+            else {
+                String format = "&7- &a" + hashmapKey + "&7 did &a" + (int) damagePercentage + "%";
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', format));
+
+            }
         }
 
         //Broadcasting and stuff
         // use 'lastPlayerBlow' to determine kill message and such
-        DamageCauseLib damageCauseLib = new DamageCauseLib();
+
         String deathMessage = player.getName();
 
         String credit = " was killed by a mysterious force";
         String lastEnvironmentHit;
+        boolean playerInvolved = true;
+
 
         //Check who should get credit
-        if (data.lastPlayerDamager == null && data.lastOtherDamager != null){
+        if (damageData.lastPlayerDamager == null && damageData.lastOtherDamager != null){
             //This means the player was completely killed by environment, no player killer
-            lastEnvironmentHit = data.lastOtherDamager;
-            credit = damageCauseLib.deathMessages.get(lastEnvironmentHit); //TODO: not grabbing idk why?
+            lastEnvironmentHit = damageData.lastOtherDamager;
+            credit = damageCauseLib.deathMessages.get(lastEnvironmentHit);
+            playerInvolved = false;
 
         }
-        if (data.lastPlayerDamager != null && data.lastOtherDamager != null){
+        if (damageData.lastPlayerDamager != null && damageData.lastOtherDamager != null){
             //This means player got damage from both
-            credit = " was killed by " + data.lastPlayerDamager;
+            credit = damageData.lastPlayerDamager;
+            deathMessage += " was killed by ";
+
 
         }
-        if (data.lastPlayerDamager != null && data.lastOtherDamager == null){
+        if (damageData.lastPlayerDamager != null && damageData.lastOtherDamager == null){
             //Means player has only been hit by other players
-            credit = " was killed by " + data.lastPlayerDamager;
+            credit = damageData.lastPlayerDamager;
+            deathMessage += " was killed by ";
 
         }
 
         deathMessage = deathMessage + credit;
-        // Death message shows who got credit
-        player.sendMessage(deathMessage);
+        // Death message shows who got credit, broadcast to every player in pvp world
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (onlinePlayer.getWorld() == player.getWorld()) {
+                onlinePlayer.sendMessage(deathMessage);
+            }
+        }
+
         
         Component mainTitle = Component.text("You died!").color(TextColor.color(230,60,60));
         Title title = Title.title(mainTitle, Component.text(""));
         player.showTitle(title);
 
+        // get player who assisted from damageCausesMap (if there is a player in there)
+
+        //Get all players for later (to see if DamageCause is a player or not)
+        ArrayList<String> pvpPlayers = new ArrayList<>(); // List of all players in pvp world
+        for (Player pvpPlayer : Bukkit.getOnlinePlayers()){
+            if (pvpPlayer.getWorld() == player.getWorld()){
+                pvpPlayers.add(pvpPlayer.getName());
+            }
+        }
+
+        String highestAssistor = null;
+        for (String key2 : damageData.damageDistributionMap.keySet()){
+            if (!(key2.equalsIgnoreCase(credit)) && pvpPlayers.contains(key2)){ // Dont count the killer in the assist check
+                //Only check players for assist
+                if (highestAssistor == null){
+                    highestAssistor = key2;
+                    //First element is always highest
+                }
+                if (damageData.damageDistributionMap.get(key2) >= damageData.damageDistributionMap.get(highestAssistor)){
+                    highestAssistor = key2;
+                    //Check others to see if they are higher
+                }
+            }
+        }
+
+        Player assistor = null;
+        if (highestAssistor != null){
+            assistor = Bukkit.getPlayerExact(highestAssistor);
+            assistor.sendMessage(ChatColor.translateAlternateColorCodes('&',"&aYou assisted in the kill of &7" + player.getName()));
+        }
 
         // Player was killed, all damage info reset
         player.getPersistentDataContainer().remove(key);
 
         //player.teleport(new Location(player.getWorld(), 0, 145, 0)); TODO: na testing dit uncommenten
         player.setFireTicks(0);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 5, 1));
+
+        // Give kill credit and stats to killer and player ()
+        //TODO: check if player killed himself (i.e. with arrow), if so, don't give kill (to prevent boosting)
+        //Vars that can be used: assistor, credit (will need to check if human using pvpPlayers), player
+
+        //Set stats of player
+        //If this is the first time the player is killed
+        NamespacedKey pvpStatsKey = new NamespacedKey(plugin, "pvpStats");
+        if (!(player.getPersistentDataContainer().has(pvpStatsKey,new PlayerStatsDataType()))){
+            //Player does not have pvpStatsContainer, creating one with empty data
+            player.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), new PlayerStats(player));
+        }
+        PlayerStats playerStats  = player.getPersistentDataContainer().get(pvpStatsKey, new PlayerStatsDataType());
+
+        playerStats.deaths += 1; // NPE lies?
+        playerStats.updateRatio();
+
+        player.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), playerStats);
+
+
+        // If there is a human credit involved
+        if (playerInvolved){
+
+            Player creditPlayer = Bukkit.getPlayerExact(credit);
+
+            //If killer first kill
+            if (!(creditPlayer.getPersistentDataContainer().has(pvpStatsKey,new PlayerStatsDataType()))){
+                //Player does not have pvpStatsContainer, creating one with empty data
+                creditPlayer.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), new PlayerStats(creditPlayer));
+            }
+
+            PlayerStats killerStats  = creditPlayer.getPersistentDataContainer().get(pvpStatsKey, new PlayerStatsDataType());
+
+            killerStats.kills += 1;
+            killerStats.updateRatio();
+
+            creditPlayer.sendActionBar(Component.text("Kills: " + killerStats.kills + "    K/D: " + DoubleUtils.round(killerStats.kdRatio,2)));
+
+            creditPlayer.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), killerStats);
+
+        }
+
+        //Check if there is an assistor
+        if (assistor != null){
+
+            //If players first assist
+            if (!(assistor.getPersistentDataContainer().has(pvpStatsKey,new PlayerStatsDataType()))){
+                //Player does not have pvpStatsContainer, creating one with empty data
+                assistor.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), new PlayerStats(assistor));
+            }
+
+            PlayerStats assistorStats  = assistor.getPersistentDataContainer().get(pvpStatsKey, new PlayerStatsDataType());
+
+            assistorStats.assists += 1;
+
+            assistor.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), assistorStats);
+
+            assistor.sendActionBar(Component.text("Assists: " + assistorStats.assists + "    K/D: " + DoubleUtils.round(assistorStats.kdRatio, 2)));
+
+        }
+
+        player.sendActionBar(Component.text("Deaths: " + playerStats.deaths + "    K/D: " + DoubleUtils.round(playerStats.kdRatio, 2)));
+
     }
 
 
@@ -125,13 +242,20 @@ public class DeathHandler implements Listener {
             damager = (Player) event.getDamager();
             player = (Player) event.getEntity();
 
-        } else if (event.getDamager() instanceof Arrow && event.getEntity() instanceof Player){
+        } else if (event.getDamager() instanceof Arrow && event.getEntity() instanceof Player) {
 
             //Projectile combat
             player = (Player) event.getEntity();
             Arrow arrow = (Arrow) event.getDamager();
 
             damager = (Player) arrow.getShooter();
+        } else if (event.getDamager() instanceof ThrownPotion && event.getEntity() instanceof Player){
+
+            //Splash potion threw (only potions that do damage, only those are seen by this event)
+            player = (Player) event.getEntity();
+            ThrownPotion potion = (ThrownPotion) event.getDamager();
+
+            damager = (Player) potion.getShooter(); //TODO: test if this works
 
         } else {
             //If we end up here idk what happened but nothing relevant (probably a zombie hitting a pig or something)
@@ -206,7 +330,7 @@ public class DeathHandler implements Listener {
             //Player does not have dataContainer, creating one with data from this hit
             //Make new object with that player, is mostly empty
             PlayerDamageDistribution damageDistrib = new PlayerDamageDistribution(player);
-            damageDistrib.lastPlayerDamager = cause.name();
+
             player.getPersistentDataContainer().set(key, new PlayerDamageDistributionDataType(), damageDistrib);
         }
 

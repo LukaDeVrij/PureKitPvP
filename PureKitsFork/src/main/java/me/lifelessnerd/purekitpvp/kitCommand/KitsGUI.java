@@ -81,16 +81,14 @@ public class KitsGUI implements TabExecutor {
             for (int index = 0; index < kitItems.size(); index++) {
 
                 ItemStack item = kitItems.get(index);
-            //for (ItemStack item : kitItems) {
-                //Index checks for separation weapons, armor, items and offhand
-//                if(index == 3 | index == 36 | index== 40){
-//                    lore.add("");
-//                }
+
                 switch (index) {
                     case 3 -> lore.add(ChatColor.BLUE + "Items:");
                     case 36 -> {
                         if(kitItems.get(36) != null | kitItems.get(37) != null | kitItems.get(38) != null | kitItems.get(39) != null) {
                             lore.add(ChatColor.BLUE + "Armor:");
+                        } else {
+                            lore.add(ChatColor.BLUE + "No Armor");
                         }
                     }
                     case 40 -> {
