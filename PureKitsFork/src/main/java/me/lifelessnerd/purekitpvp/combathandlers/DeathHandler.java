@@ -178,7 +178,8 @@ public class DeathHandler implements Listener {
         }
         PlayerStats playerStats  = player.getPersistentDataContainer().get(pvpStatsKey, new PlayerStatsDataType());
 
-        playerStats.deaths += 1; // NPE lies?
+        playerStats.deaths += 1; // TODO: NPE but i cant figure out why or when triggered
+        playerStats.consecutiveKills = 0;
         playerStats.updateRatio();
 
         player.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), playerStats);
@@ -198,12 +199,23 @@ public class DeathHandler implements Listener {
             PlayerStats killerStats  = creditPlayer.getPersistentDataContainer().get(pvpStatsKey, new PlayerStatsDataType());
 
             killerStats.kills += 1;
+            killerStats.consecutiveKills += 1;
             killerStats.updateRatio();
 
             creditPlayer.sendActionBar(Component.text("Kills: " + killerStats.kills + "    K/D: " + DoubleUtils.round(killerStats.kdRatio,2)));
 
             creditPlayer.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), killerStats);
 
+            //KillStreak check
+            if (killerStats.consecutiveKills >= 3){
+                for (Player pvpPlayer : Bukkit.getOnlinePlayers()){
+                    if (pvpPlayer.getWorld() == player.getWorld()){
+
+                        pvpPlayer.sendMessage(ChatColor.RED + credit + ChatColor.YELLOW + " is on a KILLING STREAK of " + ChatColor.RED + killerStats.consecutiveKills);
+
+                    }
+                }
+            }
         }
 
         //Check if there is an assistor
@@ -216,7 +228,8 @@ public class DeathHandler implements Listener {
             }
 
             PlayerStats assistorStats  = assistor.getPersistentDataContainer().get(pvpStatsKey, new PlayerStatsDataType());
-
+            /*/ TODO: Ik denk dat de container wel bestaat, maar dat de inhoud null is, kan gefixt worden met nullcheck en dan als null: gelijk zetten aan een empty object
+             zelfde als ik de .has check hierboven /*/
             assistorStats.assists += 1;
 
             assistor.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), assistorStats);
@@ -226,6 +239,8 @@ public class DeathHandler implements Listener {
         }
 
         player.sendActionBar(Component.text("Deaths: " + playerStats.deaths + "    K/D: " + DoubleUtils.round(playerStats.kdRatio, 2)));
+
+
 
     }
 
