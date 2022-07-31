@@ -1,12 +1,15 @@
 package me.lifelessnerd.purekitpvp.combathandlers;
 
+import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import me.lifelessnerd.purekitpvp.utils.DoubleUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,9 +49,13 @@ public class DeathHandler implements Listener {
 
         //Reset player
         e.setCancelled(true);
-        player.teleport(new Location(player.getWorld(), 0, 145, 0));
+        Bukkit.getScheduler().runTaskLater((Plugin)this.plugin, () ->
+                player.teleport(new Location(player.getWorld(), 0, 145, 0, 0, 0)), 1L);
+        Bukkit.getScheduler().runTaskLater((Plugin)this.plugin, () ->
+                player.setHealth(20), 2L);
         player.getInventory().clear();
         player.getActivePotionEffects().clear();
+        player.setExp(0f);
 
 
         DamageCauseLib damageCauseLib = new DamageCauseLib();
@@ -156,94 +163,148 @@ public class DeathHandler implements Listener {
         if (highestAssistor != null){
             assistor = Bukkit.getPlayerExact(highestAssistor);
             assistor.sendMessage(ChatColor.translateAlternateColorCodes('&',"&aYou assisted in the kill of &7" + player.getName()));
+            assistor.playSound(assistor.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_HIT,1, 1);
         }
 
         // Player was killed, all damage info reset
         player.getPersistentDataContainer().remove(key);
 
-        //player.teleport(new Location(player.getWorld(), 0, 145, 0)); TODO: na testing dit uncommenten
+
         player.setFireTicks(0);
         player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 5, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10 , 1));
+        //Sound effects and such
+        player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_HURT, 1,0);
 
-        // Give kill credit and stats to killer and player ()
-        //TODO: check if player killed himself (i.e. with arrow), if so, don't give kill (to prevent boosting)
-        //Vars that can be used: assistor, credit (will need to check if human using pvpPlayers), player
 
         //Set stats of player
-        //If this is the first time the player is killed
-        NamespacedKey pvpStatsKey = new NamespacedKey(plugin, "pvpStats");
-        if (!(player.getPersistentDataContainer().has(pvpStatsKey,new PlayerStatsDataType()))){
-            //Player does not have pvpStatsContainer, creating one with empty data
-            player.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), new PlayerStats(player));
+        //Check if player has an entry in config
+        if (PlayerStatsConfig.get().isSet(player.getName())){
+            FileConfiguration playerStats = PlayerStatsConfig.get();
+            playerStats.set(player.getName() + ".deaths", playerStats.getInt(player.getName() + ".deaths") + 1);
+
+            //Ratio update
+            double newRatio = (double) playerStats.getInt(player.getName() + ".kills") / (double) playerStats.getInt(player.getName() + ".deaths");
+            //newRatio = DoubleUtils.round(newRatio, 2);
+            playerStats.set(player.getName() + ".kdratio", newRatio);
+
+            //Update killstreak (reset)
+            playerStats.set(player.getName() + ".killstreak", 0);
+
+            PlayerStatsConfig.save();
+
+            TextComponent actionBarText = Component.text("Deaths: ", NamedTextColor.GREEN)
+                    .append(Component.text(playerStats.getInt(player.getName() + ".deaths"), NamedTextColor.LIGHT_PURPLE))
+                    .append(Component.text("    K/D: ", NamedTextColor.GREEN));
+
+            try {
+                actionBarText = actionBarText.append(Component.text((DoubleUtils.round(playerStats.getDouble(player.getName() + ".kdratio"), 2)), NamedTextColor.LIGHT_PURPLE));
+            } catch (Exception exception){
+                actionBarText = actionBarText.append(Component.text("Infinity", NamedTextColor.LIGHT_PURPLE));
+            }
+
+            player.sendActionBar(actionBarText);
+
+        } else {
+            //Player does not have an entry; creating one with new data
+            PlayerStatsConfig.get().set(player.getName(), "");
+            PlayerStatsConfig.get().set(player.getName() + ".kills", 0);
+            PlayerStatsConfig.get().set(player.getName() + ".deaths", 1);
+            PlayerStatsConfig.get().set(player.getName() + ".assists", 0);
+            PlayerStatsConfig.get().set(player.getName() + ".kdratio", 0);
+            PlayerStatsConfig.get().set(player.getName() + ".killstreak", 0);
+            PlayerStatsConfig.save();
+
         }
-        PlayerStats playerStats  = player.getPersistentDataContainer().get(pvpStatsKey, new PlayerStatsDataType());
 
-        playerStats.deaths += 1; // TODO: NPE but i cant figure out why or when triggered
-        playerStats.consecutiveKills = 0;
-        playerStats.updateRatio();
-
-        player.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), playerStats);
-
-
-        // If there is a human credit involved
+        //Only give credit if there is a player involved,
         if (playerInvolved){
-
             Player creditPlayer = Bukkit.getPlayerExact(credit);
+            creditPlayer.playSound(creditPlayer.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_HIT,1, 1);
+            //Check if player has an entry in config
+            if (PlayerStatsConfig.get().isSet(creditPlayer.getName())){
+                FileConfiguration creditStats = PlayerStatsConfig.get();
+                creditStats.set(creditPlayer.getName() + ".kills", creditStats.getInt(creditPlayer.getName() + ".kills") + 1);
 
-            //If killer first kill
-            if (!(creditPlayer.getPersistentDataContainer().has(pvpStatsKey,new PlayerStatsDataType()))){
-                //Player does not have pvpStatsContainer, creating one with empty data
-                creditPlayer.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), new PlayerStats(creditPlayer));
-            }
+                //Ratio update
+                double newRatio = (double) creditStats.getInt(creditPlayer.getName() + ".kills") / (double) creditStats.getInt(creditPlayer.getName() + ".deaths");
+                //newRatio = DoubleUtils.round(newRatio, 2);
+                creditStats.set(creditPlayer.getName() + ".kdratio", newRatio);
 
-            PlayerStats killerStats  = creditPlayer.getPersistentDataContainer().get(pvpStatsKey, new PlayerStatsDataType());
+                //Killstreak update
+                creditStats.set(creditPlayer.getName() + ".killstreak", creditStats.getInt(creditPlayer.getName() + ".killstreak") + 1);
+                //Killstreak checker
+                if (creditStats.getInt(creditPlayer.getName() + ".killstreak") % 5 == 0){
+                    creditPlayer.playSound(creditPlayer.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 0.3f, 1);
+                    for (Player pvpPlayer : Bukkit.getOnlinePlayers()){
+                        if (pvpPlayer.getWorld() == player.getWorld()){
 
-            killerStats.kills += 1;
-            killerStats.consecutiveKills += 1;
-            killerStats.updateRatio();
+                            pvpPlayer.sendMessage(ChatColor.RED + credit + ChatColor.YELLOW + " is on a KILLING STREAK of " + ChatColor.RED + creditStats.getInt(creditPlayer.getName() + ".killstreak"));
 
-            creditPlayer.sendActionBar(Component.text("Kills: " + killerStats.kills + "    K/D: " + DoubleUtils.round(killerStats.kdRatio,2)));
 
-            creditPlayer.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), killerStats);
-
-            //KillStreak check
-            if (killerStats.consecutiveKills >= 3){
-                for (Player pvpPlayer : Bukkit.getOnlinePlayers()){
-                    if (pvpPlayer.getWorld() == player.getWorld()){
-
-                        pvpPlayer.sendMessage(ChatColor.RED + credit + ChatColor.YELLOW + " is on a KILLING STREAK of " + ChatColor.RED + killerStats.consecutiveKills);
-
+                        }
                     }
+                    creditPlayer.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 10, 1)); //TODO make this toggleable via config
                 }
+
+                PlayerStatsConfig.save();
+
+                // Actionbar thingies
+                TextComponent actionBarText = Component.text("Kills: ", NamedTextColor.GREEN)
+                        .append(Component.text(creditStats.getInt(creditPlayer.getName() + ".kills"), NamedTextColor.LIGHT_PURPLE))
+                        .append(Component.text("    K/D: ", NamedTextColor.GREEN));
+
+                try {
+                    actionBarText = actionBarText.append(Component.text((DoubleUtils.round(creditStats.getDouble(creditPlayer.getName() + ".kdratio"), 2)), NamedTextColor.LIGHT_PURPLE));
+                } catch (Exception exception){
+                    actionBarText = actionBarText.append(Component.text("Infinity", NamedTextColor.LIGHT_PURPLE));
+                }
+
+                creditPlayer.sendActionBar(actionBarText);
+
+
+            } else {
+                //Player does not have an entry; creating one with new data
+                PlayerStatsConfig.get().set(creditPlayer.getName(), "");
+                PlayerStatsConfig.get().set(creditPlayer.getName() + ".kills", 1);
+                PlayerStatsConfig.get().set(creditPlayer.getName() + ".deaths", 0);
+                PlayerStatsConfig.get().set(creditPlayer.getName() + ".assists", 0);
+                PlayerStatsConfig.get().set(creditPlayer.getName() + ".kdratio", 0);
+                PlayerStatsConfig.get().set(creditPlayer.getName() + ".killstreak", 1);
+                PlayerStatsConfig.save();
+
             }
+
         }
 
-        //Check if there is an assistor
         if (assistor != null){
+            if (PlayerStatsConfig.get().isSet(assistor.getName())){
+                FileConfiguration assistorStats = PlayerStatsConfig.get();
+                assistorStats.set(assistor.getName() + ".assists", assistorStats.getInt(assistor.getName() + ".assists") + 1);
 
-            //If players first assist
-            if (!(assistor.getPersistentDataContainer().has(pvpStatsKey,new PlayerStatsDataType()))){
-                //Player does not have pvpStatsContainer, creating one with empty data
-                assistor.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), new PlayerStats(assistor));
+                PlayerStatsConfig.save();
+
+                TextComponent actionBarText = Component.text("Assists: ", NamedTextColor.GREEN)
+                        .append(Component.text(assistorStats.getInt(assistor.getName() + ".assists"), NamedTextColor.LIGHT_PURPLE))
+                        .append(Component.text("    K/D: ", NamedTextColor.GREEN))
+                        .append(Component.text((assistorStats.getDouble(assistor.getName() + ".kdratio")), NamedTextColor.LIGHT_PURPLE));
+                assistor.sendActionBar(actionBarText);
+
+            } else {
+                //Player does not have an entry; creating one with new data
+                PlayerStatsConfig.get().set(assistor.getName(), "");
+                PlayerStatsConfig.get().set(assistor.getName() + ".kills", 0);
+                PlayerStatsConfig.get().set(assistor.getName() + ".deaths", 0);
+                PlayerStatsConfig.get().set(assistor.getName() + ".assists", 1);
+                PlayerStatsConfig.get().set(assistor.getName() + ".kdratio", 0);
+                PlayerStatsConfig.get().set(assistor.getName() + ".killstreak", 0);
+                PlayerStatsConfig.save();
+
             }
-
-            PlayerStats assistorStats  = assistor.getPersistentDataContainer().get(pvpStatsKey, new PlayerStatsDataType());
-            /*/ TODO: Ik denk dat de container wel bestaat, maar dat de inhoud null is, kan gefixt worden met nullcheck en dan als null: gelijk zetten aan een empty object
-             zelfde als ik de .has check hierboven /*/
-            assistorStats.assists += 1;
-
-            assistor.getPersistentDataContainer().set(pvpStatsKey, new PlayerStatsDataType(), assistorStats);
-
-            assistor.sendActionBar(Component.text("Assists: " + assistorStats.assists + "    K/D: " + DoubleUtils.round(assistorStats.kdRatio, 2)));
-
         }
-
-        player.sendActionBar(Component.text("Deaths: " + playerStats.deaths + "    K/D: " + DoubleUtils.round(playerStats.kdRatio, 2)));
-
 
 
     }
-
 
 
     @EventHandler
@@ -251,11 +312,16 @@ public class DeathHandler implements Listener {
         Player player = null;
         Player damager = null;
         // HAND TO HAND COMBAT
+
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
 
             //HAND COMBAT
             damager = (Player) event.getDamager();
             player = (Player) event.getEntity();
+
+            if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+                return;
+            }
 
         } else if (event.getDamager() instanceof Arrow && event.getEntity() instanceof Player) {
 
@@ -263,14 +329,55 @@ public class DeathHandler implements Listener {
             player = (Player) event.getEntity();
             Arrow arrow = (Arrow) event.getDamager();
 
+            if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+                return;
+            }
+
             damager = (Player) arrow.getShooter();
+            double damage = event.getDamage();
+            double playerHP = player.getHealth() - damage;
+            if (playerHP < 0){
+                playerHP = 0;
+            }
+            damager.sendMessage(ChatColor.translateAlternateColorCodes(
+                    '&', "&a" + player.getName() + " &cis on &a" + (int) playerHP + " &cHP."));
         } else if (event.getDamager() instanceof ThrownPotion && event.getEntity() instanceof Player){
 
             //Splash potion threw (only potions that do damage, only those are seen by this event)
             player = (Player) event.getEntity();
             ThrownPotion potion = (ThrownPotion) event.getDamager();
 
-            damager = (Player) potion.getShooter(); //TODO: test if this works
+            if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+                return;
+            }
+
+            damager = (Player) potion.getShooter(); //works
+            double damage = event.getDamage();
+            double playerHP = player.getHealth() - damage;
+            if (playerHP < 0){
+                playerHP = 0;
+            }
+            damager.sendMessage(ChatColor.translateAlternateColorCodes(
+                    '&', "&a" + player.getName() + " &cis on &a" + (int) playerHP + " &cHP."));
+
+        } else if (event.getDamager() instanceof Trident && event.getEntity() instanceof Player){
+
+            //Splash potion threw (only potions that do damage, only those are seen by this event)
+            player = (Player) event.getEntity();
+            Trident trident = (Trident) event.getDamager();
+
+            if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+                return;
+            }
+
+            damager = (Player) trident.getShooter(); //works
+            double damage = event.getDamage();
+            double playerHP = player.getHealth() - damage;
+            if (playerHP < 0){
+                playerHP = 0;
+            }
+            damager.sendMessage(ChatColor.translateAlternateColorCodes(
+                    '&', "&a" + player.getName() + " &cis on &a" + (int) playerHP + " &cHP."));
 
         } else {
             //If we end up here idk what happened but nothing relevant (probably a zombie hitting a pig or something)
@@ -317,12 +424,17 @@ public class DeathHandler implements Listener {
 
     @EventHandler
     public void onPlayerTakeDamage(EntityDamageEvent event){
+
         //EVERYTHING WHERE A PLAYER IS NOT INVOLVED
         if (!(event.getEntity() instanceof Player)){
             return;
         }
 
         Player player = (Player) event.getEntity();
+
+        if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+            return;
+        }
 
         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK){
             //This is handled by onPlayerCombatHit
@@ -331,6 +443,10 @@ public class DeathHandler implements Listener {
         if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){
             //This is handled by onPlayerCombatHit or (with snowballs) onSnowballHit
             return;
+        }
+        if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC){
+            return;
+
         }
 
         int damageAmount = (int) event.getDamage();
@@ -379,10 +495,18 @@ public class DeathHandler implements Listener {
         if (!(event.getHitEntity() instanceof Player)){
             return;
         }
+        if (!(event.getEntity().getShooter() instanceof Player)){
+            return;
+        }
         Player player = (Player) event.getHitEntity();
         Player shooter = null;
+
+        if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+            return;
+        }
+
         if (event.getEntity() instanceof Snowball | event.getEntity() instanceof Egg){
-            player.sendMessage("SNOWBALL/EGG by" + (Player) event.getEntity().getShooter());
+
             shooter = (Player) event.getEntity().getShooter();
         }
         else {
@@ -403,8 +527,10 @@ public class DeathHandler implements Listener {
         PersistentDataContainer data = player.getPersistentDataContainer();
         PlayerDamageDistribution pulledPlayerData = data.get(key, new PlayerDamageDistributionDataType());
 
-
-
+        if (shooter != null){
+            pulledPlayerData.lastPlayerDamager = shooter.getName();
+            player.getPersistentDataContainer().set(key, new PlayerDamageDistributionDataType(), pulledPlayerData);
+        }
 
     }
 

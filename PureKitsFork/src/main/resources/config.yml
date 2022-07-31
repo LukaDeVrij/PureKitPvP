@@ -4,3 +4,5 @@
 
 # World in which the plugin should be active: i.e. kits, deaths, stats and such
 world: pvp
+# Y level at which you should die in pvp, please provide double
+voidY: 0.0

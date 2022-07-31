@@ -50,6 +50,11 @@ public class GetKit implements TabExecutor, Listener {
         Player player = (Player) sender;
         String kitNameArg = args[0].substring(0, 1).toUpperCase() + args[0].substring(1);
 
+        if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+            player.sendMessage("You cannot use that command in this world!");
+            return true;
+        }
+
         if (hasKit.contains(player.getName())){
             player.sendMessage(ChatColor.GRAY + "You already have a kit!");
             return true;

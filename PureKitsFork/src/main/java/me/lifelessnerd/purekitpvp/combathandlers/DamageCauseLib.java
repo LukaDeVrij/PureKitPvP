@@ -11,7 +11,7 @@ public class DamageCauseLib {
         public DamageCauseLib() {
                 deathMessages.put("CONTACT"," was pricked to death!");
                 deathMessages.put("SUFFOCATION"," needed some oxygen");
-                deathMessages.put("FALL"," feel from a high (or low) place");
+                deathMessages.put("FALL"," fell from a high (or low) place");
                 deathMessages.put("FIRE"," burnt to death");
                 deathMessages.put("FIRE_TICK"," slowly burned to death");
                 deathMessages.put("MELTING"," was cooked alive");
