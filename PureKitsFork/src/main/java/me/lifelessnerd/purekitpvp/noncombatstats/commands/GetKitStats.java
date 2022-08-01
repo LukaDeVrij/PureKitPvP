@@ -15,6 +15,12 @@ public class GetKitStats implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
+//Mobile mockup
+
+FileConfiguration kitStats = KitStatsConfig.get();
+for(String key : kitStats.getKeys(false){
+player.sendMessage(key + " - " + kitStats.getInt(key);
+}
         //TODO: check sender
         // Get kitstatsconfig
         // loop trough getKeys()
