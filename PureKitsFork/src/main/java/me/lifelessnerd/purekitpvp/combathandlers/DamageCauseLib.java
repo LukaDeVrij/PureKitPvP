@@ -19,7 +19,7 @@ public class DamageCauseLib {
                 deathMessages.put("DROWNING"," ran out of oxygen");
                 deathMessages.put("BLOCK_EXPLOSION"," died to an explosion");
                 deathMessages.put("ENTITY_EXPLOSION"," died to an explosion");
-                deathMessages.put("VOID"," feel into the abyss");
+                deathMessages.put("VOID"," fell into the abyss");
                 deathMessages.put("LIGHTNING"," got very unlucky");
                 deathMessages.put("SUICIDE"," committed suicide");
                 deathMessages.put("STARVATION"," died of hunger");

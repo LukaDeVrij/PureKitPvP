@@ -49,8 +49,12 @@ public class DeathHandler implements Listener {
 
         //Reset player
         e.setCancelled(true);
+        double x = plugin.getConfig().getDouble("respawnX");
+        double y = plugin.getConfig().getDouble("respawnY");
+        double z = plugin.getConfig().getDouble("respawnZ");
+
         Bukkit.getScheduler().runTaskLater((Plugin)this.plugin, () ->
-                player.teleport(new Location(player.getWorld(), 0, 145, 0, 0, 0)), 1L);
+                player.teleport(new Location(player.getWorld(), x, y, z, 0, 0)), 1L);
         Bukkit.getScheduler().runTaskLater((Plugin)this.plugin, () ->
                 player.setHealth(20), 2L);
         player.getInventory().clear();

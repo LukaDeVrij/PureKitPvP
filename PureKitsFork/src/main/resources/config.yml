@@ -6,3 +6,7 @@
 world: pvp
 # Y level at which you should die in pvp, please provide double
 voidY: 0.0
+#respawn X, Y, Z in world
+respawnX: 0.5
+respawnY: 142.0
+respawnZ: 0.5
