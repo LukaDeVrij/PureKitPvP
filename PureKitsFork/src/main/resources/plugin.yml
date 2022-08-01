@@ -2,8 +2,8 @@ name: PureKitPvP
 version: '${project.version}'
 main: me.lifelessnerd.purekitpvp.PureKitPvP
 api-version: 1.19
-authors: [ PsionicPvP, LifelessNerd ]
-description: PureKits fork, customised
+authors: [ LifelessNerd, PsionicPvP ]
+description: KitPVP plugin, with kit functionality from PureKits (abandoned)
 commands:
   getkit:
     description: Gives you a kit.
@@ -11,6 +11,8 @@ commands:
   resetkit:
     description: Resets your kit.
     usage: /resetkit
+    aliases:
+      - rs
   kit:
     description: Shows kit selection GUI.
     usage: /kit
@@ -22,6 +24,16 @@ commands:
     usage: /deletekit <kitName>
     aliases:
       - removekit
+  suicide:
+    description: Kill yourself in pvp.
+    usage: /suicide
+  getstats:
+    description: Get the stats of a player.
+    usage: /getstats <player>
+    aliases:
+      - stats
+      - pvpstats
+
 
 
 

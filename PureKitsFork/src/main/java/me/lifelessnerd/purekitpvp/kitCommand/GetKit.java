@@ -92,7 +92,7 @@ public class GetKit implements TabExecutor, Listener {
         for (PotionEffect effect : player.getActivePotionEffects())
             player.removePotionEffect(effect.getType());
 
-        //Give items
+        //Give items (code from PureKits)
         for (int index = 0; index < kitItems.size(); index++) {
             ItemStack item = kitItems.get(index);
             if (item == null) {
@@ -110,6 +110,8 @@ public class GetKit implements TabExecutor, Listener {
         }
 
         hasKit.add(player.getName());
+
+        KitStats.updateValue(kitNameArg);
 
         return true;
     }
