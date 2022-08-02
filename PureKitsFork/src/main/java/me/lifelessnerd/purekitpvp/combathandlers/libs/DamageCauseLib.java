@@ -1,4 +1,4 @@
-package me.lifelessnerd.purekitpvp.combathandlers;
+package me.lifelessnerd.purekitpvp.combathandlers.libs;
 
 import java.util.HashMap;
 

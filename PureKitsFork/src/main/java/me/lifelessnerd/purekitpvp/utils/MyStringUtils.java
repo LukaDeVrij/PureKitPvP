@@ -75,7 +75,7 @@ public class MyStringUtils {
 
             StringBuilder potency =  new StringBuilder(splitOnceMore[1]);
             potency.deleteCharAt(0);
-            int potencyInt = Integer.parseInt(potency.toString());
+            int potencyInt = Integer.parseInt(potency.toString()) + 1;
 
             StringBuilder lvlAndTime = new StringBuilder("");
             lvlAndTime.append(potencyInt + " (" + timeSec + "s)");

@@ -1,6 +1,8 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
 import me.lifelessnerd.purekitpvp.files.KitConfig;
+import me.lifelessnerd.purekitpvp.files.KitStatsConfig;
+import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -111,7 +113,24 @@ public class GetKit implements TabExecutor, Listener {
 
         hasKit.add(player.getName());
 
-        KitStats.updateValue(kitNameArg);
+        //Add current kit to config
+        PlayerStatsConfig.get().set(player.getName() + ".current_kit", kitNameArg);
+        PlayerStatsConfig.save();
+        PlayerStatsConfig.reload();
+
+        //Tried to put this in a static class but it did not work so its here now
+        if (!(KitStatsConfig.get().isSet(kitNameArg))){
+
+            KitStatsConfig.get().set(kitNameArg, 1);
+
+        } else {
+            int value = KitStatsConfig.get().getInt(kitNameArg);
+            int newValue = value + 1;
+            KitStatsConfig.get().set(kitNameArg, newValue);
+        }
+
+        KitStatsConfig.save();
+        KitStatsConfig.reload();
 
         return true;
     }

@@ -29,6 +29,8 @@ public class ResetKit implements TabExecutor {
             player.removePotionEffect(effect.getType());
         }
 
+        player.setExp(0f);
+        player.setLevel(0);
         player.getInventory().clear();
         GetKit.hasKit.remove(player.getName());
         player.sendMessage(ChatColor.GRAY + "You have reset your kit.");

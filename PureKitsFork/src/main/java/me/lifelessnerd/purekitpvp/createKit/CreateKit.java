@@ -42,6 +42,7 @@ public class CreateKit implements TabExecutor {
         //Store arguments
         KitIcon kitIconLib = new KitIcon();
         String kitIcon = "STONE";
+        String killItem = "GOLDEN_APPLE";
         String kitPermission = "kit.other";
         String kitName = args[0].toLowerCase();
         kitName = kitName.substring(0, 1).toUpperCase() + kitName.substring(1);
@@ -51,6 +52,13 @@ public class CreateKit implements TabExecutor {
 
         }else {
             player.sendMessage(args[2] + " is not a valid option.");
+            return true;
+        }
+        if (Arrays.asList(kitIconLib.materialList).contains(args[4])){
+            killItem = args[4].toUpperCase();
+
+        }else {
+            player.sendMessage(args[4] + " is not a valid option.");
             return true;
         }
         if (args.length > 3){
@@ -73,6 +81,8 @@ public class CreateKit implements TabExecutor {
         KitConfig.get().set("kits." + kitName + ".guiitem", kitIcon);
         KitConfig.get().addDefault("kits." + kitName, "");
         KitConfig.get().addDefault("kits." + kitName + ".displayname", "&7" + args[0]);
+        KitConfig.get().addDefault("kits." + kitName + ".killitem", "GOLDEN_APPLE");
+        KitConfig.get().set("kits." + kitName + ".killitem", killItem);
         KitConfig.get().addDefault("kits." + kitName + ".guiitem", "STONE");
         KitConfig.get().addDefault("kits." + kitName + ".guilore", "");
         KitConfig.get().set("kits." + kitName + ".helmet", helmet);
@@ -84,7 +94,8 @@ public class CreateKit implements TabExecutor {
         KitConfig.save();
         KitConfig.reload();
 
-        player.sendMessage("Kit made with name: " + kitName + ", displayColor: " + displayColor + ", kitIcon: " + kitIcon + ", kitPermission: " + kitPermission);
+        player.sendMessage("Kit made with name: " + kitName + ",\n displayColor: " + displayColor + ",\n kitIcon: "
+                + kitIcon + ",\n kitPermission: " + kitPermission + ",\nkillItem: " + killItem);
 
         return true;
     }
@@ -123,9 +134,13 @@ public class CreateKit implements TabExecutor {
         }
         if (args.length == 4){
             List<String> arguments = new ArrayList<>();
-            arguments.add("kits.other");
+            arguments.add("kit.other");
 
             return arguments;
+        }
+        if (args.length == 5){
+            KitIcon kitIconLib = new KitIcon();
+            return Arrays.asList(kitIconLib.materialList);
         }
 
         return null;

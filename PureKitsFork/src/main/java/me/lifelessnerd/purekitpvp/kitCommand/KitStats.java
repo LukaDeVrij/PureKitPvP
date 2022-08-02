@@ -19,8 +19,9 @@ public class KitStats {
         int newValue = value + 1;
         kitStats.set(kitName, newValue);
 
+        KitStatsConfig.reload();
         KitStatsConfig.save();
-        //TODO: think this works, havent testes
+
     }
 
 

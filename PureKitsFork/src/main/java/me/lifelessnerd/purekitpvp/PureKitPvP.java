@@ -1,10 +1,10 @@
 package me.lifelessnerd.purekitpvp;
 
-import me.lifelessnerd.purekitpvp.combathandlers.Suicide;
+import me.lifelessnerd.purekitpvp.combathandlers.commands.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.VoidKiller;
 import me.lifelessnerd.purekitpvp.createKit.CreateKit;
 import me.lifelessnerd.purekitpvp.createKit.DeleteKit;
-import me.lifelessnerd.purekitpvp.combathandlers.DeathHandler;
+import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.KitStatsConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
@@ -14,6 +14,8 @@ import me.lifelessnerd.purekitpvp.kitCommand.KitsGUI;
 import me.lifelessnerd.purekitpvp.kitCommand.ResetKit;
 import me.lifelessnerd.purekitpvp.noncombatstats.commands.GetKitStats;
 import me.lifelessnerd.purekitpvp.noncombatstats.commands.GetStats;
+import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ArrowsShotStat;
+import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ProjectilesThrownStat;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PureKitPvP extends JavaPlugin {
@@ -55,6 +57,8 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GUIListener(this), this);
         getServer().getPluginManager().registerEvents(new DeathHandler(this), this);
         getServer().getPluginManager().registerEvents(new VoidKiller(this), this);
+        getServer().getPluginManager().registerEvents(new ProjectilesThrownStat(this), this);
+        getServer().getPluginManager().registerEvents(new ArrowsShotStat(this), this);
 
     }
 

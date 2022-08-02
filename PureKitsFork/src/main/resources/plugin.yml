@@ -18,7 +18,7 @@ commands:
     usage: /kit
   createkit:
     description: Creates a kit from your current inventory.
-    usage: /createkit <kitName> <displayName> <kitIcon> <kitPermission>
+    usage: /createkit <kitName> <displayName> <kitIcon> <kitPermission> <killItem>
   deletekit:
     description: Removes a kit.
     usage: /deletekit <kitName>
@@ -33,7 +33,9 @@ commands:
     aliases:
       - stats
       - pvpstats
-
+  kitstats:
+    description: Get the usage stats of kits.
+    usage: /kitstats
 
 
 

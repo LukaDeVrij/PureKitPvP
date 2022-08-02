@@ -55,10 +55,10 @@ public class GetStats implements TabExecutor {
                 //Only children of player
                 if (key.split("\\.")[1].equalsIgnoreCase("kdratio")) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a    " +
-                            MyStringUtils.camelCaseWord(key.split("\\.")[1]) + " &c- &r" + playerStatsConfig.getDouble(key)));
+                            MyStringUtils.itemCamelCase(key.split("\\.")[1]) + "&c- &r" + playerStatsConfig.getDouble(key)));
                 } else {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a    " +
-                            MyStringUtils.camelCaseWord(key.split("\\.")[1]) + " &c- &r" + playerStatsConfig.getInt(key)));
+                            MyStringUtils.itemCamelCase(key.split("\\.")[1]) + "&c- &r" + playerStatsConfig.getInt(key)));
                 }
             }
         }

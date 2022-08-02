@@ -1,5 +1,8 @@
-package me.lifelessnerd.purekitpvp.combathandlers;
+package me.lifelessnerd.purekitpvp.combathandlers.killhandler;
 
+import me.lifelessnerd.purekitpvp.combathandlers.PlayerLeveling;
+import me.lifelessnerd.purekitpvp.combathandlers.libs.DamageCauseLib;
+import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import me.lifelessnerd.purekitpvp.utils.DoubleUtils;
 import net.kyori.adventure.text.Component;
@@ -7,7 +10,6 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
-import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -17,15 +19,15 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Objects;
+import java.util.logging.Level;
 
 public class DeathHandler implements Listener {
 
@@ -60,6 +62,7 @@ public class DeathHandler implements Listener {
         player.getInventory().clear();
         player.getActivePotionEffects().clear();
         player.setExp(0f);
+        player.setLevel(0);
 
 
         DamageCauseLib damageCauseLib = new DamageCauseLib();
@@ -175,6 +178,7 @@ public class DeathHandler implements Listener {
 
 
         player.setFireTicks(0);
+
         player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 5, 1));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10 , 1));
         //Sound effects and such
@@ -206,6 +210,11 @@ public class DeathHandler implements Listener {
             } catch (Exception exception){
                 actionBarText = actionBarText.append(Component.text("Infinity", NamedTextColor.LIGHT_PURPLE));
             }
+
+            //update level
+            PlayerLeveling.createLevelXPPath(player.getName());
+            PlayerLeveling.addExperience(player, 1, "Death"); // 1 for DEATH
+            PlayerLeveling.updateLevels();
 
             player.sendActionBar(actionBarText);
 
@@ -248,7 +257,10 @@ public class DeathHandler implements Listener {
 
                         }
                     }
-                    creditPlayer.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 10, 1)); //TODO make this toggleable via config
+                    PlayerLeveling.addExperience(creditPlayer, creditStats.getInt(creditPlayer.getName() + ".killstreak"), "Killstreak Bonus");
+                }
+                if (creditStats.getInt(creditPlayer.getName() + ".killstreak") >= 5){
+                    creditPlayer.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 2000, 2)); //TODO make this toggleable via config
                 }
 
                 PlayerStatsConfig.save();
@@ -264,7 +276,28 @@ public class DeathHandler implements Listener {
                     actionBarText = actionBarText.append(Component.text("Infinity", NamedTextColor.LIGHT_PURPLE));
                 }
 
+                //update level
+                PlayerLeveling.createLevelXPPath(creditPlayer.getName());
+                if (!(creditPlayer == player)){
+                    PlayerLeveling.addExperience(creditPlayer, 5, "Kill"); // 5 for KILL
+                }
+                PlayerLeveling.updateLevels();
+
                 creditPlayer.sendActionBar(actionBarText);
+
+                //Give killItem based on kit
+                try {
+                    ItemStack killItem = new ItemStack(Material.AIR);
+                    String kitName = PlayerStatsConfig.get().getString(credit + ".current_kit");
+                    if (!(KitConfig.get().getString("kits." + kitName + ".killitem") == null)) {
+                        killItem.setType(Material.getMaterial(KitConfig.get().getString("kits." + kitName + ".killitem")));
+
+                        creditPlayer.getInventory().addItem(killItem);
+                    }
+                } catch (Exception exception){
+                    plugin.getLogger().log(Level.SEVERE, exception.toString());
+                }
+
 
 
             } else {
@@ -288,11 +321,19 @@ public class DeathHandler implements Listener {
 
                 PlayerStatsConfig.save();
 
+
+
                 TextComponent actionBarText = Component.text("Assists: ", NamedTextColor.GREEN)
                         .append(Component.text(assistorStats.getInt(assistor.getName() + ".assists"), NamedTextColor.LIGHT_PURPLE))
                         .append(Component.text("    K/D: ", NamedTextColor.GREEN))
                         .append(Component.text((assistorStats.getDouble(assistor.getName() + ".kdratio")), NamedTextColor.LIGHT_PURPLE));
+
                 assistor.sendActionBar(actionBarText);
+
+                //update level
+                PlayerLeveling.createLevelXPPath(assistor.getName());
+                PlayerLeveling.addExperience(assistor, 3, "Assist"); // 3 for assists
+                PlayerLeveling.updateLevels();
 
             } else {
                 //Player does not have an entry; creating one with new data

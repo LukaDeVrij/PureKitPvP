@@ -1,4 +1,4 @@
-package me.lifelessnerd.purekitpvp.combathandlers;
+package me.lifelessnerd.purekitpvp.combathandlers.killhandler;
 
 import org.bukkit.entity.Player;
 

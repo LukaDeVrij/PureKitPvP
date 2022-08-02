@@ -1,4 +1,4 @@
-package me.lifelessnerd.purekitpvp.combathandlers;
+package me.lifelessnerd.purekitpvp.combathandlers.commands;
 
 import me.lifelessnerd.purekitpvp.PureKitPvP;
 import org.bukkit.Location;
