@@ -5,8 +5,14 @@ import me.lifelessnerd.purekitpvp.combathandlers.VoidKiller;
 import me.lifelessnerd.purekitpvp.createKit.CreateKit;
 import me.lifelessnerd.purekitpvp.createKit.DeleteKit;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
+import me.lifelessnerd.purekitpvp.createKit.SetKillItem;
+import me.lifelessnerd.purekitpvp.customitems.GoldenHeadEat;
+import me.lifelessnerd.purekitpvp.customitems.OpenRandomChest;
+import me.lifelessnerd.purekitpvp.customitems.commands.CommandManager;
+import me.lifelessnerd.purekitpvp.customitems.loottablelogic.CreateLootTable;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.KitStatsConfig;
+import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import me.lifelessnerd.purekitpvp.kitCommand.GUIListener;
 import me.lifelessnerd.purekitpvp.kitCommand.GetKit;
@@ -41,6 +47,10 @@ public final class PureKitPvP extends JavaPlugin {
         KitStatsConfig.get().options().copyDefaults(true);
         KitStatsConfig.save();
 
+        LootTablesConfig.setup();
+        LootTablesConfig.get().options().copyDefaults(true);
+        LootTablesConfig.save();
+
         PlayerStatsConfig.setup();
         PlayerStatsConfig.get().options().copyDefaults(true);
         PlayerStatsConfig.save();
@@ -53,12 +63,17 @@ public final class PureKitPvP extends JavaPlugin {
         getCommand("suicide").setExecutor(new Suicide(this));
         getCommand("getstats").setExecutor(new GetStats(this));
         getCommand("kitstats").setExecutor(new GetKitStats(this));
+        getCommand("setkillitem").setExecutor(new SetKillItem(this));
+        getCommand("getitem").setExecutor(new CommandManager(this));
+        getCommand("createloottable").setExecutor(new CreateLootTable(this));
         getServer().getPluginManager().registerEvents(new GetKit(this), this);
         getServer().getPluginManager().registerEvents(new GUIListener(this), this);
         getServer().getPluginManager().registerEvents(new DeathHandler(this), this);
         getServer().getPluginManager().registerEvents(new VoidKiller(this), this);
         getServer().getPluginManager().registerEvents(new ProjectilesThrownStat(this), this);
         getServer().getPluginManager().registerEvents(new ArrowsShotStat(this), this);
+        getServer().getPluginManager().registerEvents(new GoldenHeadEat(this), this);
+        getServer().getPluginManager().registerEvents(new OpenRandomChest(this), this);
 
     }
 

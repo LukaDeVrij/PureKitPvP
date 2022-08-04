@@ -438,14 +438,23 @@ public class DeathHandler implements Listener {
 
         //If player has just started combat, make a dataContainer with the empty object above
         NamespacedKey key = new NamespacedKey(plugin, "damageDistributionInfo");
-        if (!(player.getPersistentDataContainer().has(key,new PlayerDamageDistributionDataType()))){
+        if (!(player.getPersistentDataContainer().has(key, new PlayerDamageDistributionDataType()))){
             //Player does not have dataContainer, creating one with data from this hit
             player.getPersistentDataContainer().set(key, new PlayerDamageDistributionDataType(), damageDistrib);
         }
 
+
         //We get the data that either already existed or has just been created
         PersistentDataContainer data = player.getPersistentDataContainer();
         PlayerDamageDistribution pulledPlayerData = data.get(key, new PlayerDamageDistributionDataType());
+
+        if (pulledPlayerData == null){
+            //Nullcheck, just trying to eliminate an NPE (see pulledPlayerData)
+            plugin.getLogger().log(Level.FINE, "Aware of warning above, does not seem to matter");
+            //Player does not have dataContainer, creating one with data from this hit
+            player.getPersistentDataContainer().set(key, new PlayerDamageDistributionDataType(), damageDistrib);
+            pulledPlayerData = data.get(key, new PlayerDamageDistributionDataType());
+        }
 
         //We get its damageData
         HashMap<String, Integer> damageMap = pulledPlayerData.damageDistributionMap;

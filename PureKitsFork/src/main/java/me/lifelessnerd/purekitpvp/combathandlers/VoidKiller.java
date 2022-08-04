@@ -6,6 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.logging.Level;
 
@@ -23,6 +25,9 @@ public class VoidKiller implements Listener {
         String yLevelStr = Double.toString(yLevel);
         try {
             if (yLevel <= (double) plugin.getConfig().get("voidY")) {
+                for (PotionEffect effect: p.getActivePotionEffects()){
+                    p.removePotionEffect(effect.getType());
+                }
                 p.setHealth(1);
                 Location tpLoc = new Location(loc.getWorld(), loc.getX(), loc.getY() - 150, loc.getZ());
                 p.teleport(tpLoc);

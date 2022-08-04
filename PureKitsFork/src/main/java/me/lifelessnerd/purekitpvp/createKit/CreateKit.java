@@ -2,6 +2,7 @@ package me.lifelessnerd.purekitpvp.createKit;
 
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -42,11 +43,16 @@ public class CreateKit implements TabExecutor {
         //Store arguments
         KitIcon kitIconLib = new KitIcon();
         String kitIcon = "STONE";
-        String killItem = "GOLDEN_APPLE";
+        String killItem = "AIR";
         String kitPermission = "kit.other";
         String kitName = args[0].toLowerCase();
         kitName = kitName.substring(0, 1).toUpperCase() + kitName.substring(1);
         String displayColor = args[1];
+        if (!(args.length >= 5)){
+            player.sendMessage("Provide arguments!");
+            return false;
+
+        }
         if (Arrays.asList(kitIconLib.materialList).contains(args[2])){
             kitIcon = args[2].toUpperCase();
 
@@ -81,8 +87,7 @@ public class CreateKit implements TabExecutor {
         KitConfig.get().set("kits." + kitName + ".guiitem", kitIcon);
         KitConfig.get().addDefault("kits." + kitName, "");
         KitConfig.get().addDefault("kits." + kitName + ".displayname", "&7" + args[0]);
-        KitConfig.get().addDefault("kits." + kitName + ".killitem", "GOLDEN_APPLE");
-        KitConfig.get().set("kits." + kitName + ".killitem", killItem);
+
         KitConfig.get().addDefault("kits." + kitName + ".guiitem", "STONE");
         KitConfig.get().addDefault("kits." + kitName + ".guilore", "");
         KitConfig.get().set("kits." + kitName + ".helmet", helmet);
@@ -90,6 +95,13 @@ public class CreateKit implements TabExecutor {
         KitConfig.get().set("kits." + kitName + ".leggings", leggings);
         KitConfig.get().set("kits." + kitName + ".boots", boots);
         KitConfig.get().addDefault("kits." + kitName + ".contents", kitContents);
+
+        //Killitem
+        Material killItemMat = Material.getMaterial(killItem);
+        ItemStack killItemStack = new ItemStack(killItemMat);
+        KitConfig.get().addDefault("kits." + kitName + ".killitem", "GOLDEN_APPLE");
+        KitConfig.get().set("kits." + kitName + ".killitem", killItemStack);
+
         KitConfig.get().options().copyDefaults(true);
         KitConfig.save();
         KitConfig.reload();

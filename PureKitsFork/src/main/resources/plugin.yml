@@ -36,6 +36,15 @@ commands:
   kitstats:
     description: Get the usage stats of kits.
     usage: /kitstats
+  setkillitem:
+    description: Set the kill item for a kit to the item in your hand
+    usage: /setkillitem <kit>
+  getitem:
+    description: Get a special item
+    usage: /getitem <item>
+  createloottable:
+    description: Create a loot table based on the chest you are looking at
+    usage: /createloottable <name> <desiredLore> <displayName>
 
 
 
