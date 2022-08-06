@@ -87,14 +87,13 @@ public class GetKit implements TabExecutor, Listener {
         player.sendMessage(ChatColor.GRAY + "Kit " + ChatColor.BLUE + kitNameArg + ChatColor.GRAY + " given.");
 
         FileConfiguration fileConfiguration = KitConfig.get();
-        Object kitObject = fileConfiguration.get("kits." + kitNameArg + ".contents");
-        List<ItemStack> kitItems = (List<ItemStack>) kitObject;
+        List<ItemStack> kitItems = (List<ItemStack>) fileConfiguration.get("kits." + kitNameArg + ".contents");
 
         //Remove any potion effects that make PvP unfair
         for (PotionEffect effect : player.getActivePotionEffects())
             player.removePotionEffect(effect.getType());
 
-        //Give items (code from PureKits)
+        //Give items
         for (int index = 0; index < kitItems.size(); index++) {
             ItemStack item = kitItems.get(index);
             if (item == null) {
@@ -104,11 +103,11 @@ public class GetKit implements TabExecutor, Listener {
             ItemStack helmet = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
             player.getInventory().setHelmet(helmet);
             ItemStack chestplate = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
-            player.getInventory().setHelmet(chestplate);
+            player.getInventory().setChestplate(chestplate);
             ItemStack leggings = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
-            player.getInventory().setHelmet(leggings);
+            player.getInventory().setLeggings(leggings);
             ItemStack boots = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
-            player.getInventory().setHelmet(boots);
+            player.getInventory().setBoots(boots);
         }
 
         hasKit.add(player.getName());

@@ -10,6 +10,7 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,6 +59,15 @@ public class DeleteKit implements TabExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (args.length == 1){
+            List<String> autoComplete = new ArrayList<>();
+            for(String key : KitConfig.get().getConfigurationSection("kits.").getKeys(false)){
+                key = key.toLowerCase();
+                autoComplete.add(key);
+            };
+
+            return autoComplete;
+        }
         return null;
     }
 }

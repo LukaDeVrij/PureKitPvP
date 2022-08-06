@@ -74,28 +74,22 @@ public class CreateKit implements TabExecutor {
         //Storing all contents
         ItemStack helmet = player.getInventory().getHelmet();
         ItemStack chestplate = player.getInventory().getChestplate();
-        ItemStack leggings = player.getInventory().getBoots();
+        ItemStack leggings = player.getInventory().getLeggings();
         ItemStack boots = player.getInventory().getBoots();
 
         ItemStack[] kitContents = player.getInventory().getContents();
 
-        //Set permission
-        KitConfig.get().addDefault("kits." + kitName + ".permission", "");
+        //Create kit in config
+        KitConfig.get().createSection("kits." + kitName);
         KitConfig.get().set("kits." + kitName + ".permission", kitPermission);
-        KitConfig.get().addDefault("kits." + kitName + ".displayname", "");
         KitConfig.get().set("kits." + kitName + ".displayname", displayColor);
-        KitConfig.get().addDefault("kits." + kitName + ".guiitem", "");
         KitConfig.get().set("kits." + kitName + ".guiitem", kitIcon);
-        KitConfig.get().addDefault("kits." + kitName, "");
-        KitConfig.get().addDefault("kits." + kitName + ".displayname", "&7" + args[0]);
-
-        KitConfig.get().addDefault("kits." + kitName + ".guiitem", "STONE");
-        KitConfig.get().addDefault("kits." + kitName + ".guilore", "");
+        KitConfig.get().set("kits." + kitName + ".guilore", "");
         KitConfig.get().set("kits." + kitName + ".helmet", helmet);
         KitConfig.get().set("kits." + kitName + ".chestplate", chestplate);
         KitConfig.get().set("kits." + kitName + ".leggings", leggings);
         KitConfig.get().set("kits." + kitName + ".boots", boots);
-        KitConfig.get().addDefault("kits." + kitName + ".contents", kitContents);
+        KitConfig.get().set("kits." + kitName + ".contents", kitContents);
 
         //Killitem
         Material killItemMat = Material.getMaterial(killItem);

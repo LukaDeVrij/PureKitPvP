@@ -75,8 +75,7 @@ public class KitsGUI implements TabExecutor {
 
             // Item lore that consists of contents of kit
             FileConfiguration fileConfiguration = KitConfig.get();
-            Object kitObject = fileConfiguration.get("kits." + key + ".contents");
-            List<ItemStack> kitContent = (List<ItemStack>) kitObject;
+            List<ItemStack> kitContent = (List<ItemStack>) fileConfiguration.get("kits." + key + ".contents");
             lore.add(ChatColor.BLUE + "Weapons:");
             for (int index = 0; index < kitContent.size(); index++) {
 
@@ -134,8 +133,7 @@ public class KitsGUI implements TabExecutor {
                 }
             }
             //Set KillItem as lore
-            Object killItemObject = KitConfig.get().get("kits." + key + ".killitem");
-            ItemStack killItem = (ItemStack) killItemObject;
+            ItemStack killItem = (ItemStack) KitConfig.get().get("kits." + key + ".killitem");
             if (killItem.getType().toString().equalsIgnoreCase("PLAYER_HEAD")){
                 lore.add(ChatColor.WHITE + "Item on Kill:");
                 lore.add(ChatColor.YELLOW + "    Golden Head"); //I would just get the displayname to make this more dynamic but I cant because of fecking component
