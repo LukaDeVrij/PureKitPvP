@@ -76,16 +76,16 @@ public class KitsGUI implements TabExecutor {
             // Item lore that consists of contents of kit
             FileConfiguration fileConfiguration = KitConfig.get();
             Object kitObject = fileConfiguration.get("kits." + key + ".contents");
-            List<ItemStack> kitItems = (List<ItemStack>) kitObject;
+            List<ItemStack> kitContent = (List<ItemStack>) kitObject;
             lore.add(ChatColor.BLUE + "Weapons:");
-            for (int index = 0; index < kitItems.size(); index++) {
+            for (int index = 0; index < kitContent.size(); index++) {
 
-                ItemStack item = kitItems.get(index);
+                ItemStack item = kitContent.get(index);
 
                 switch (index) {
                     case 3 -> lore.add(ChatColor.BLUE + "Items:");
                     case 36 -> {
-                        if(kitItems.get(36) != null | kitItems.get(37) != null | kitItems.get(38) != null | kitItems.get(39) != null) {
+                        if(kitContent.get(36) != null | kitContent.get(37) != null | kitContent.get(38) != null | kitContent.get(39) != null) {
                             lore.add(ChatColor.BLUE + "Armor:");
                         } else {
                             lore.add(ChatColor.BLUE + "No Armor");
@@ -144,7 +144,8 @@ public class KitsGUI implements TabExecutor {
                 lore.add(ChatColor.WHITE + "No Item on Kill");
             } else {
                 lore.add(ChatColor.WHITE + "Item on Kill:");
-                lore.add(ChatColor.YELLOW + "    " + MyStringUtils.itemCamelCase(killItem.getType().toString()));
+                int amount = killItem.getAmount();
+                lore.add(ChatColor.GRAY + "" +  amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(killItem.getType().toString()));
 
             }
 

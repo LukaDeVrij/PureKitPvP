@@ -2,6 +2,7 @@ package me.lifelessnerd.purekitpvp;
 
 import me.lifelessnerd.purekitpvp.combathandlers.commands.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.VoidKiller;
+import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.createKit.CreateKit;
 import me.lifelessnerd.purekitpvp.createKit.DeleteKit;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
@@ -74,6 +75,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ArrowsShotStat(this), this);
         getServer().getPluginManager().registerEvents(new GoldenHeadEat(this), this);
         getServer().getPluginManager().registerEvents(new OpenRandomChest(this), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerSpawnMob(this), this);
 
     }
 

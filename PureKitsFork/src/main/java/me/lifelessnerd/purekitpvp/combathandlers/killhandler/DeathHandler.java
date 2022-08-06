@@ -2,6 +2,7 @@ package me.lifelessnerd.purekitpvp.combathandlers.killhandler;
 
 import me.lifelessnerd.purekitpvp.combathandlers.PlayerLeveling;
 import me.lifelessnerd.purekitpvp.combathandlers.libs.DamageCauseLib;
+import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.MobRemover;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import me.lifelessnerd.purekitpvp.utils.DoubleUtils;
@@ -215,6 +216,9 @@ public class DeathHandler implements Listener {
             PlayerLeveling.createLevelXPPath(player.getName());
             PlayerLeveling.addExperience(player, 1, "Death"); // 1 for DEATH
             PlayerLeveling.updateLevels();
+
+            //remove any mobs player spawned
+            MobRemover.removeMobs(player);
 
             player.sendActionBar(actionBarText);
 

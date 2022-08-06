@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp.customitems.commands;
 
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -34,6 +35,10 @@ public class CommandManager implements TabExecutor {
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) {
             player.sendMessage("You may not do that in this world!");
+            return true;
+        }
+        if(!(player.hasPermission("purekitpvp.admin.getitem"))){
+            player.sendMessage(ChatColor.RED + "You do not have permission!");
             return true;
         }
 

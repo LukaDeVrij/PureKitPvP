@@ -46,7 +46,7 @@ public class GUIListener implements Listener {
                             player.chat("/resetkit");
                         }
                         else {
-                            player.setHealth(0);
+                            player.chat("/suicide");
                         }
                     }
 

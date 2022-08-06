@@ -37,6 +37,8 @@ public class OpenRandomChest implements Listener {
             return;
         }
 
+
+
         if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR)) {
             return;
 

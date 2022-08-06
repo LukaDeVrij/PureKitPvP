@@ -19,7 +19,13 @@ public class VoidKiller implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
+
         Player p = e.getPlayer();
+
+        if (!(p.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) {
+            return;
+        }
+
         Location loc = p.getLocation();
         double yLevel = loc.getY();
         String yLevelStr = Double.toString(yLevel);

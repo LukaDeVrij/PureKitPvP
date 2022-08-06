@@ -76,6 +76,7 @@ public class CreateKit implements TabExecutor {
         ItemStack chestplate = player.getInventory().getChestplate();
         ItemStack leggings = player.getInventory().getBoots();
         ItemStack boots = player.getInventory().getBoots();
+
         ItemStack[] kitContents = player.getInventory().getContents();
 
         //Set permission
