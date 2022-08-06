@@ -1,4 +1,4 @@
-package me.lifelessnerd.purekitpvp.customitems.commands;
+package me.lifelessnerd.purekitpvp;
 
 import org.bukkit.entity.Player;
 

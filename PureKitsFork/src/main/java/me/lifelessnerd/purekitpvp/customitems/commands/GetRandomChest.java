@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.customitems.commands;
 
+import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
@@ -11,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetRandomChest extends Subcommand{
+public class GetRandomChest extends Subcommand {
     @Override
     public String getName() {
         return "random_chest";

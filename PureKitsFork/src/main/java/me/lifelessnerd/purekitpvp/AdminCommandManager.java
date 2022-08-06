@@ -1,6 +1,5 @@
-package me.lifelessnerd.purekitpvp.customitems.commands;
+package me.lifelessnerd.purekitpvp;
 
-import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,12 +13,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandManager implements TabExecutor {
+public class AdminCommandManager implements TabExecutor {
     ArrayList<Subcommand> subcommands = new ArrayList<>();
     Plugin plugin;
-    public CommandManager(Plugin plugin){
-        subcommands.add(new GetGoldenHead());
-        subcommands.add(new GetRandomChest());
+    public AdminCommandManager(Plugin plugin){
+        //subcommands.add();
         this.plugin = plugin;
     }
 
@@ -32,11 +30,7 @@ public class CommandManager implements TabExecutor {
         }
         Player player = (Player) sender;
 
-        if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) {
-            player.sendMessage("You may not do that in this world!");
-            return true;
-        }
-        if(!(player.hasPermission("purekitpvp.admin.getitem"))){
+        if(!(player.hasPermission("purekitpvp.admin.*"))){
             player.sendMessage(ChatColor.RED + "You do not have permission!");
             return true;
         }
@@ -69,14 +63,8 @@ public class CommandManager implements TabExecutor {
 
         if(args.length == 1) {
             List<String> arguments = new ArrayList<>();
-            arguments.add("createkit");
-            arguments.add("deletekit");
-            arguments.add("kitstats");
-            arguments.add("setkillitem");
-            arguments.add("getcustomitem");
-            arguments.add("createloottable");
-            arguments.add("help");
-            arguments.add("reload");
+            arguments.add("golden_head");
+            arguments.add("random_chest");
             return arguments;
         }
 

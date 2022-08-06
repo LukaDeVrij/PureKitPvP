@@ -1,19 +1,16 @@
 package me.lifelessnerd.purekitpvp.customitems.commands;
 
+import me.lifelessnerd.purekitpvp.Subcommand;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.awt.*;
 import java.util.Arrays;
 
-public class GetGoldenHead extends Subcommand{
+public class GetGoldenHead extends Subcommand {
     @Override
     public String getName() {
         return "golden_head";
