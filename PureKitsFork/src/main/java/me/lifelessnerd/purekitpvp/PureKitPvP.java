@@ -57,16 +57,17 @@ public final class PureKitPvP extends JavaPlugin {
         PlayerStatsConfig.save();
 
         getCommand("getkit").setExecutor(new GetKit(this));
-        getCommand("resetkit").setExecutor(new ResetKit());
+        //getCommand("resetkit").setExecutor(new ResetKit());
         getCommand("kit").setExecutor(new KitsGUI(this));
-        getCommand("createkit").setExecutor(new CreateKit(this));
+        //getCommand("createkit").setExecutor(new CreateKit(this));
         getCommand("deletekit").setExecutor(new DeleteKit(this));
         getCommand("suicide").setExecutor(new Suicide(this));
         getCommand("getstats").setExecutor(new GetStats(this));
-        getCommand("kitstats").setExecutor(new GetKitStats(this));
-        getCommand("setkillitem").setExecutor(new SetKillItem(this));
+        //getCommand("kitstats").setExecutor(new GetKitStats(this));
+        //getCommand("setkillitem").setExecutor(new SetKillItem(this));
         getCommand("getitem").setExecutor(new CommandManager(this));
-        getCommand("createloottable").setExecutor(new CreateLootTable(this));
+        //getCommand("createloottable").setExecutor(new CreateLootTable(this));
+        getCommand("purekitpvp").setExecutor(new AdminCommandManager(this));
         getServer().getPluginManager().registerEvents(new GetKit(this), this);
         getServer().getPluginManager().registerEvents(new GUIListener(this), this);
         getServer().getPluginManager().registerEvents(new DeathHandler(this), this);

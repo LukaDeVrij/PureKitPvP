@@ -45,6 +45,9 @@ commands:
   createloottable:
     description: Create a loot table based on the chest you are looking at
     usage: /createloottable <name> <desiredLore> <displayName>
+  purekitpvp:
+    description: All admin commands.
+    usage: /purekitpvp <createkit/deletekit/kitstats/setkillitem/getcustomitem/createloottable/reload>
 
 
 

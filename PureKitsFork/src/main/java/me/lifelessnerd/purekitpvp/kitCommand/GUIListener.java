@@ -43,7 +43,7 @@ public class GUIListener implements Listener {
                     else {
                         e.setCancelled(true);
                         if (player.hasPermission("purekitpvp.admin.resetkit")){
-                            player.chat("/resetkit");
+                            player.chat("/purekitpvp resetkit");
                         }
                         else {
                             player.chat("/suicide");

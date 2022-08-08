@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
+import me.lifelessnerd.purekitpvp.Subcommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,14 +12,30 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ResetKit implements TabExecutor {
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+public class ResetKit extends Subcommand {
 
-        if (!(sender instanceof Player)){
-            return false;
-        }
-        Player player = (Player) sender;
+    @Override
+    public String getName() {
+        return "resetkit";
+    }
+
+    @Override
+    public String[] getAliases() {
+        return null;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Reset your kit";
+    }
+
+    @Override
+    public String getSyntax() {
+        return "/purekitpvp resetkit";
+    }
+
+    @Override
+    public boolean perform(Player player, String[] args) {
 
         if(!(player.hasPermission("purekitpvp.admin.resetkit"))){
             player.sendMessage(ChatColor.RED + "You do not have permission!");
@@ -37,10 +54,5 @@ public class ResetKit implements TabExecutor {
 
 
         return true;
-    }
-
-    @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        return null;
     }
 }

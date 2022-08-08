@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.customitems.loottablelogic;
 
+import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.createKit.KitIcon;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import org.bukkit.Material;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CreateLootTable implements TabExecutor {
+public class CreateLootTable extends Subcommand {
     Plugin plugin;
 
     public CreateLootTable(Plugin plugin) {
@@ -31,24 +32,40 @@ public class CreateLootTable implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public String getName() {
+        return "createloottable";
+    }
 
-        if(!(sender instanceof Player player)){
-            return true;
-        }
+    @Override
+    public String[] getAliases() {
+        return null;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Create a loot table by looking at a chest";
+    }
+
+    @Override
+    public String getSyntax() {
+        return "/purekitpvp createloottable <name> <lore> <displayname>";
+    }
+
+    @Override
+    public boolean perform(Player player, String[] args) {
 
         if (!(player.hasPermission("purekitpvp.admin.createloottable"))) {
             player.sendMessage("No permission!");
             return true;
         }
 
-        if (!(args.length >= 3)){
+        if (!(args.length >= 4)){
             player.sendMessage("Provide arguments!");
             return false;
         }
-        String name = args[0];
-        String desiredLore = args[1];
-        String displayName = args[2];
+        String name = args[1];
+        String desiredLore = args[2];
+        String displayName = args[3];
 
         Block targetBlock = player.getTargetBlock(10);
         if (targetBlock == null){
@@ -87,35 +104,12 @@ public class CreateLootTable implements TabExecutor {
         }
 
         player.sendMessage(
-                        "Loot table created. \nTo specify chances per item, and add multi-word lore" +
-                                "please use the loottables.yml config!");
+                "Loot table created. \nTo specify chances per item, and add multi-word lore" +
+                        "please use the loottables.yml config!");
 
         LootTablesConfig.save();
         LootTablesConfig.reload();
         return true;
-    }
 
-    @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length == 1){
-            List<String> arguments = new ArrayList<>();
-            arguments.add("<name>");
-            return arguments;
-        }
-        if (args.length == 2){
-            List<String> arguments = new ArrayList<>();
-            arguments.add("<desiredLore>");
-
-
-            return arguments;
-        }
-        if (args.length == 3){
-            List<String> arguments = new ArrayList<>();
-            arguments.add("<displayName>");
-
-            return arguments;
-        }
-
-        return null;
     }
 }

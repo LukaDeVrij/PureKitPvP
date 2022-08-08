@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.createKit;
 
+import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CreateKit implements TabExecutor {
+public class CreateKit extends Subcommand {
     Plugin plugin;
 
     public CreateKit(Plugin plugin) {
@@ -24,19 +25,34 @@ public class CreateKit implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public String getName() {
+        return "createkit";
+    }
 
-        if (!(sender instanceof Player)){
-            return false;
-        }
-        Player player = (Player) sender;
+    @Override
+    public String[] getAliases() {
+        return null;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Create a kit from the contents of your inventory";
+    }
+
+    @Override
+    public String getSyntax() {
+        return "/purekitpvp createkit <kitName> <displayName> <kitIcon> <kitPermission> <killItem>";
+    }
+
+    @Override
+    public boolean perform(Player player, String[] args) {
 
         if (!player.hasPermission("purekitpvp.admin.createkit")){
             player.sendMessage(ChatColor.RED + "No permission!");
             return true;
         }
 
-        if (!(args.length >= 1)){
+        if (!(args.length >= 2)){
             player.sendMessage(ChatColor.RED + "Please provide arguments!");
             return false;
         }
@@ -45,31 +61,29 @@ public class CreateKit implements TabExecutor {
         String kitIcon = "STONE";
         String killItem = "AIR";
         String kitPermission = "kit.other";
-        String kitName = args[0].toLowerCase();
+        String kitName = args[1].toLowerCase();
         kitName = kitName.substring(0, 1).toUpperCase() + kitName.substring(1);
-        String displayColor = args[1];
-        if (!(args.length >= 5)){
+        String displayColor = args[2];
+        if (!(args.length >= 6)){
             player.sendMessage("Provide arguments!");
             return false;
 
         }
-        if (Arrays.asList(kitIconLib.materialList).contains(args[2])){
-            kitIcon = args[2].toUpperCase();
+        if (Arrays.asList(kitIconLib.materialList).contains(args[3])){
+            kitIcon = args[3].toUpperCase();
 
         }else {
-            player.sendMessage(args[2] + " is not a valid option.");
+            player.sendMessage(args[3] + " is not a valid option.");
             return true;
         }
-        if (Arrays.asList(kitIconLib.materialList).contains(args[4])){
-            killItem = args[4].toUpperCase();
+        if (Arrays.asList(kitIconLib.materialList).contains(args[5])){
+            killItem = args[5].toUpperCase();
 
         }else {
-            player.sendMessage(args[4] + " is not a valid option.");
+            player.sendMessage(args[5] + " is not a valid option.");
             return true;
         }
-        if (args.length > 3){
-            kitPermission = args[3];
-        }
+        kitPermission = args[4];
 
         //Storing all contents
         ItemStack helmet = player.getInventory().getHelmet();
@@ -105,52 +119,6 @@ public class CreateKit implements TabExecutor {
                 + kitIcon + ",\n kitPermission: " + kitPermission + ",\nkillItem: " + killItem);
 
         return true;
-    }
-
-    @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-
-        //Draft syntax:
-        // /createkit <Name> <DisplayName> Icon permission(optional)
-        // Icon will be tricky, will need to autocomplete every item in itemstack format (or minecraft format
-        // and translate)
-        if (args.length == 1){
-            List<String> arguments = new ArrayList<>();
-            arguments.add("<kitName>");
-            return arguments;
-        }
-        if (args.length == 2){
-            List<String> arguments = new ArrayList<>();
-            arguments.add("&1");
-            arguments.add("&2");
-            arguments.add("&3");
-            arguments.add("&4");
-            arguments.add("&5");
-            arguments.add("&6");
-            arguments.add("&7");
-            arguments.add("&8");
-            arguments.add("&9");
-            arguments.add("&0");
-
-            return arguments;
-        }
-        if (args.length == 3){
-            KitIcon kitIconLib = new KitIcon();
-
-            return Arrays.asList(kitIconLib.materialList);
-        }
-        if (args.length == 4){
-            List<String> arguments = new ArrayList<>();
-            arguments.add("kit.other");
-
-            return arguments;
-        }
-        if (args.length == 5){
-            KitIcon kitIconLib = new KitIcon();
-            return Arrays.asList(kitIconLib.materialList);
-        }
-
-        return null;
 
     }
 }
