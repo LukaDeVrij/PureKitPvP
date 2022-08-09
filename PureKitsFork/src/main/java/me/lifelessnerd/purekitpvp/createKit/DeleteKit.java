@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.createKit;
 
+import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,32 +15,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class DeleteKit implements TabExecutor {
+public class DeleteKit extends Subcommand {
     Plugin plugin;
 
     public DeleteKit(Plugin plugin) {
         this.plugin = plugin;
     }
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!(sender instanceof Player)){
-            return false;
-        }
-        Player player = (Player) sender;
+    @Override
+    public String getName() {
+        return "deletekit";
+    }
+
+    @Override
+    public String[] getAliases() {
+        return null;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Remove a kit";
+    }
+
+    @Override
+    public String getSyntax() {
+        return "/purekitpvp deletekit <kitName>";
+    }
+
+    @Override
+    public boolean perform(Player player, String[] args) {
 
         if (!player.hasPermission("purekitpvp.admin.deletekit")){
             player.sendMessage(ChatColor.RED + "No permission!");
             return true;
         }
 
-        if (!(args.length >= 1)){
+        if (!(args.length >= 2)){
             player.sendMessage(ChatColor.RED + "Please provide arguments!");
             return false;
         }
 
-        String kitName = args[0].toLowerCase();
+        String kitName = args[1].toLowerCase();
         kitName = kitName.substring(0, 1).toUpperCase() + kitName.substring(1);
 
         if(KitConfig.get().get("kits." + kitName) == null){
@@ -55,19 +72,5 @@ public class DeleteKit implements TabExecutor {
 
 
         return true;
-    }
-
-    @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length == 1){
-            List<String> autoComplete = new ArrayList<>();
-            for(String key : KitConfig.get().getConfigurationSection("kits.").getKeys(false)){
-                key = key.toLowerCase();
-                autoComplete.add(key);
-            };
-
-            return autoComplete;
-        }
-        return null;
     }
 }

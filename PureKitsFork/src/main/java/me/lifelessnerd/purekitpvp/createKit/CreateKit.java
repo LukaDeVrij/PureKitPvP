@@ -41,7 +41,7 @@ public class CreateKit extends Subcommand {
 
     @Override
     public String getSyntax() {
-        return "/purekitpvp createkit <kitName> <displayName> <kitIcon> <kitPermission> <killItem>";
+        return "/purekitpvp createkit <kitName> <displayColor> <kitIcon> <kitPermission> <killItem>";
     }
 
     @Override
@@ -64,7 +64,7 @@ public class CreateKit extends Subcommand {
         String kitName = args[1].toLowerCase();
         kitName = kitName.substring(0, 1).toUpperCase() + kitName.substring(1);
         String displayColor = args[2];
-        if (!(args.length >= 6)){
+        if (!(args.length >= 4)){
             player.sendMessage("Provide arguments!");
             return false;
 
@@ -76,14 +76,26 @@ public class CreateKit extends Subcommand {
             player.sendMessage(args[3] + " is not a valid option.");
             return true;
         }
-        if (Arrays.asList(kitIconLib.materialList).contains(args[5])){
-            killItem = args[5].toUpperCase();
+        if (!(args[5] == null)){
+            if (Arrays.asList(kitIconLib.materialList).contains(args[5])){
+                killItem = args[5].toUpperCase();
 
-        }else {
-            player.sendMessage(args[5] + " is not a valid option.");
-            return true;
+            }else {
+                player.sendMessage(args[5] + " is not a valid option.");
+                return true;
+            }
+        } else {
+            killItem = "AIR";
+            player.sendMessage("Defaulted to kill item AIR (none). You may change this with /pkpvp setkillitem");
         }
-        kitPermission = args[4];
+
+        if (!(args[4] == null)){
+            kitPermission = args[4];
+        } else {
+            kitPermission = "kit.other";
+        }
+
+
 
         //Storing all contents
         ItemStack helmet = player.getInventory().getHelmet();
@@ -115,8 +127,11 @@ public class CreateKit extends Subcommand {
         KitConfig.save();
         KitConfig.reload();
 
-        player.sendMessage("Kit made with name: " + kitName + ",\n displayColor: " + displayColor + ",\n kitIcon: "
-                + kitIcon + ",\n kitPermission: " + kitPermission + ",\nkillItem: " + killItem);
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                "Kit created with following properties: \nKitName: &a" + kitName +
+                        "&r\n displayColor: &a" + displayColor + "&r\n kitIcon: &a"
+                + kitIcon + "&r\n kitPermission: &a" + kitPermission + "&r\nkillItem: &a" + killItem));
+        player.sendMessage("You can change these in the kits.yml file, but remember to backup the file when manually editing.");
 
         return true;
 

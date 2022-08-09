@@ -74,7 +74,6 @@ public class GetKit implements TabExecutor, Listener {
 
         if(!KitConfig.get().isSet("kits." + kitNameArg + ".permission")){
             player.sendMessage(ChatColor.GRAY + "That kit does not have a permission associated. Please report to your administrator.");
-            //TODO: Make permissions optional without duplicating code ideally
             return true;
         }
 

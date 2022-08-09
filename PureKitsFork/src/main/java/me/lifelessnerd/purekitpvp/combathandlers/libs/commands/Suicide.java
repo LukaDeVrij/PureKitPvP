@@ -1,4 +1,4 @@
-package me.lifelessnerd.purekitpvp.combathandlers.commands;
+package me.lifelessnerd.purekitpvp.combathandlers.libs.commands;
 
 import me.lifelessnerd.purekitpvp.PureKitPvP;
 import org.bukkit.Location;
@@ -21,6 +21,11 @@ public class Suicide implements CommandExecutor {
 
         if (!(sender instanceof Player player)){
 
+            return true;
+        }
+
+        if (!(plugin.getConfig().getBoolean("suicide-command"))){
+            player.sendMessage("This is disabled.");
             return true;
         }
 

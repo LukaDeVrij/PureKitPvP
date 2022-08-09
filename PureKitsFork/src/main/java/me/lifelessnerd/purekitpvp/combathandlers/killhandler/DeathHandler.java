@@ -41,15 +41,11 @@ public class DeathHandler implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e){
 
-
         Player player = e.getPlayer();
-
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
             return;
         }
-
-
         //Reset player
         e.setCancelled(true);
         double x = plugin.getConfig().getDouble("respawnX");
@@ -64,6 +60,7 @@ public class DeathHandler implements Listener {
         player.getActivePotionEffects().clear();
         player.setExp(0f);
         player.setLevel(0);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5, 254)); //Kinda jank, works tho
 
 
         DamageCauseLib damageCauseLib = new DamageCauseLib();
@@ -263,8 +260,12 @@ public class DeathHandler implements Listener {
                     }
                     PlayerLeveling.addExperience(creditPlayer, creditStats.getInt(creditPlayer.getName() + ".killstreak"), "Killstreak Bonus");
                 }
-                if (creditStats.getInt(creditPlayer.getName() + ".killstreak") >= 5){
-                    creditPlayer.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 2000, 2)); //TODO make this toggleable via config
+                if(plugin.getConfig().getBoolean("killstreak-glowing")) {
+
+                    if (creditStats.getInt(creditPlayer.getName() + ".killstreak") >= 5) {
+                        int duration = plugin.getConfig().getInt("killstreak-glowing-duration");
+                        creditPlayer.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, duration * 20, 2));
+                    }
                 }
 
                 PlayerStatsConfig.save();
@@ -294,12 +295,13 @@ public class DeathHandler implements Listener {
                     ItemStack killItem = new ItemStack(Material.AIR);
                     String kitName = PlayerStatsConfig.get().getString(credit + ".current_kit");
                     if (!(KitConfig.get().getString("kits." + kitName + ".killitem") == null)) {
-                        killItem.setType(Material.getMaterial(KitConfig.get().getString("kits." + kitName + ".killitem")));
+                        ItemStack fromFile = (ItemStack) KitConfig.get().get("kits." + kitName + ".killitem");
+                        killItem.setType(fromFile.getType());
 
                         creditPlayer.getInventory().addItem(killItem);
                     }
                 } catch (Exception exception){
-                    plugin.getLogger().log(Level.SEVERE, exception.toString());
+                    plugin.getLogger().log(Level.SEVERE, exception.toString()); //TODO throws here. think i fixed it but not sure
                 }
 
 

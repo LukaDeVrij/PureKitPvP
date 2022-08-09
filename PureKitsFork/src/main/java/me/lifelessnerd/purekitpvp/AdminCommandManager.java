@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp;
 
 import me.lifelessnerd.purekitpvp.createKit.CreateKit;
+import me.lifelessnerd.purekitpvp.createKit.DeleteKit;
 import me.lifelessnerd.purekitpvp.createKit.KitIcon;
 import me.lifelessnerd.purekitpvp.createKit.SetKillItem;
 import me.lifelessnerd.purekitpvp.customitems.GetCustomItem;
@@ -26,13 +27,16 @@ public class AdminCommandManager implements TabExecutor {
     ArrayList<Subcommand> subcommands = new ArrayList<>();
     Plugin plugin;
     public AdminCommandManager(Plugin plugin){
-        subcommands.add(new CreateLootTable(plugin));
-        subcommands.add(new ReloadPlugin());
-        subcommands.add(new GetCustomItem());
         subcommands.add(new CreateKit(plugin));
+        subcommands.add(new DeleteKit(plugin));
         subcommands.add(new ResetKit());
         subcommands.add(new SetKillItem(plugin));
+        subcommands.add(new CreateLootTable(plugin));
+        subcommands.add(new GetCustomItem());
         subcommands.add(new GetKitStats(plugin));
+        subcommands.add(new HelpCommand(subcommands, plugin));
+        subcommands.add(new InfoCommand());
+        subcommands.add(new ReloadPlugin(plugin));
         this.plugin = plugin;
     }
 
@@ -51,7 +55,7 @@ public class AdminCommandManager implements TabExecutor {
         }
 
         if (args.length < 1){
-            player.sendMessage("Please specify what function to use."); //TODO: Add all options in a message
+            player.sendMessage("Please specify what function to use.");
             return false;
         }
 
@@ -64,7 +68,7 @@ public class AdminCommandManager implements TabExecutor {
         }
 
 
-        player.sendMessage(args[0] + " is not a valid sub-command."); //TODO: Add all options in a message same as above
+        player.sendMessage(args[0] + " is not a valid sub-command.");
         return false;
 
     }

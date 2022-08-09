@@ -29,19 +29,20 @@ public class VoidKiller implements Listener {
         Location loc = p.getLocation();
         double yLevel = loc.getY();
         String yLevelStr = Double.toString(yLevel);
-        try {
-            if (yLevel <= (double) plugin.getConfig().get("voidY")) {
-                for (PotionEffect effect: p.getActivePotionEffects()){
-                    p.removePotionEffect(effect.getType());
+        if (plugin.getConfig().getBoolean("quick-voidkill")) {
+            try {
+                if (yLevel <= (double) plugin.getConfig().get("voidY")) {
+                    for (PotionEffect effect : p.getActivePotionEffects()) {
+                        p.removePotionEffect(effect.getType());
+                    }
+                    p.setHealth(1);
+                    Location tpLoc = new Location(loc.getWorld(), loc.getX(), loc.getY() - 150, loc.getZ());
+                    p.teleport(tpLoc);
                 }
-                p.setHealth(1);
-                Location tpLoc = new Location(loc.getWorld(), loc.getX(), loc.getY() - 150, loc.getZ());
-                p.teleport(tpLoc);
+            } catch (Exception ex) {
+                plugin.getLogger().log(Level.SEVERE, "Please set voidY in the config!");
+                plugin.getLogger().log(Level.INFO, ex.toString());
             }
-        }
-        catch (Exception ex){
-            plugin.getLogger().log(Level.SEVERE, "Please set voidY in the config!");
-            plugin.getLogger().log(Level.INFO, ex.toString());
         }
 
     }

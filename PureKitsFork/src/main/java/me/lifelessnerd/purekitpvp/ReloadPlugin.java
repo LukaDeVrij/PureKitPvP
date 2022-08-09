@@ -4,9 +4,19 @@ import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.KitStatsConfig;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import java.io.File;
 
 public class ReloadPlugin extends Subcommand {
+    Plugin plugin;
+    public ReloadPlugin(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public String getName() {
         return "reload";
@@ -29,14 +39,22 @@ public class ReloadPlugin extends Subcommand {
 
     @Override
     public boolean perform(Player player, String[] args) {
-        KitConfig.save();
+        //TODO Reload should read the files, even if they are manually edited, and load them into the plugin
+        // NO WORKIE
         KitConfig.reload();
-        KitStatsConfig.save();
+        KitConfig.save();
         KitStatsConfig.reload();
-        LootTablesConfig.save();
+        KitStatsConfig.save();
         LootTablesConfig.reload();
-        PlayerStatsConfig.save();
+        LootTablesConfig.save();
         PlayerStatsConfig.reload();
+        PlayerStatsConfig.save();
+
+        plugin.reloadConfig();
+        plugin.getConfig();
+        plugin.saveConfig();
+        plugin.saveDefaultConfig();
+
         player.sendMessage("Plugin configs were reloaded!");
 
         return true;

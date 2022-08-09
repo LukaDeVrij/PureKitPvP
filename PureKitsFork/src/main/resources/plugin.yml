@@ -8,22 +8,9 @@ commands:
   getkit:
     description: Gives you a kit.
     usage: /getkit <kitName>
-  resetkit:
-    description: Resets your kit.
-    usage: /resetkit
-    aliases:
-      - rs
   kit:
     description: Shows kit selection GUI.
     usage: /kit
-  createkit:
-    description: Creates a kit from your current inventory.
-    usage: /createkit <kitName> <displayName> <kitIcon> <kitPermission> <killItem>
-  deletekit:
-    description: Removes a kit.
-    usage: /deletekit <kitName>
-    aliases:
-      - removekit
   suicide:
     description: Kill yourself in pvp.
     usage: /suicide
@@ -33,21 +20,12 @@ commands:
     aliases:
       - stats
       - pvpstats
-  kitstats:
-    description: Get the usage stats of kits.
-    usage: /kitstats
-  setkillitem:
-    description: Set the kill item for a kit to the item in your hand
-    usage: /setkillitem <kit>
-  getitem:
-    description: Get a special item
-    usage: /getitem <item>
-  createloottable:
-    description: Create a loot table based on the chest you are looking at
-    usage: /createloottable <name> <desiredLore> <displayName>
   purekitpvp:
-    description: All admin commands.
+    description: All admin commands. See documentation for help.
     usage: /purekitpvp <createkit/deletekit/kitstats/setkillitem/getcustomitem/createloottable/reload>
+    aliases:
+      - kitpvp
+      - pkpvp
 
 
 

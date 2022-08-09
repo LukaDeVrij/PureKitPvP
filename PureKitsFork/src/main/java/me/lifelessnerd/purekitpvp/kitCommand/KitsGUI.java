@@ -117,10 +117,14 @@ public class KitsGUI implements TabExecutor {
                     lore.add("    " + ChatColor.GRAY + MyStringUtils.itemMetaToEffects(item.getItemMeta().toString()));
 
                 } else if (item.getType().toString().equalsIgnoreCase("PLAYER_HEAD")){
-                    //Do stuff with potions
+
                     String amount = String.valueOf(item.getAmount());
                     lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase("golden_head"));
                     lore.add(ChatColor.GRAY + "    Healing Item");
+                } else if (item.getType().toString().equalsIgnoreCase("CHEST")){
+
+                    String amount = String.valueOf(item.getAmount());
+                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase("random_loot_chest"));
 
                 } else {
                     String amount = String.valueOf(item.getAmount());
@@ -134,9 +138,13 @@ public class KitsGUI implements TabExecutor {
             }
             //Set KillItem as lore
             ItemStack killItem = (ItemStack) KitConfig.get().get("kits." + key + ".killitem");
-            if (killItem.getType().toString().equalsIgnoreCase("PLAYER_HEAD")){
+            if (killItem.getType().toString().equalsIgnoreCase("PLAYER_HEAD")) {
                 lore.add(ChatColor.WHITE + "Item on Kill:");
                 lore.add(ChatColor.YELLOW + "    Golden Head"); //I would just get the displayname to make this more dynamic but I cant because of fecking component
+            } else if (killItem.getType().toString().equalsIgnoreCase("CHEST")){
+                lore.add(ChatColor.WHITE + "Item on Kill:");
+                int amount = killItem.getAmount();
+                lore.add(ChatColor.GRAY + "" +  amount + "x " + ChatColor.YELLOW + "Kit Loot Chest");
 
             } else if (killItem.getType().toString().equalsIgnoreCase("AIR")){
                 lore.add(ChatColor.WHITE + "No Item on Kill");

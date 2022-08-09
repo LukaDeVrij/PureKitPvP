@@ -1,12 +1,24 @@
 # PureKitPvP by LifelessNerd
-# Partially based on PureKits
+# Made to work with PureKits kit files
 # 2022
 
 # World in which the plugin should be active: i.e. kits, deaths, stats and such
 world: pvp
-# Y level at which you should die in pvp, please provide double
+
+#Quick kill when falling in void, only works when suicide-command is enabled
+quick-voidkill: true
+#If above true, Y level at which you should die in pvp, please provide double
 voidY: 0.0
+
 #respawn X, Y, Z in world
 respawnX: 0.5
 respawnY: 142.0
 respawnZ: 0.5
+
+#Whether people who get a killstreak will get glowing effect
+killstreak-glowing: true
+#If above true, the duration in seconds
+killstreak-glowing-duration: 100
+
+#Suicide command from PureKitPvP, ensures death recaps work correctly
+suicide-command: true

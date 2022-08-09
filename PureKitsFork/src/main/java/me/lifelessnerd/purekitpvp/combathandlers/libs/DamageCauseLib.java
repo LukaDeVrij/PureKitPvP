@@ -37,8 +37,8 @@ public class DamageCauseLib {
                 deathMessages.put("FREEZE"," froze to death");
                 deathMessages.put("SONIC_BOOM"," got pummeled by a Warden");
 
-                damageCauseTranslations.put("CONTACT","Cactus");
-                damageCauseTranslations.put("SUFFOCATION","Suffocation");
+                damageCauseTranslations.put("CONTACT"," Cactus");
+                damageCauseTranslations.put("SUFFOCATION"," Suffocation");
                 damageCauseTranslations.put("FALL"," Fall Damage");
                 damageCauseTranslations.put("FIRE"," Fire");
                 damageCauseTranslations.put("FIRE_TICK"," Fire");

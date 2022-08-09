@@ -56,6 +56,9 @@ public class GetStats implements TabExecutor {
                 if (key.split("\\.")[1].equalsIgnoreCase("kdratio")) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a    " +
                             MyStringUtils.itemCamelCase(key.split("\\.")[1]) + "&c- &r" + playerStatsConfig.getDouble(key)));
+                } else if (key.split("\\.")[1].equalsIgnoreCase("current_kit")){
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a    " +
+                            MyStringUtils.itemCamelCase(key.split("\\.")[1]) + "&c- &r" + playerStatsConfig.getString(key)));
                 } else {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a    " +
                             MyStringUtils.itemCamelCase(key.split("\\.")[1]) + "&c- &r" + playerStatsConfig.getInt(key)));

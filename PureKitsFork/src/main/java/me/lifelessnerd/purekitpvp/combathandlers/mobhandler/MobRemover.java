@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 public class MobRemover {
 
-
     public static void removeMobs(Player player){
 
         for (Entity entity : OnPlayerSpawnMob.mobOwners.keySet()){
