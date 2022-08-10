@@ -70,9 +70,25 @@ All commands can be seen in-game via _/purekitpvp help_.
 
 ## Files
 There are several files, most are used internally to track stats and such. The config has some feature toggles that are explained there. 
+I would recommend not editing the kits.yml unless you know how to check if your YAML is valid, because the file may reset when wrong YAML is parsed.
+For the loottables.yml, follow the format that is provided in the example in the file. Write lore bare, and the displayname with single apostrophes (like so: '&6Lootchest'). 
+
+## How to create a kit
+*Also see the video that covers this topic below.*
+
+Have all the items you want to be in your kit in your inventory, and type the command. A kit will be created with the arguments and automatically added to the kit menu (/kit). You either provide a kill item in the base command, or, if you want the kill item to be a special item (i.e. a golden head or a random loot chest), use the /purekitpvp getcustomitem command to get that item, and run the command /purekitpvp setkillitem \<kitName> while holding that item.
+The contents of the kit will be shown in a clean hoverbox when choosing the kit, which will categorize the first 3 items in your hotbar as weapons, the rest of the inventory as items, the armor as armor and the offhand as offhand. If the kit has no armor, it will tell you aswell. A piece of lore can be set in the kits.yml. 
+Basic potions that can be found in the inventory are translated as well, although they do not show their potency and lenght, due to how these items work in spigot. Custom potions created with commands however do work perfectly and show potency and lenght, so I recommend to create your own potions with commands when working with them.
+
+## How to create a loot table
+*Also see the video that covers this topic below.*
+
+Place a chest and put all items you want to be in your loottable in the chest. The chance of each item will be 0.1 by default. You can change this in the loottables.yml file, but if you want you can just put 2 identical items in the chest if you want the chance to be 0.2. When finished, run the command /purekitpvp createloottable \<name> \<lore> \<displayName>. The lore and displayname are important for the item this loot table with be attached to. Now you may change the chance values of each item in the loottables.yml file. You may also change the lore and displayname to get multi-line text. Check if your YAML is valid before reloading the plugin (or back it up), otherwise the file may reset (!). To get the item with the loot table, run the command /purekitpvp getcustomitem random_chest \<loottable>. With this item in your inventory you can use it in a kit, or as kill item.
+## Video
+https://youtu.be/wZcZ4DcRfgU
 
 ## Known issues
-Currently no known issues.
+I am sure there will be issues, but finding all of them takes a lot of testing time. Please submit any problems!
 
 If there are any problems, create a message below, add them on GitHub, [here](https://github.com/LifelessNerd/PureKitPvP), or DM me on [Twitter](https://twitter.com/nerdlifeless).
 
