@@ -63,6 +63,7 @@ All commands can be seen in-game via _/purekitpvp help_.
 
 * **/stats <player>** 
 	* Show stats of any player
+
 ![enter image description here](https://i.imgur.com/ATOzlVD.png)
 
 * **/suicide** 
