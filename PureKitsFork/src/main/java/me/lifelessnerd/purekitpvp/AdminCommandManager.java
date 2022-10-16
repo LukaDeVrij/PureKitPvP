@@ -1,9 +1,7 @@
 package me.lifelessnerd.purekitpvp;
 
-import me.lifelessnerd.purekitpvp.createKit.CreateKit;
-import me.lifelessnerd.purekitpvp.createKit.DeleteKit;
-import me.lifelessnerd.purekitpvp.createKit.KitIcon;
-import me.lifelessnerd.purekitpvp.createKit.SetKillItem;
+import me.lifelessnerd.purekitpvp.combathandlers.perkhandler.PerkLib;
+import me.lifelessnerd.purekitpvp.createKit.*;
 import me.lifelessnerd.purekitpvp.customitems.GetCustomItem;
 import me.lifelessnerd.purekitpvp.customitems.loottablelogic.CreateLootTable;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
@@ -31,6 +29,7 @@ public class AdminCommandManager implements TabExecutor {
         subcommands.add(new DeleteKit(plugin));
         subcommands.add(new ResetKit());
         subcommands.add(new SetKillItem(plugin));
+        subcommands.add(new SetPerk(plugin));
         subcommands.add(new CreateLootTable(plugin));
         subcommands.add(new GetCustomItem());
         subcommands.add(new GetKitStats(plugin));
@@ -130,6 +129,31 @@ public class AdminCommandManager implements TabExecutor {
                     key = key.toLowerCase();
                     autoComplete.add(key);
                 };
+                return autoComplete;
+            }
+        }
+        if (args[0].equalsIgnoreCase("setperk")){
+
+            if (args.length == 2){ //kit
+                List<String> autoComplete = new ArrayList<>();
+                for(String key : KitConfig.get().getConfigurationSection("kits.").getKeys(false)){
+                    key = key.toLowerCase();
+                    autoComplete.add(key);
+                };
+                return autoComplete;
+            }
+            if (args.length == 3){ //perk
+                List<String> autoComplete = new ArrayList<>();
+                PerkLib perkLib = new PerkLib();
+                for(String perkName : perkLib.perks.keySet()){
+                    autoComplete.add(perkName.toLowerCase()); //TODOfixed: Caps might fuck up
+                };
+                return autoComplete;
+            }
+            if (args.length == 4){ //true/false
+                List<String> autoComplete = new ArrayList<>();
+                autoComplete.add("true");
+                autoComplete.add("false");
                 return autoComplete;
             }
         }

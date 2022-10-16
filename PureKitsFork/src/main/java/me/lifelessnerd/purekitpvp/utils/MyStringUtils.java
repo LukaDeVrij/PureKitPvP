@@ -73,12 +73,17 @@ public class MyStringUtils {
             time.deleteCharAt(splitOnceMore[0].length() - 1);
             int timeSec = Integer.parseInt(time.toString()) / 20;
 
+
             StringBuilder potency =  new StringBuilder(splitOnceMore[1]);
             potency.deleteCharAt(0);
             int potencyInt = Integer.parseInt(potency.toString()) + 1;
 
             StringBuilder lvlAndTime = new StringBuilder("");
-            lvlAndTime.append(potencyInt + " (" + timeSec + "s)");
+            if (timeSec > 100000000){
+                lvlAndTime.append(potencyInt + " (Infinite)");
+            } else {
+                lvlAndTime.append(potencyInt + " (" + timeSec + "s)");
+            }
 
             result.append(lvlAndTime);
 

@@ -3,6 +3,7 @@ import me.lifelessnerd.purekitpvp.combathandlers.libs.commands.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.VoidKiller;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
+import me.lifelessnerd.purekitpvp.combathandlers.perkhandler.PerkHandler;
 import me.lifelessnerd.purekitpvp.customitems.GoldenHeadEat;
 import me.lifelessnerd.purekitpvp.customitems.OpenRandomChest;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
@@ -49,6 +50,7 @@ public final class PureKitPvP extends JavaPlugin {
         PlayerStatsConfig.get().options().copyDefaults(true);
         PlayerStatsConfig.save();
 
+        PerkHandler perkHandler = new PerkHandler(this);
         getCommand("getkit").setExecutor(new GetKit(this));
         getCommand("kit").setExecutor(new KitsGUI(this));
         getCommand("suicide").setExecutor(new Suicide(this));

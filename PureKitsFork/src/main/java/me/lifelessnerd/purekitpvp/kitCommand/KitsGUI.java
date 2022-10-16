@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class KitsGUI implements TabExecutor {
@@ -120,11 +122,12 @@ public class KitsGUI implements TabExecutor {
 
                     String amount = String.valueOf(item.getAmount());
                     lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase("golden_head"));
-                    lore.add(ChatColor.GRAY + "    Healing Item");
+                    lore.add(ChatColor.GRAY + "    " + item.getItemMeta().getLore().get(0));
                 } else if (item.getType().toString().equalsIgnoreCase("CHEST")){
 
                     String amount = String.valueOf(item.getAmount());
                     lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase("random_loot_chest"));
+                    lore.add(ChatColor.GRAY + "    " + item.getItemMeta().getLore().get(0));
 
                 } else {
                     String amount = String.valueOf(item.getAmount());
@@ -138,13 +141,18 @@ public class KitsGUI implements TabExecutor {
             }
             //Set KillItem as lore
             ItemStack killItem = (ItemStack) KitConfig.get().get("kits." + key + ".killitem");
+
             if (killItem.getType().toString().equalsIgnoreCase("PLAYER_HEAD")) {
                 lore.add(ChatColor.WHITE + "Item on Kill:");
-                lore.add(ChatColor.YELLOW + "    Golden Head"); //I would just get the displayname to make this more dynamic but I cant because of fecking component
+                lore.add(ChatColor.GRAY + "1x " + ChatColor.YELLOW + "Golden Head"); //fixedI would just get the displayname to make this more dynamic but I cant because of fecking component
+                lore.add(ChatColor.GRAY + "    " + killItem.getItemMeta().getLore().get(0));
+
             } else if (killItem.getType().toString().equalsIgnoreCase("CHEST")){
                 lore.add(ChatColor.WHITE + "Item on Kill:");
                 int amount = killItem.getAmount();
-                lore.add(ChatColor.GRAY + "" +  amount + "x " + ChatColor.YELLOW + "Kit Loot Chest");
+                lore.add(ChatColor.GRAY + "" +  amount + "x " + ChatColor.YELLOW + "Random Loot Chest");
+                lore.add(ChatColor.GRAY + "    " + killItem.getItemMeta().getLore().get(0));
+                System.out.println(killItem.getItemMeta().getLore().get(0));
 
             } else if (killItem.getType().toString().equalsIgnoreCase("AIR")){
                 lore.add(ChatColor.WHITE + "No Item on Kill");
@@ -154,7 +162,16 @@ public class KitsGUI implements TabExecutor {
                 lore.add(ChatColor.GRAY + "" +  amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(killItem.getType().toString()));
 
             }
-
+            //Add some final lines with active perks on this kit
+            ConfigurationSection perksSection = KitConfig.get().getConfigurationSection("kits." + key + ".perks");
+            if (perksSection == null){
+                lore.add(ChatColor.RED + "No Perks");
+            } else {
+                lore.add(ChatColor.RED + "Perks:");
+                for (String perkKey : perksSection.getKeys(false)) {
+                    lore.add("    " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(perkKey));
+                }
+            }
 
             itemMeta.setLore(lore); //Heck you Component
 
@@ -172,15 +189,27 @@ public class KitsGUI implements TabExecutor {
             ItemMeta resetButtonMeta = resetButton.getItemMeta();
             resetButtonMeta.displayName(Component.text("Reset kit"));
             List<Component> loreList = new ArrayList<>();
-            TextComponent txt = Component.text("If you do not have permission to reset your kit,").color(TextColor.color(0,100,255));
-            TextComponent txt2 = Component.text("this will run /suicide on your behalf.").color(TextColor.color(0,100,255));
+            TextComponent txt = Component.text("If you do not have permission to reset your kit,").color(TextColor.color(100,100,100));
+            TextComponent txt2 = Component.text("this will run /suicide on your behalf.").color(TextColor.color(100,100,100));
             loreList.add(txt);
             loreList.add(txt2);
             resetButtonMeta.lore(loreList);
             resetButton.setItemMeta(resetButtonMeta);
             kits.setItem(53, resetButton);
 
+            //Perk Help Button
+            ItemStack perkHelpButton = new ItemStack(Material.BOOK);
+            ItemMeta perkHelpButtonMeta = perkHelpButton.getItemMeta();
+            perkHelpButtonMeta.displayName(Component.text("Perk Info"));
+            List<Component> loreList2 = new ArrayList<>();
+            TextComponent txt21 = Component.text("Click here to reveal info about all perks.").color(TextColor.color(100,100,100));
+            loreList2.add(txt21);
+            perkHelpButtonMeta.lore(loreList2);
+            perkHelpButton.setItemMeta(perkHelpButtonMeta);
+            kits.setItem(52, perkHelpButton);
+
             player.openInventory(kits);
+
 
         }
 

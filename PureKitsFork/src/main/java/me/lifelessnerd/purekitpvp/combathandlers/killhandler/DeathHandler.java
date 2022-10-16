@@ -3,6 +3,7 @@ package me.lifelessnerd.purekitpvp.combathandlers.killhandler;
 import me.lifelessnerd.purekitpvp.combathandlers.PlayerLeveling;
 import me.lifelessnerd.purekitpvp.combathandlers.libs.DamageCauseLib;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.MobRemover;
+import me.lifelessnerd.purekitpvp.combathandlers.perkhandler.PerkHandler;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import me.lifelessnerd.purekitpvp.utils.DoubleUtils;
@@ -303,6 +304,10 @@ public class DeathHandler implements Listener {
                 } catch (Exception exception){
                     plugin.getLogger().log(Level.SEVERE, exception.toString()); //TODO throws here. think i fixed it but not sure
                 }
+
+                //PerkHandler
+                PerkHandler.firePerks(creditPlayer);
+
 
 
 
