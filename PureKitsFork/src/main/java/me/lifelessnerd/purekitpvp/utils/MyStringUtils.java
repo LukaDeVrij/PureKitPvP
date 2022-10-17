@@ -110,4 +110,9 @@ public class MyStringUtils {
         return result.toString();
     }
 
+    public static String[] perkLoreDecoder(String string){
+        String[] output = string.split("\n");
+        return output;
+    }
+
 }

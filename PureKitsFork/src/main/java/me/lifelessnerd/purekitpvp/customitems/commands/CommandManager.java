@@ -42,7 +42,7 @@
 //        }
 //
 //        if (args.length < 1){
-//            player.sendMessage("Please specify what function to use."); //TODO: Add all options in a message
+//            player.sendMessage("Please specify what function to use.");
 //            return false;
 //        }
 //
@@ -55,7 +55,7 @@
 //        }
 //
 //
-//        player.sendMessage(args[0] + " is not a valid sub-command."); //TODO: Add all options in a message same as above
+//        player.sendMessage(args[0] + " is not a valid sub-command.");
 //        return false;
 //
 //    }

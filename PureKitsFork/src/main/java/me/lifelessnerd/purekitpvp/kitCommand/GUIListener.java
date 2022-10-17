@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
 import me.lifelessnerd.purekitpvp.combathandlers.perkhandler.PerkLib;
+import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
@@ -79,10 +80,19 @@ public class GUIListener implements Listener {
                             itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
                             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                             icon.setItemMeta(itemMeta);
-                            TextComponent[] loreTBA = {
-                                    Component.text(perkLib.perks.get(perk)).color(TextColor.color(150, 150, 150))
-                            };
-                            icon.lore(Arrays.asList(loreTBA));
+
+                            ArrayList<Component> loreTBA = new ArrayList<>();
+
+                            if (perkLib.perks.get(perk).contains("\n")){
+                                String[] decodedLore = MyStringUtils.perkLoreDecoder(perkLib.perks.get(perk));
+                                for (String line : decodedLore){
+                                    loreTBA.add(Component.text(line).color(TextColor.color(150, 150, 150)));
+                                }
+                            } else {
+                                loreTBA.add(Component.text(perkLib.perks.get(perk)).color(TextColor.color(150, 150, 150)));
+                            }
+
+                            icon.lore(loreTBA);
                             perkHelp.addItem(icon);
                         }
 

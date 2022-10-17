@@ -33,7 +33,7 @@ public final class PureKitPvP extends JavaPlugin {
         //Might create problems, I tried to just keep value null but then the entire value didn't show up until I created a kit
         //Which is not too bad either so whatever, if there are any problems ever change this and hope for the best
         //Otherwise find a way to make a path without a value, like: kits: , instead of kits: ''
-        //TODO: fix this with createConfiguration if I feel like it, tbf it works fine
+        //: fix this with createConfiguration if I feel like it, tbf it works fine (IT DOES)
 
         KitConfig.get().options().copyDefaults(true);
         KitConfig.save();

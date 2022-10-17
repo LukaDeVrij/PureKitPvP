@@ -2,8 +2,12 @@ package me.lifelessnerd.purekitpvp.combathandlers.perkhandler;
 
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -28,10 +32,10 @@ public class PerkHandler {
         }
         Set<String> activePerks = perkSection.getKeys(false);
         for(String perk : activePerks){
-            System.out.println(perk);
+            //System.out.println(perk);
             switch(perk){
 
-                default: //TODO: this always fires for no reason??? (along with the correct case)
+                default: //TODO: this always fires for no reason??? (along with the correct case), not really a problem just very weird
                     //plugin.getLogger().log(Level.WARNING, "Perk " + perk + " does not exist!");
 
                 case "JUGGERNAUT":
@@ -45,6 +49,17 @@ public class PerkHandler {
                 case "KNOWLEDGE":
 
                     player.giveExpLevels(1);
+                    //
+                case "NOTORIETY":
+                    if(Math.random() <= 0.1) {
+                        ItemStack weapon = player.getInventory().getItemInMainHand();
+                        ItemMeta weaponMeta = weapon.getItemMeta();
+                        int sharpnessLevel = weaponMeta.getEnchantLevel(Enchantment.DAMAGE_ALL);
+                        weaponMeta.removeEnchant(Enchantment.DAMAGE_ALL);
+                        weaponMeta.addEnchant(Enchantment.DAMAGE_ALL, sharpnessLevel + 1, true);
+                        weapon.setItemMeta(weaponMeta);
+                        player.sendMessage(ChatColor.YELLOW + "Your sharpness level has increased!");
+                    }
             }
         }
     }

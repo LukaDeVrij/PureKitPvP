@@ -46,7 +46,7 @@ public class GoldenHeadEat implements Listener {
 
 
         ItemStack heldItem = player.getInventory().getItemInMainHand();
-        String desiredLore = "Golden Head"; //TODO: Might make this customizable later
+        String desiredLore = "Healing Item"; //TODO: Might have broken it by changing it Golden Head > Healing Item
 
 
         if (!(heldItem.getItemMeta().hasLore())) {
