@@ -5,9 +5,11 @@ import me.lifelessnerd.purekitpvp.combathandlers.perkhandler.PerkLib;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SetPerk extends Subcommand {
@@ -51,43 +53,81 @@ public class SetPerk extends Subcommand {
         }
 
         String kitNameArg = MyStringUtils.camelCaseWord(args[1]);
-        if (!(KitConfig.get().isSet("kits." + kitNameArg))){
-            player.sendMessage(ChatColor.GRAY + "That kit does not exist.");
-            return true;
+        ArrayList<String> kitNames = new ArrayList<>();
+        ConfigurationSection kitsSection = KitConfig.get().getConfigurationSection("kits");
+
+        // This nesting is painful but it works okay
+        if (kitNameArg.equalsIgnoreCase("all")){
+
+            kitNames.addAll(kitsSection.getKeys(false));
+
+        } else {
+            if (!(KitConfig.get().isSet("kits." + kitNameArg))){
+                player.sendMessage(ChatColor.GRAY + "That kit does not exist.");
+                return true;
+            } else {
+                kitNames.add(kitNameArg);
+            }
         }
+
 
         String perkNameArg = args[2].toUpperCase();
         PerkLib perkLib = new PerkLib();
+        ArrayList<String> perkNames = new ArrayList<>();
 
-        if (!(perkLib.perks.containsKey(perkNameArg))){
-            player.sendMessage(ChatColor.GRAY + "That perk does not exist. Choose from the following:");
-            for (String key : perkLib.perks.keySet()){
-                player.sendMessage(ChatColor.GREEN + key);
-                player.sendMessage(ChatColor.GRAY + perkLib.perks.get(key));
+        // This nesting is painful but it works okay
+        if (perkNameArg.equalsIgnoreCase("all")){
+
+            perkNames.addAll(perkLib.perks.keySet());
+
+        } else {
+            if (!(perkLib.perks.containsKey(perkNameArg))){
+                player.sendMessage(ChatColor.GRAY + "That perk does not exist. Choose from the following:");
+                for (String key : perkLib.perks.keySet()){
+                    player.sendMessage(ChatColor.GREEN + key);
+                    player.sendMessage(ChatColor.GRAY + perkLib.perks.get(key));
+                }
+                return true;
+            } else {
+                perkNames.add(perkNameArg);
             }
-            return true;
         }
+
 
         String booleanArg = args[3].toLowerCase();
         if (!(booleanArg.equalsIgnoreCase("true") || booleanArg.equalsIgnoreCase("false"))){
             player.sendMessage(ChatColor.GRAY + "Provide either true or false.");
             return true;
         }
+        
 
         if (booleanArg.equalsIgnoreCase("true")) {
-            KitConfig.get().set("kits." + kitNameArg + ".perks." + perkNameArg, true);
-            player.sendMessage(ChatColor.GRAY + "Perk set to true.");
-        } else {
-            KitConfig.get().set("kits." + kitNameArg + ".perks." + perkNameArg, null);
-            player.sendMessage(ChatColor.GRAY + "Perk set to false.");
+
+            for(String kitName : kitNames){
+                for(String perkName : perkNames) {
+                    KitConfig.get().set("kits." + kitName + ".perks." + perkName, true);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            "&7Perk &e" + perkName + " &7updated to &aTRUE&7 for kit &e" + kitName
+                            ));
+                }
+            }
+
+        } else { // i.e. false
+
+            for (String kitName : kitNames) {
+                for (String perkName : perkNames) {
+                    KitConfig.get().set("kits." + kitName + ".perks." + perkName, null);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            "&7Perk &e" + perkName + " &7updated to &cFALSE&7 for kit &e" + kitName
+                    ));
+                }
+            }
         }
+
 
         KitConfig.save();
         KitConfig.reload();
 
         return true;
     }
-
-
-
 }

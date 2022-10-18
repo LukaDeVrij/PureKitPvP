@@ -22,3 +22,8 @@ killstreak-glowing-duration: 100
 
 #Suicide command from PureKitPvP, ensures death recaps work correctly
 suicide-command: true
+
+#Notoriety perk boundary
+#If the notoriety perk is too OP, restrict the maximum level of sharpness that can be gained
+#Set to -1 if infinite
+notoriety-maximum: -1

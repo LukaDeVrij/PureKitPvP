@@ -164,7 +164,7 @@ public class KitsGUI implements TabExecutor {
             }
             //Add some final lines with active perks on this kit
             ConfigurationSection perksSection = KitConfig.get().getConfigurationSection("kits." + key + ".perks");
-            if (perksSection == null){
+            if (perksSection == null || perksSection.getKeys(false).size() == 0){
                 lore.add(ChatColor.RED + "No Perks");
             } else {
                 lore.add(ChatColor.RED + "Perks:");

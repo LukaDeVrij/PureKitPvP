@@ -10,6 +10,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 public class GetKitStats extends Subcommand {
     Plugin plugin;
     public GetKitStats(Plugin plugin) {
@@ -40,11 +44,13 @@ public class GetKitStats extends Subcommand {
     @Override
     public boolean perform(Player player, String[] args) {
         FileConfiguration kitStats = KitStatsConfig.get();
-        for(String key : kitStats.getKeys(false)){
+        ArrayList<String> kitStatsKeys = new ArrayList<>(kitStats.getKeys(false));
+        Collections.sort(kitStatsKeys);
+        for(String key : kitStatsKeys){
 
             player.sendMessage(key + " - " + kitStats.getInt(key));
 
-        }
+        } //TODO: sort this based on value, so make a hashmap, put all stuff into it, sort on value, iterate through and print
         return true;
     }
 }

@@ -1,48 +1,21 @@
 package me.lifelessnerd.purekitpvp;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-public class HelpCommand extends Subcommand {
-    Plugin plugin;
-    ArrayList<Subcommand> subcommands;
-    public HelpCommand(ArrayList<Subcommand> subcommands, Plugin plugin) {
-        this.plugin = plugin;
-        this.subcommands = subcommands;
-    }
-
+public class HelpCommand implements CommandExecutor {
     @Override
-    public String getName() {
-        return "help";
-    }
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-    @Override
-    public String[] getAliases() {
-        return null;
-    }
+        if (!(sender instanceof Player player)){
+            return false;
+        }
 
-    @Override
-    public String getDescription() {
-        return "Get a list of all commands";
-    }
-
-    @Override
-    public String getSyntax() {
-        return "/purekitpvp help";
-    }
-
-    @Override
-    public boolean perform(Player player, String[] args) {
-
-        if (args.length == 1){
-            String message = """
+        String message = """
                     &bPureKitPvP - Help Menu
                     &a/kit &r- &eOpen up the kit menu
                     &a/getkit <kit> &r- &eGet a kit directly
@@ -50,31 +23,7 @@ public class HelpCommand extends Subcommand {
                     &a/stats <player> &r- &eGet PVP stats of a player
                     &bFor admin commands, see &a/pkpvp help 2&b!
                     """;
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-
-
-
-        }
-        if (args.length >= 2){
-
-            if (args[1].equalsIgnoreCase("2")){
-
-                if (!(player.hasPermission("purekitpvp.admin.*"))){
-                    player.sendMessage("No permission!");
-                    return true;
-                }//Obsolete, any AdminCommandManager subcommands require admin perm
-
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bPureKitPvP - Admin Commands"));
-                for (Subcommand subcommand : subcommands){
-                    String message =
-                            "&a" + subcommand.getSyntax() + " &r- &e" + subcommand.getDescription();
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                }
-
-            }
-
-        }
-
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
         return true;
     }
 }

@@ -55,6 +55,7 @@ public final class PureKitPvP extends JavaPlugin {
         getCommand("kit").setExecutor(new KitsGUI(this));
         getCommand("suicide").setExecutor(new Suicide(this));
         getCommand("getstats").setExecutor(new GetStats(this));
+        getCommand("purekitpvphelp").setExecutor(new HelpCommand());
         getCommand("purekitpvp").setExecutor(new AdminCommandManager(this));
         getServer().getPluginManager().registerEvents(new GetKit(this), this);
         getServer().getPluginManager().registerEvents(new GUIListener(this), this);

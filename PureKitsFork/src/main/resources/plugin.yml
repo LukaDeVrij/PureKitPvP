@@ -26,6 +26,12 @@ commands:
     aliases:
       - kitpvp
       - pkpvp
+  purekitpvphelp:
+    description: Get PureKitPvP help, for the common folk
+    usage: /purekitpvphelp
+    aliases:
+      - pkpvphelp
+      - pvphelp
 
 
 

@@ -33,7 +33,7 @@ public class AdminCommandManager implements TabExecutor {
         subcommands.add(new CreateLootTable(plugin));
         subcommands.add(new GetCustomItem());
         subcommands.add(new GetKitStats(plugin));
-        subcommands.add(new HelpCommand(subcommands, plugin));
+        subcommands.add(new AdminHelpCommand(subcommands, plugin));
         subcommands.add(new InfoCommand());
         subcommands.add(new ReloadPlugin(plugin));
         this.plugin = plugin;
@@ -140,14 +140,16 @@ public class AdminCommandManager implements TabExecutor {
                     key = key.toLowerCase();
                     autoComplete.add(key);
                 };
+                autoComplete.add("all");
                 return autoComplete;
             }
             if (args.length == 3){ //perk
                 List<String> autoComplete = new ArrayList<>();
                 PerkLib perkLib = new PerkLib();
                 for(String perkName : perkLib.perks.keySet()){
-                    autoComplete.add(perkName.toLowerCase()); //TODOfixed: Caps might fuck up
+                    autoComplete.add(perkName.toLowerCase());
                 };
+                autoComplete.add("all");
                 return autoComplete;
             }
             if (args.length == 4){ //true/false

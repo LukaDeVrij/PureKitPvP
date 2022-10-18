@@ -306,7 +306,7 @@ public class DeathHandler implements Listener {
                 }
 
                 //PerkHandler
-                PerkHandler.firePerks(creditPlayer);
+                PerkHandler.fireKillPerks(creditPlayer);
 
 
 
