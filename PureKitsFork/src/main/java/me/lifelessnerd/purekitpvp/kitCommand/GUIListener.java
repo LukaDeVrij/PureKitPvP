@@ -1,6 +1,6 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
-import me.lifelessnerd.purekitpvp.combathandlers.perkhandler.PerkLib;
+import me.lifelessnerd.purekitpvp.perks.perkhandler.PerkLib;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -20,7 +20,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 

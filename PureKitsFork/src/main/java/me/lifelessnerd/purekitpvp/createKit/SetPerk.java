@@ -1,7 +1,7 @@
 package me.lifelessnerd.purekitpvp.createKit;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
-import me.lifelessnerd.purekitpvp.combathandlers.perkhandler.PerkLib;
+import me.lifelessnerd.purekitpvp.perks.perkhandler.PerkLib;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import org.bukkit.ChatColor;
@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class SetPerk extends Subcommand {
     Plugin plugin;

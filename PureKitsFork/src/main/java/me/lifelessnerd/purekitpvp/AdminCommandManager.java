@@ -1,6 +1,6 @@
 package me.lifelessnerd.purekitpvp;
 
-import me.lifelessnerd.purekitpvp.combathandlers.perkhandler.PerkLib;
+import me.lifelessnerd.purekitpvp.perks.perkhandler.PerkLib;
 import me.lifelessnerd.purekitpvp.createKit.*;
 import me.lifelessnerd.purekitpvp.customitems.GetCustomItem;
 import me.lifelessnerd.purekitpvp.customitems.loottablelogic.CreateLootTable;

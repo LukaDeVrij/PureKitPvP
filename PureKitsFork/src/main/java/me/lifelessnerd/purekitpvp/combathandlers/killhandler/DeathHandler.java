@@ -3,7 +3,7 @@ package me.lifelessnerd.purekitpvp.combathandlers.killhandler;
 import me.lifelessnerd.purekitpvp.combathandlers.PlayerLeveling;
 import me.lifelessnerd.purekitpvp.combathandlers.libs.DamageCauseLib;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.MobRemover;
-import me.lifelessnerd.purekitpvp.combathandlers.perkhandler.PerkHandler;
+import me.lifelessnerd.purekitpvp.perks.perkhandler.PerkHandler;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import me.lifelessnerd.purekitpvp.utils.DoubleUtils;
@@ -379,6 +379,8 @@ public class DeathHandler implements Listener {
                 return;
             }
 
+            PerkHandler.fireCombatPerks(player, damager);
+
         } else if (event.getDamager() instanceof Arrow && event.getEntity() instanceof Player) {
 
             //Projectile combat
@@ -573,6 +575,9 @@ public class DeathHandler implements Listener {
         if (event.getEntity() instanceof Snowball | event.getEntity() instanceof Egg){
 
             shooter = (Player) event.getEntity().getShooter();
+
+            PerkHandler.fireSnowballPerks(player, shooter);
+
         }
         else {
             return;

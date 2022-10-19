@@ -98,15 +98,16 @@ public class GetKit implements TabExecutor, Listener {
             if (item == null) {
                 item = new ItemStack(Material.AIR);
             }
+            // This code is from PureKits, idk why it works (.setHelmet is called for every armor piece?)
             player.getInventory().setItem(index, item);
             ItemStack helmet = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
             player.getInventory().setHelmet(helmet);
             ItemStack chestplate = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
-            player.getInventory().setChestplate(chestplate);
+            player.getInventory().setHelmet(chestplate);
             ItemStack leggings = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
-            player.getInventory().setLeggings(leggings);
+            player.getInventory().setHelmet(leggings);
             ItemStack boots = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
-            player.getInventory().setBoots(boots);
+            player.getInventory().setHelmet(boots);
         }
 
         hasKit.add(player.getName());
