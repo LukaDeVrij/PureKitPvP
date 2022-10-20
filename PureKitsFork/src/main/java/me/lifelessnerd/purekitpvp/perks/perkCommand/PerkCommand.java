@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp.perks.perkCommand;
 
 import me.lifelessnerd.purekitpvp.files.KitConfig;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
@@ -18,6 +19,7 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PerkCommand implements CommandExecutor {
     Plugin plugin;
@@ -55,12 +57,23 @@ public class PerkCommand implements CommandExecutor {
         infoItem.getItemMeta().displayName(infoItemName);
         infoItem.getItemMeta().lore(lore); //Werkt dit zo? of moet ik het eerst nog opslaan en dan setten?
 
-
+        TextComponent noPerkSelectedName = Component.text("No Perk Selected").color(TextColor.color(233, 67, 47));
         ItemStack perk1Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
+        ComponentUtils.setLore(perk1Slot.getItemMeta(), "&aPerk 1", 0); //TODO: needs testing
+        perk1Slot.setItemMeta(perk1Slot.getItemMeta());
         ItemStack perk2Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
+        perk1Slot.setItemMeta(perk2Slot.getItemMeta());
         ItemStack perk3Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
+        perk1Slot.setItemMeta(perk3Slot.getItemMeta());
         ItemStack perk4Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
+        perk1Slot.setItemMeta(perk4Slot.getItemMeta());
         ItemStack perk5Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
+        perk1Slot.setItemMeta(perk5Slot.getItemMeta());
 
 
 
