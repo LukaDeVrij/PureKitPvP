@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ComponentUtils {
 
-    public static void setLore(ItemMeta itemMeta, String lore, int line){ //TODO: needs testing
+    public static ItemMeta setLore(ItemMeta itemMeta, String lore, int line){ //TODO: needs testing
         List<Component> currentLore = null;
         if (itemMeta.hasLore()){
             currentLore = itemMeta.lore();
@@ -21,12 +21,15 @@ public class ComponentUtils {
 
         TextComponent translated = stringDecoder(lore);
 
+
         if (line >= currentLore.size()){
             currentLore.add(translated);
         } else {
             currentLore.set(line, translated);
         }
 
+        itemMeta.lore(currentLore);
+        return itemMeta;
     }
 
     static TextComponent stringDecoder(String lore) {
@@ -40,8 +43,9 @@ public class ComponentUtils {
             char character = lore.charAt(index);
             if (character == '&') {
 
-                textComponent.append(Component.text(
+                textComponent = textComponent.append(Component.text(
                         toBeAdded.toString()).color(lastColor));
+                toBeAdded = new StringBuilder();
 
                 switch (lore.charAt(index + 1)) {
                     case '0':
@@ -96,12 +100,14 @@ public class ComponentUtils {
 
                 }
 
-                index = index + 2;
+                index = index + 1;
             } else {
                 toBeAdded.append(character);
             }
 
         }
+        textComponent = textComponent.append(Component.text(
+                toBeAdded.toString()).color(lastColor));
         return textComponent;
     }
 }

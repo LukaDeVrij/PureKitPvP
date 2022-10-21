@@ -14,7 +14,7 @@ public class PerkData {
 
     public static void setup(){
 
-        file = new File(Bukkit.getServer().getPluginManager().getPlugin("PureKitPvP").getDataFolder(), "pvpstats.yml");
+        file = new File(Bukkit.getServer().getPluginManager().getPlugin("PureKitPvP").getDataFolder(), "perkdata.yml");
         if (!(file.exists())){
             try{
                 file.createNewFile();

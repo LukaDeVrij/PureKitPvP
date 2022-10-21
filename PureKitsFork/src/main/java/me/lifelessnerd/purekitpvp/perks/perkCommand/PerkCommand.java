@@ -15,6 +15,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,21 +48,27 @@ public class PerkCommand implements CommandExecutor {
         //Info item
         ItemStack infoItem = new ItemStack(Material.BOOK);
         TextComponent infoItemName = Component.text("Perks Info").color(TextColor.color(233, 67, 47));
-        TextComponent infoItemLore =
-                Component.text("You can equip a total of 5 perks total.").color(TextColor.color(255, 255, 50)).append(
-                Component.text("Click on a perk slot to choose a perk for that slot.").color(TextColor.color(180, 180, 180)).append(
-                Component.text("It will replace any perk currently in that slot.").color(TextColor.color(180, 180, 180)).append(
-                Component.text("Perks are abilities that are always active.").color(TextColor.color(180, 180, 180)))));
-        ArrayList<Component> lore = new ArrayList<>();
-        lore.add(infoItemLore);
-        infoItem.getItemMeta().displayName(infoItemName);
-        infoItem.getItemMeta().lore(lore); //Werkt dit zo? of moet ik het eerst nog opslaan en dan setten?
+        ItemMeta infoMeta = infoItem.getItemMeta();
+        infoMeta.displayName(infoItemName);
+        infoMeta = ComponentUtils.setLore(infoMeta, "&aYou can equip a total of &e5 &aperks total.", 0);
+        infoMeta = ComponentUtils.setLore(infoMeta, "&7Click on a perk slot to choose a perk for that slot.", 1);
+        infoMeta = ComponentUtils.setLore(infoMeta, "&7It will replace any perk currently in that slot.", 2);
+        infoMeta = ComponentUtils.setLore(infoMeta, "&7Perks are abilities that are always active.", 3);
+        infoItem.setItemMeta(infoMeta);
+        perksInventory.setItem(13, infoItem);
 
-        TextComponent noPerkSelectedName = Component.text("No Perk Selected").color(TextColor.color(233, 67, 47));
+
+        //Perk items
         ItemStack perk1Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
-        ComponentUtils.setLore(perk1Slot.getItemMeta(), "&aPerk 1", 0); //TODO: needs testing
-        perk1Slot.setItemMeta(perk1Slot.getItemMeta());
+        TextComponent noPerkSelectedName = Component.text("Perk 1").color(TextColor.color(233, 67, 47));
+        ItemMeta perk1Meta = perk1Slot.getItemMeta();
+        perk1Meta.displayName(noPerkSelectedName); //TODO: does not work? huh
+        perk1Meta.setDisplayName("Perk 1"); //Because the above does not work, mf'er THIS DOESNT WORKJ EITHER WHAT
+        perk1Meta = ComponentUtils.setLore(perk1Slot.getItemMeta(), "&cNo Perk Selected", 0);
+        perk1Slot.setItemMeta(perk1Meta);
+        perksInventory.setItem(20, perk1Slot);
+
+
         ItemStack perk2Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
         perk1Slot.getItemMeta().displayName(noPerkSelectedName);
         perk1Slot.setItemMeta(perk2Slot.getItemMeta());
@@ -76,7 +83,7 @@ public class PerkCommand implements CommandExecutor {
         perk1Slot.setItemMeta(perk5Slot.getItemMeta());
 
 
-
-        return false;
+        player.openInventory(perksInventory);
+        return true;
     }
 }

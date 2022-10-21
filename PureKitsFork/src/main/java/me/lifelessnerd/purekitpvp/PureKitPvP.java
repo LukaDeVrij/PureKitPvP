@@ -4,6 +4,7 @@ import me.lifelessnerd.purekitpvp.combathandlers.VoidKiller;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
 import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkCommand;
+import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkGUIListener;
 import me.lifelessnerd.purekitpvp.perks.perkhandler.PerkHandler;
 import me.lifelessnerd.purekitpvp.customitems.GoldenHeadEat;
 import me.lifelessnerd.purekitpvp.customitems.OpenRandomChest;
@@ -62,6 +63,7 @@ public final class PureKitPvP extends JavaPlugin {
         getCommand("purekitpvp").setExecutor(new AdminCommandManager(this));
         getServer().getPluginManager().registerEvents(new GetKit(this), this);
         getServer().getPluginManager().registerEvents(new GUIListener(this), this);
+        getServer().getPluginManager().registerEvents(new PerkGUIListener(this), this);
         getServer().getPluginManager().registerEvents(new DeathHandler(this), this);
         getServer().getPluginManager().registerEvents(new VoidKiller(this), this);
         getServer().getPluginManager().registerEvents(new ProjectilesThrownStat(this), this);
