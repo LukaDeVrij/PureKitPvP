@@ -69,18 +69,18 @@ public class PerkCommand implements CommandExecutor {
         perksInventory.setItem(20, perk1Slot);
 
 
-        ItemStack perk2Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
-        perk1Slot.setItemMeta(perk2Slot.getItemMeta());
-        ItemStack perk3Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
-        perk1Slot.setItemMeta(perk3Slot.getItemMeta());
-        ItemStack perk4Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
-        perk1Slot.setItemMeta(perk4Slot.getItemMeta());
-        ItemStack perk5Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
-        perk1Slot.setItemMeta(perk5Slot.getItemMeta());
+//        ItemStack perk2Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+//        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
+//        perk1Slot.setItemMeta(perk2Slot.getItemMeta());
+//        ItemStack perk3Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+//        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
+//        perk1Slot.setItemMeta(perk3Slot.getItemMeta());
+//        ItemStack perk4Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+//        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
+//        perk1Slot.setItemMeta(perk4Slot.getItemMeta());
+//        ItemStack perk5Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+//        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
+//        perk1Slot.setItemMeta(perk5Slot.getItemMeta());
 
 
         player.openInventory(perksInventory);
