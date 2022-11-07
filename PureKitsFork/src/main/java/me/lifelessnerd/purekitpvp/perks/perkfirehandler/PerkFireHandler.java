@@ -1,4 +1,4 @@
-package me.lifelessnerd.purekitpvp.perks.perkhandler;
+package me.lifelessnerd.purekitpvp.perks.perkfirehandler;
 
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
@@ -19,10 +19,10 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class PerkHandler {
+public class PerkFireHandler {
     public static Plugin plugin;
-    public PerkHandler(Plugin plugin){
-        PerkHandler.plugin = plugin;
+    public PerkFireHandler(Plugin plugin){
+        PerkFireHandler.plugin = plugin;
     }
 
     public static void fireKillPerks(Player player){ //Main class

@@ -60,12 +60,11 @@ public class PerkCommand implements CommandExecutor {
 
         //Perk items
         ItemStack perk1Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        TextComponent noPerkSelectedName = Component.text("Perk 1").color(TextColor.color(233, 67, 47));
-        ItemMeta perk1Meta = perk1Slot.getItemMeta();
-        perk1Meta.displayName(noPerkSelectedName); //TODO: does not work? huh
-        perk1Meta.setDisplayName("Perk 1"); //Because the above does not work, mf'er THIS DOESNT WORKJ EITHER WHAT
-        perk1Meta = ComponentUtils.setLore(perk1Slot.getItemMeta(), "&cNo Perk Selected", 0);
-        perk1Slot.setItemMeta(perk1Meta);
+        TextComponent noPerkName = Component.text("Perk Slot 1").color(TextColor.color(233, 67, 47));
+        ItemMeta noPerkMeta = perk1Slot.getItemMeta();
+        noPerkMeta.displayName(noPerkName);
+        noPerkMeta = ComponentUtils.setLore(noPerkMeta, "&aClick to select a perk for this slot!", 0);
+        perk1Slot.setItemMeta(noPerkMeta);
         perksInventory.setItem(20, perk1Slot);
 
 

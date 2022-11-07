@@ -1,9 +1,8 @@
-package me.lifelessnerd.purekitpvp.perks.perkhandler;
+package me.lifelessnerd.purekitpvp.perks.perkfirehandler;
 
 import org.bukkit.Material;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class PerkLib {
 

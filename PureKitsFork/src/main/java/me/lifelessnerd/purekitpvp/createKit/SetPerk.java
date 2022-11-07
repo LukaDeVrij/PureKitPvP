@@ -1,7 +1,7 @@
 package me.lifelessnerd.purekitpvp.createKit;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
-import me.lifelessnerd.purekitpvp.perks.perkhandler.PerkLib;
+import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import org.bukkit.ChatColor;
