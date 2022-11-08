@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.perks.perkCommand;
 
+import me.lifelessnerd.purekitpvp.files.PerkData;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
@@ -43,15 +44,12 @@ public class PerkGUIListener implements Listener {
         InventoryView inv = e.getView();
         if (inv.title().toString().contains("Perks Menu")) { //I hate component
             e.setCancelled(true);
-            if (clickedItem.getType() != Material.RED_STAINED_GLASS_PANE){
-                return;
-            }
             Component itemDisplayName = clickedItem.displayName();
             PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
             String itemName = serializer.serialize(itemDisplayName);
 
             if (itemName.contains("Perk Slot")) {
-                int slot = itemName.charAt(itemName.length() - 1); //TODO: Wrong number it seems (93??)
+                int slot = Integer.parseInt(String.valueOf(itemName.charAt(itemName.length() - 2)));
                 //Create inventory GUI
                 TextComponent invTitle = Component.text("Perk Slot " + slot).color(TextColor.color(255, 150, 20));
                 Inventory perkSlotInventory = Bukkit.createInventory(null, 54, invTitle);
@@ -86,11 +84,22 @@ public class PerkGUIListener implements Listener {
             }
         }
         else if (inv.title().toString().contains("Perk Slot")){
+            e.setCancelled(true);
             Component title = inv.title();
             PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
             String itemName = serializer.serialize(title);
-            int slot = itemName.charAt(itemName.length() - 1);
-            System.out.println(slot); //TODO; 51 wot?
+
+            int slot = Integer.parseInt(String.valueOf(itemName.charAt(itemName.length() - 1)));
+            ItemStack clickedPerk = e.getCurrentItem();
+            String displayName = serializer.serialize(clickedPerk.displayName());
+            displayName = displayName.substring(1, displayName.length() - 1);
+            PerkData.setPerk(player, displayName, slot);
+            PerkData.save();
+            PerkData.reload();
+
+            inv.close();
+            player.chat("/perks");
+
         }
 
 
@@ -98,7 +107,4 @@ public class PerkGUIListener implements Listener {
 
     }
 
-    public static void selectPerk(int perkSlot){
-
-    }
 }

@@ -66,59 +66,7 @@ public class GUIListener implements Listener {
                     } else if (e.getRawSlot() == 52){ // Perk help button
                         e.setCancelled(true);
 
-//                        //Create inventory GUI  MIGRATED TO /PERK
-//                        TextComponent inventoryTitle = Component.text("Perk Help").color(TextColor.color(255, 150, 20));
-//                        Inventory perkHelp = Bukkit.createInventory(null, 27, inventoryTitle);
-//
-//                        PerkLib perkLib = new PerkLib();
-//                        for (String perk : perkLib.perkIcons.keySet()) {
-//
-//                            ItemStack icon = new ItemStack(perkLib.perkIcons.get(perk));
-//                            ItemMeta itemMeta = icon.getItemMeta();
-//                            itemMeta.displayName(Component.text(perk).color(TextColor.color(200, 0, 0)));
-//                            itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-//                            itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-//                            icon.setItemMeta(itemMeta);
-//
-//                            ArrayList<Component> loreTBA = new ArrayList<>();
-//
-//                            if (perkLib.perks.get(perk).contains("\n")){
-//                                String[] decodedLore = MyStringUtils.perkLoreDecoder(perkLib.perks.get(perk));
-//                                for (String line : decodedLore){
-//                                    loreTBA.add(Component.text(line).color(TextColor.color(150, 150, 150)));
-//                                }
-//                            } else {
-//                                loreTBA.add(Component.text(perkLib.perks.get(perk)).color(TextColor.color(150, 150, 150)));
-//                            }
-//
-//                            icon.lore(loreTBA);
-//                            perkHelp.addItem(icon);
-//                        }
-//
-//                        //Go back to /kit
-//                        ItemStack backButton = new ItemStack(Material.BARRIER);
-//                        ItemMeta backButtonMeta = backButton.getItemMeta();
-//                        backButtonMeta.displayName(Component.text("Back"));
-//                        List<Component> loreList2 = new ArrayList<>();
-//                        TextComponent txt21 = Component.text("Go back to kit selection!").color(TextColor.color(100,100,100));
-//                        loreList2.add(txt21);
-//                        backButton.lore(loreList2);
-//                        backButton.setItemMeta(backButtonMeta);
-//                        perkHelp.setItem(26, backButton);
-//
-//                        player.openInventory(perkHelp);
-
-                    }
-
-                }
-                if (inv.title().toString().contains("Perk Help")){
-                    e.setCancelled(true);
-                    if (e.getRawSlot() == 26){
-
-                        if(clickedItem == null){
-                            return;
-                        }
-                        player.chat("/kit");
+                        player.chat("/perks");
 
                     }
                 }

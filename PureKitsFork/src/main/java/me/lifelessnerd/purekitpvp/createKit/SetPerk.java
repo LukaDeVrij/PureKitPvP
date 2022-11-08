@@ -85,6 +85,7 @@ public class SetPerk extends Subcommand {
                 for (String key : perkLib.perks.keySet()){
                     player.sendMessage(ChatColor.GREEN + key);
                     player.sendMessage(ChatColor.GRAY + perkLib.perks.get(key));
+
                 }
                 return true;
             } else {

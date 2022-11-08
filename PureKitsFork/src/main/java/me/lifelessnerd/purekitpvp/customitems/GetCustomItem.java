@@ -44,7 +44,7 @@ public class GetCustomItem extends Subcommand {
             ItemStack goldenHead = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) goldenHead.getItemMeta();
             meta.displayName(Component.text("Golden Head"));
-            String[] loreList = {"Golden Head"};
+            String[] loreList = {"Healing Item"};
             meta.setLore(Arrays.asList(loreList));
             meta.setOwningPlayer(Bukkit.getOfflinePlayer("PhantomTupac"));
             goldenHead.setItemMeta(meta);

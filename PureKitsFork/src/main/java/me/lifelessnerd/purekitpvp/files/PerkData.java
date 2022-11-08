@@ -51,7 +51,6 @@ public class PerkData {
 
         perkData.set(player.getName() + ".slot" + slot, perkName);
 
-
     }
 
     public static void createSection(Player player){

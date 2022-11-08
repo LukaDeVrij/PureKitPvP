@@ -21,6 +21,7 @@ public class HelpCommand implements CommandExecutor {
                     &a/getkit <kit> &r- &eGet a kit directly
                     &a/suicide &r- &eCommit suicide (if enabled)
                     &a/stats <player> &r- &eGet PVP stats of a player
+                    &a/perks &r- &eSelect perks
                     &bFor admin commands, see &a/pkpvp help 2&b!
                     """;
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));

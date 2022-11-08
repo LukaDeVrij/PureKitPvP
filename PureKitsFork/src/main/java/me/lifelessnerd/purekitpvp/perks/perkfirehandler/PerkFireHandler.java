@@ -1,13 +1,17 @@
 package me.lifelessnerd.purekitpvp.perks.perkfirehandler;
 
+import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
+import me.lifelessnerd.purekitpvp.files.PerkData;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -16,6 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -25,16 +30,20 @@ public class PerkFireHandler {
         PerkFireHandler.plugin = plugin;
     }
 
-    public static void fireKillPerks(Player player){ //Main class
+    public static void fireKillPerks(Player player){
 
-        String currentKit = PlayerStatsConfig.get().getString(player.getName() + ".current_kit");
-        ConfigurationSection perkSection = KitConfig.get().getConfigurationSection("kits." + currentKit + ".perks");
+        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(player.getName());
 
-        if (perkSection == null){
+        if (playerPerks == null){
             return;
         }
-        Set<String> activePerks = perkSection.getKeys(false);
-        for(String perk : activePerks){
+
+        Set<String> perkSlots = playerPerks.getKeys(false);
+        Set<String> perks = new HashSet<>();
+        for (String perkSlot : perkSlots){
+            perks.add(playerPerks.getString(perkSlot));
+        }
+        for(String perk : perks){
             //System.out.println(perk);
             switch(perk){
                 case "JUGGERNAUT":
@@ -70,7 +79,7 @@ public class PerkFireHandler {
                         player.sendMessage(ChatColor.YELLOW + "Your sharpness level has increased!");
                     }
                     break;
-                case "BLACK MAGIC":
+                case "ENDERMAGIC":
 
                     if(Math.random() <= 0.3) {
                         ItemStack pearl = new ItemStack(Material.ENDER_PEARL, 1);
@@ -89,14 +98,18 @@ public class PerkFireHandler {
 
     public static void fireCombatPerks(Player damaged, Player damager){
 
-        String currentKit = PlayerStatsConfig.get().getString(damager.getName() + ".current_kit");
-        ConfigurationSection perkSection = KitConfig.get().getConfigurationSection("kits." + currentKit + ".perks");
+        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(damager.getName());
 
-        if (perkSection == null){
+        if (playerPerks == null){
             return;
         }
-        Set<String> activePerks = perkSection.getKeys(false);
-        for(String perk : activePerks){
+
+        Set<String> perkSlots = playerPerks.getKeys(false);
+        Set<String> perks = new HashSet<>();
+        for (String perkSlot : perkSlots){
+            perks.add(playerPerks.getString(perkSlot));
+        }
+        for(String perk : perks){
 
             switch(perk){
                 case "ROBBERY":
@@ -125,6 +138,7 @@ public class PerkFireHandler {
                         }
                         // I could have just always swapped, sometimes swap with air
                         // oh well shite
+                        damaged.sendMessage(ChatColor.YELLOW + "You were disarmed!");
                     }
                     break;
             }
@@ -132,20 +146,61 @@ public class PerkFireHandler {
         }
 
     }
+    public static void fireVampirePerk(EntityDamageByEntityEvent event) {
 
-    public static void fireSnowballPerks(Player damaged, Player shooter) {
-        String currentKit = PlayerStatsConfig.get().getString(shooter.getName() + ".current_kit");
-        ConfigurationSection perkSection = KitConfig.get().getConfigurationSection("kits." + currentKit + ".perks");
-
-        if (perkSection == null){
+        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(event.getDamager().getName());
+        Player player = (Player) event.getDamager();
+        if (playerPerks == null){
             return;
         }
-        Set<String> activePerks = perkSection.getKeys(false);
-        for(String perk : activePerks){
+
+        Set<String> perkSlots = playerPerks.getKeys(false);
+        Set<String> perks = new HashSet<>();
+        for (String perkSlot : perkSlots){
+            perks.add(playerPerks.getString(perkSlot));
+        }
+        for(String perk : perks){
+
+            if (perk.equalsIgnoreCase("VAMPIRE")){
+
+                if (event.isCritical()){
+                    //Main logic
+                    double damageDealt = event.getDamage();
+                    double regen = damageDealt / 2;
+
+                    if (player.getHealth() + regen <= 20){
+                        player.setHealth(player.getHealth() + regen);
+                    } else {
+                        player.setHealth(20);
+                    }
+
+                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 1,0);
+
+                }
+
+            }
+        }
+
+    }
+
+    public static void fireSnowballPerks(Player damaged, Player shooter) {
+        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(shooter.getName());
+
+        if (playerPerks == null){
+            return;
+        }
+
+        Set<String> perkSlots = playerPerks.getKeys(false);
+        Set<String> perks = new HashSet<>();
+        for (String perkSlot : perkSlots){
+            perks.add(playerPerks.getString(perkSlot));
+        }
+
+        for(String perk : perks){
 
             switch(perk){
                 case "SNOWMAN":
-                    damaged.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 0));
+                    damaged.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
                     break;
                 case "DISRUPTOR":
                     damaged.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 0));
@@ -155,4 +210,39 @@ public class PerkFireHandler {
         }
 
     }
+    public static void fireEnderpearlPerks(Player player, PlayerLaunchProjectileEvent event) {
+        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(player.getName());
+
+        if (playerPerks == null){
+            return;
+        }
+
+        Set<String> perkSlots = playerPerks.getKeys(false);
+        Set<String> perks = new HashSet<>();
+        for (String perkSlot : perkSlots){
+            perks.add(playerPerks.getString(perkSlot));
+        }
+
+        for(String perk : perks){
+
+            switch(perk){
+                case "ENDERMAN":
+
+                    Block lookingAt = event.getPlayer().getTargetBlock(50);
+                    player.teleport(lookingAt.getLocation());
+                    event.setCancelled(true);
+                    int epAmount = player.getInventory().getItemInMainHand().getAmount();
+                    ItemStack toBeGiven = player.getInventory().getItemInMainHand();
+                    toBeGiven.setAmount(epAmount - 1);
+                    player.getInventory().setItemInMainHand(toBeGiven);
+
+                    break;
+
+            }
+
+        }
+
+
+    }
+
 }

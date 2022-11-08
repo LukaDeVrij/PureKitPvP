@@ -32,9 +32,11 @@ commands:
     aliases:
       - pkpvphelp
       - pvphelp
-  perk:
+  perks:
     description: Perk menu
-    usage: /perk a
+    usage: /perk
+    aliases:
+      - perk
 
 
 

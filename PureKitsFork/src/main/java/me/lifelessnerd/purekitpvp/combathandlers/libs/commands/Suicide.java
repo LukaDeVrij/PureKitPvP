@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 
 public class Suicide implements CommandExecutor {
@@ -30,6 +31,10 @@ public class Suicide implements CommandExecutor {
         }
 
         player.setHealth(1);
+        for(PotionEffect effect:player.getActivePotionEffects()){
+        //Now use the method Player#removePotionEffect to remove the potion effect. This method accepts a PotionEffectType, so we need to get the type of the effect variable, and then remove it:
+            player.removePotionEffect(effect.getType());
+        }
         player.teleport(new Location(player.getWorld(),
                 player.getLocation().getX(),
                 plugin.getConfig().getDouble("voidY") - 150.0,

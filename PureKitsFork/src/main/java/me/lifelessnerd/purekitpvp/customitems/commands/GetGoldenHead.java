@@ -33,16 +33,16 @@ public class GetGoldenHead extends Subcommand {
 
     @Override
     public boolean perform(Player player, String[] args) {
-
-        ItemStack goldenHead = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta meta = (SkullMeta) goldenHead.getItemMeta();
-        meta.displayName(Component.text("Golden Head"));
-        String[] loreList = {"Golden Head"};
-        meta.setLore(Arrays.asList(loreList));
-        meta.setOwningPlayer(Bukkit.getOfflinePlayer("PhantomTupac"));
-        goldenHead.setItemMeta(meta);
-
-        player.getInventory().addItem(goldenHead);
+//        System.out.println("dab");
+//        ItemStack goldenHead = new ItemStack(Material.PLAYER_HEAD);
+//        SkullMeta meta = (SkullMeta) goldenHead.getItemMeta();
+//        meta.displayName(Component.text("Golden Head"));
+//        String[] loreList = {"Healing Item"};
+//        meta.setLore(Arrays.asList(loreList));
+//        meta.setOwningPlayer(Bukkit.getOfflinePlayer("PhantomTupac"));
+//        goldenHead.setItemMeta(meta);
+//
+//        player.getInventory().addItem(goldenHead);
 
         return true;
     }

@@ -1,7 +1,10 @@
 package me.lifelessnerd.purekitpvp.perks.perkCommand;
 
 import me.lifelessnerd.purekitpvp.files.KitConfig;
+import me.lifelessnerd.purekitpvp.files.PerkData;
+import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
+import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
@@ -14,6 +17,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -54,33 +58,53 @@ public class PerkCommand implements CommandExecutor {
         infoMeta = ComponentUtils.setLore(infoMeta, "&7Click on a perk slot to choose a perk for that slot.", 1);
         infoMeta = ComponentUtils.setLore(infoMeta, "&7It will replace any perk currently in that slot.", 2);
         infoMeta = ComponentUtils.setLore(infoMeta, "&7Perks are abilities that are always active.", 3);
+        infoMeta = ComponentUtils.setLore(infoMeta, "&7Duplicate perks do not stack.", 4);
         infoItem.setItemMeta(infoMeta);
         perksInventory.setItem(13, infoItem);
 
 
-        //Perk items
-        ItemStack perk1Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        TextComponent noPerkName = Component.text("Perk Slot 1").color(TextColor.color(233, 67, 47));
-        ItemMeta noPerkMeta = perk1Slot.getItemMeta();
-        noPerkMeta.displayName(noPerkName);
-        noPerkMeta = ComponentUtils.setLore(noPerkMeta, "&aClick to select a perk for this slot!", 0);
-        perk1Slot.setItemMeta(noPerkMeta);
-        perksInventory.setItem(20, perk1Slot);
+        //Fill perk slots with either empty or actual perk icon
+        for (int index = 20; index <= 24; index++){
+            int slot = index - 19;
+            String fileContent = PerkData.get().getString(player.getName() + ".slot" + slot);
+            //System.out.println(fileContent);
+            if (fileContent == null){
+                // No perk selected in this slot; show red stained glass
+                ItemStack perkSlot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+                TextComponent perkSlotName = Component.text("Perk Slot " + slot).color(TextColor.color(233, 67, 47));
+                ItemMeta perkSlotMeta = perkSlot.getItemMeta();
+                perkSlotMeta.displayName(perkSlotName);
+                perkSlotMeta = ComponentUtils.setLore(perkSlotMeta, "&aClick to select a perk for this slot!", 0);
+                perkSlot.setItemMeta(perkSlotMeta);
+                perksInventory.setItem(index, perkSlot);
+            } else {
+                PerkLib perkLib = new PerkLib();
+                ItemStack perkSlot = new ItemStack(perkLib.perkIcons.get(fileContent));
+                TextComponent perkSlotName = Component.text("Perk Slot " + slot).color(TextColor.color(233, 67, 47));
+                ItemMeta perkSlotMeta = perkSlot.getItemMeta();
+                perkSlotMeta.displayName(perkSlotName);
+
+                //Component style - not my own class util (okay, only the decoder)
+                ArrayList<Component> loreTBA = new ArrayList<>();
+                TextComponent loreTitle = Component.text(fileContent).color(TextColor.color(0, 230, 0));
+                loreTBA.add(loreTitle);
+                if (perkLib.perks.get(fileContent).contains("\n")) {
+                    String[] decodedLore = MyStringUtils.perkLoreDecoder(perkLib.perks.get(fileContent));
+                    for (String line : decodedLore) {
+                        loreTBA.add(Component.text(line).color(TextColor.color(150, 150, 150)));
+                    }
+                } else {
+                    loreTBA.add(Component.text(perkLib.perks.get(fileContent)).color(TextColor.color(150, 150, 150)));
+                }
+                perkSlotMeta.lore(loreTBA);
+                perkSlotMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                perkSlotMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                perkSlot.setItemMeta(perkSlotMeta);
+                perksInventory.setItem(index, perkSlot);
 
 
-//        ItemStack perk2Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-//        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
-//        perk1Slot.setItemMeta(perk2Slot.getItemMeta());
-//        ItemStack perk3Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-//        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
-//        perk1Slot.setItemMeta(perk3Slot.getItemMeta());
-//        ItemStack perk4Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-//        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
-//        perk1Slot.setItemMeta(perk4Slot.getItemMeta());
-//        ItemStack perk5Slot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-//        perk1Slot.getItemMeta().displayName(noPerkSelectedName);
-//        perk1Slot.setItemMeta(perk5Slot.getItemMeta());
-
+            }
+        }
 
         player.openInventory(perksInventory);
         return true;

@@ -380,6 +380,7 @@ public class DeathHandler implements Listener {
             }
 
             PerkFireHandler.fireCombatPerks(player, damager);
+            PerkFireHandler.fireVampirePerk(event);
 
         } else if (event.getDamager() instanceof Arrow && event.getEntity() instanceof Player) {
 

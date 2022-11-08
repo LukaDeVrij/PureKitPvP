@@ -152,7 +152,7 @@ public class KitsGUI implements TabExecutor {
                 int amount = killItem.getAmount();
                 lore.add(ChatColor.GRAY + "" +  amount + "x " + ChatColor.YELLOW + "Random Loot Chest");
                 lore.add(ChatColor.GRAY + "    " + killItem.getItemMeta().getLore().get(0));
-                System.out.println(killItem.getItemMeta().getLore().get(0));
+                //System.out.println(killItem.getItemMeta().getLore().get(0));
 
             } else if (killItem.getType().toString().equalsIgnoreCase("AIR")){
                 lore.add(ChatColor.WHITE + "No Item on Kill");
@@ -163,15 +163,16 @@ public class KitsGUI implements TabExecutor {
 
             }
             //Add some final lines with active perks on this kit
-            ConfigurationSection perksSection = KitConfig.get().getConfigurationSection("kits." + key + ".perks");
-            if (perksSection == null || perksSection.getKeys(false).size() == 0){
-                lore.add(ChatColor.RED + "No Perks");
-            } else {
-                lore.add(ChatColor.RED + "Perks:");
-                for (String perkKey : perksSection.getKeys(false)) {
-                    lore.add("    " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(perkKey));
-                }
-            }
+//            ConfigurationSection perksSection = KitConfig.get().getConfigurationSection("kits." + key + ".perks");
+//            if (perksSection == null || perksSection.getKeys(false).size() == 0){
+//                lore.add(ChatColor.RED + "No Perks");
+//            } else {
+//                lore.add(ChatColor.RED + "Perks:");
+//                for (String perkKey : perksSection.getKeys(false)) {
+//                    lore.add("    " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(perkKey));
+//                }
+//            }
+            //LEGACY, PERKS ARE NOW SELECTION BASED PER PLAYER
 
             itemMeta.setLore(lore); //Heck you Component
 
@@ -197,16 +198,17 @@ public class KitsGUI implements TabExecutor {
             resetButton.setItemMeta(resetButtonMeta);
             kits.setItem(53, resetButton);
 
-            //Perk Help Button
+//            Perk Redirect Button
             ItemStack perkHelpButton = new ItemStack(Material.BOOK);
             ItemMeta perkHelpButtonMeta = perkHelpButton.getItemMeta();
             perkHelpButtonMeta.displayName(Component.text("Perk Info"));
             List<Component> loreList2 = new ArrayList<>();
-            TextComponent txt21 = Component.text("Click here to reveal info about all perks.").color(TextColor.color(100,100,100));
+            TextComponent txt21 = Component.text("Click here to change your perks!").color(TextColor.color(100,100,100));
             loreList2.add(txt21);
             perkHelpButtonMeta.lore(loreList2);
             perkHelpButton.setItemMeta(perkHelpButtonMeta);
             kits.setItem(52, perkHelpButton);
+
 
             player.openInventory(kits);
 

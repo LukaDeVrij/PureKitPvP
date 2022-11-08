@@ -1,4 +1,5 @@
 package me.lifelessnerd.purekitpvp;
+import me.lifelessnerd.purekitpvp.combathandlers.PearlListener;
 import me.lifelessnerd.purekitpvp.combathandlers.libs.commands.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.VoidKiller;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
@@ -71,7 +72,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GoldenHeadEat(this), this);
         getServer().getPluginManager().registerEvents(new OpenRandomChest(this), this);
         getServer().getPluginManager().registerEvents(new OnPlayerSpawnMob(this), this);
-
+        getServer().getPluginManager().registerEvents(new PearlListener(this), this);
     }
 
     @Override
