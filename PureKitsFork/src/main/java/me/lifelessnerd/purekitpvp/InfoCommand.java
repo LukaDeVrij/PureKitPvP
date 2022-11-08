@@ -29,7 +29,7 @@ public class InfoCommand extends Subcommand{
 
         String message =
                 """       
-                &bPureKitPvP - version 1.0
+                &bPureKitPvP - version 1.1
                 &6SpigotMC: &ohttps://bit.ly/PureKitPvPSpigotMC
                 &6Github: &ohttps://github.com/LifelessNerd/PureKitPvP
                 &6Developer: &ohttps://twitter.com/NerdLifeless
