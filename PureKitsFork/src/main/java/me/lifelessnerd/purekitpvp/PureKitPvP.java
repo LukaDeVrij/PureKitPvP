@@ -50,6 +50,10 @@ public final class PureKitPvP extends JavaPlugin {
         LootTablesConfig.get().options().copyDefaults(true);
         LootTablesConfig.save();
 
+        MobSpawnConfig.setup();
+        MobSpawnConfig.get().options().copyDefaults(true);
+        MobSpawnConfig.save();
+
         PlayerStatsConfig.setup();
         PlayerStatsConfig.get().options().copyDefaults(true);
         PlayerStatsConfig.save();

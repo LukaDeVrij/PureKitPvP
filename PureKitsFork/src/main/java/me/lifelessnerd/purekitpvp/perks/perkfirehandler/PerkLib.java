@@ -21,7 +21,7 @@ public class PerkLib {
         perks.put("SNOWMAN","Give slowness 1 (3s) when you hit someone with a snowball");
         perks.put("DISRUPTOR","Give poison 1 (5s) when you hit someone with an egg");
         perks.put("ENDERMAN", "Ender pearls behave differently, teleporting on\nclick, to the location you are looking at, max 50 blocks away\nThey do no damage");
-        perks.put("VAMPIRE", "On critical hits, gain 50% of the damage\nyou dealt as regeneration");
+        perks.put("VAMPIRE", "On critical hits, gain 50% of the damage\nyou dealt, as regeneration");
 
         perkIcons.put("JUGGERNAUT" , Material.DIAMOND_CHESTPLATE);
         perkIcons.put("BULLDOZER" , Material.ANVIL);

@@ -63,6 +63,7 @@ public class PerkFireHandler {
                     if(Math.random() <= 0.1) {
                         ItemStack weapon = player.getInventory().getItemInMainHand();
                         ItemMeta weaponMeta = weapon.getItemMeta();
+                        if (weaponMeta == null){continue;} // If weapon is hand
                         int sharpnessLevel = weaponMeta.getEnchantLevel(Enchantment.DAMAGE_ALL);
 
                         if (plugin.getConfig().getInt("notoriety-maximum") != -1){

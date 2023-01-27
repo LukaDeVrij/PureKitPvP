@@ -208,6 +208,18 @@ public class AdminCommandManager implements TabExecutor {
                 return Arrays.asList(kitIconLib.materialList);
             }
         }
+        if (args[0].equalsIgnoreCase("custommob")){
+            if (args.length == 2){
+                List<String> arguments = new ArrayList<>();
+                arguments.add("create");
+                arguments.add("set");
+                arguments.add("delete");
+                return arguments;
+            }
+
+
+        }
+
 
         return new ArrayList<>();
     }
