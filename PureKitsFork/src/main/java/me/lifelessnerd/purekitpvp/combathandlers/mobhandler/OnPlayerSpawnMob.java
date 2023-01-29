@@ -71,6 +71,10 @@ public class OnPlayerSpawnMob implements Listener {
             System.out.println(spawnedEntity + "'s target set to " + closestPlayer);
             spawnedEntity.customName(Component.text(player.getName() + "'s " + spawnedEntity.getType().name()));
         }
+        if (spawnedEntity instanceof Zombie){
+            //if(MobSpawnConfig. this instance. child == true)
+            ((Zombie) spawnedEntity).setBaby();
+        }
 
         toBeCancelled = true;
 

@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp;
 
+import me.lifelessnerd.purekitpvp.custommobs.CustomMobCommand;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
 import me.lifelessnerd.purekitpvp.createKit.*;
 import me.lifelessnerd.purekitpvp.customitems.GetCustomItem;
@@ -12,6 +13,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +36,7 @@ public class AdminCommandManager implements TabExecutor {
         subcommands.add(new SetPerk(plugin));
         subcommands.add(new CreateLootTable(plugin));
         subcommands.add(new GetCustomItem());
+        subcommands.add(new CustomMobCommand());
         subcommands.add(new GetKitStats(plugin));
         subcommands.add(new AdminHelpCommand(subcommands, plugin));
         subcommands.add(new InfoCommand());
@@ -217,6 +222,36 @@ public class AdminCommandManager implements TabExecutor {
                 return arguments;
             }
 
+            if (args[1].equalsIgnoreCase("create")){
+                if (args.length == 3){
+                    List<String> arguments = new ArrayList<>();
+                    arguments.add("<identifier>");
+                    return arguments;
+                }
+                if (args.length == 4){
+                    List<String> arguments = new ArrayList<>();
+                    arguments.add("<type>");
+                    return arguments;
+                }
+            }
+            if (args[1].equalsIgnoreCase("set")){
+                if (args.length == 3){
+                    List<String> arguments = new ArrayList<>();
+                    arguments.add("<identifier>"); //TODO add dynamic custommob list
+                    return arguments;
+                }
+                if (args.length == 4){
+                    String[] possibleArgs = {"helmet", "chestplate", "leggings", "boots", "mainhand", "offhand"};
+                    return Arrays.asList(possibleArgs);
+                }
+            }
+            if (args[1].equalsIgnoreCase("delete")){
+                if (args.length == 3){
+                    List<String> arguments = new ArrayList<>();
+                    arguments.add("<identifier>"); //TODO add dynamic custommob list
+                    return arguments;
+                }
+            }
 
         }
 
