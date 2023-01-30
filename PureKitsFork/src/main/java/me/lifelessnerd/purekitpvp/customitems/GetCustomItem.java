@@ -2,14 +2,17 @@ package me.lifelessnerd.purekitpvp.customitems;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
+import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,6 +77,17 @@ public class GetCustomItem extends Subcommand {
             player.getInventory().addItem(chestItem);
 
             return true;
+
+        } else if(args[1].equalsIgnoreCase("custom_mob_egg")){
+
+            if (!(MobSpawnConfig.get().isSet(args[2]))){
+                player.sendMessage("Such custom mob does not exist!");
+                return false;
+            }
+            // Try catch dit miss?
+            String type = MobSpawnConfig.get().getString(args[2]);
+            ItemStack egg = new ItemStack(Material.valueOf(type + "_SPAWN_EGG"));
+            //TODO: persistent data container eraan hangen
 
         }
         return false;

@@ -39,7 +39,7 @@ public class CustomMobCommand extends Subcommand {
             //String customMobName = args[2];
             MobSpawnConfig.get().set(args[2], null);
             MobSpawnConfig.get().set(args[2] + ".type", EntityType.valueOf(args[3]).toString());
-            MobSpawnConfig.get().set(args[2] + ".child", null);
+            MobSpawnConfig.get().set(args[2] + ".child", false);
             MobSpawnConfig.get().set(args[2] + ".helmet", null);
             MobSpawnConfig.get().set(args[2] + ".chestplate", null);
             MobSpawnConfig.get().set(args[2] + ".leggings", null);

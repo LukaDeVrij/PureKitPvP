@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp;
 
 import me.lifelessnerd.purekitpvp.custommobs.CustomMobCommand;
+import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
 import me.lifelessnerd.purekitpvp.createKit.*;
 import me.lifelessnerd.purekitpvp.customitems.GetCustomItem;
@@ -24,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class AdminCommandManager implements TabExecutor {
     ArrayList<Subcommand> subcommands = new ArrayList<>();
@@ -236,9 +238,7 @@ public class AdminCommandManager implements TabExecutor {
             }
             if (args[1].equalsIgnoreCase("set")){
                 if (args.length == 3){
-                    List<String> arguments = new ArrayList<>();
-                    arguments.add("<identifier>"); //TODO add dynamic custommob list
-                    return arguments;
+                    return new ArrayList<>(MobSpawnConfig.get().getKeys(false));
                 }
                 if (args.length == 4){
                     String[] possibleArgs = {"helmet", "chestplate", "leggings", "boots", "mainhand", "offhand"};
@@ -247,9 +247,7 @@ public class AdminCommandManager implements TabExecutor {
             }
             if (args[1].equalsIgnoreCase("delete")){
                 if (args.length == 3){
-                    List<String> arguments = new ArrayList<>();
-                    arguments.add("<identifier>"); //TODO add dynamic custommob list
-                    return arguments;
+                    return new ArrayList<>(MobSpawnConfig.get().getKeys(false));
                 }
             }
 
