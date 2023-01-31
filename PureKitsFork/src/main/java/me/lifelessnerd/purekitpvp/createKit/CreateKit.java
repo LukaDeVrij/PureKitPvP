@@ -129,7 +129,7 @@ public class CreateKit extends Subcommand {
 
         player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                 "Kit created with following properties: \nKitName: &a" + kitName +
-                        "&r\n displayColor: &a" + displayColor + "&r\n kitIcon: &a"
+                        "&r\n displayColor: &a" + displayColor + "■" + "&r\n kitIcon: &a"
                 + kitIcon + "&r\n kitPermission: &a" + kitPermission + "&r\nkillItem: &a" + killItem));
         player.sendMessage("You can change these in the kits.yml file, but remember to backup the file when manually editing.");
 

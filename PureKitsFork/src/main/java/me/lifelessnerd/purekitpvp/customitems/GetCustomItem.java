@@ -1,18 +1,21 @@
 package me.lifelessnerd.purekitpvp.customitems;
 
+import me.lifelessnerd.purekitpvp.PluginGetter;
 import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,9 +88,18 @@ public class GetCustomItem extends Subcommand {
                 return false;
             }
             // Try catch dit miss?
-            String type = MobSpawnConfig.get().getString(args[2]);
+            String type = MobSpawnConfig.get().getString(args[2] + ".type");
             ItemStack egg = new ItemStack(Material.valueOf(type + "_SPAWN_EGG"));
-            //TODO: persistent data container eraan hangen
+            ItemMeta eggMeta = egg.getItemMeta();
+            List<Component> lore = new ArrayList<>();
+            lore.add(Component.text("Custom Mob Spawner Egg"));
+            eggMeta.lore(lore);
+            PersistentDataContainer data = eggMeta.getPersistentDataContainer();
+
+            data.set(new NamespacedKey(PluginGetter.Plugin(), "custom_mob_id"), PersistentDataType.STRING, args[2]);
+
+            egg.setItemMeta(eggMeta);
+            player.getInventory().addItem(egg);
 
         }
         return false;

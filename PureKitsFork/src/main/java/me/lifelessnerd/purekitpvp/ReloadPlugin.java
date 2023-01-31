@@ -1,9 +1,6 @@
 package me.lifelessnerd.purekitpvp;
 
-import me.lifelessnerd.purekitpvp.files.KitConfig;
-import me.lifelessnerd.purekitpvp.files.KitStatsConfig;
-import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
-import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import me.lifelessnerd.purekitpvp.files.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -49,6 +46,10 @@ public class ReloadPlugin extends Subcommand {
         LootTablesConfig.save();
         PlayerStatsConfig.reload();
         PlayerStatsConfig.save();
+        PerkData.reload();
+        PerkData.save();
+        MobSpawnConfig.reload();
+        MobSpawnConfig.save();
 
         plugin.reloadConfig();
         plugin.getConfig();

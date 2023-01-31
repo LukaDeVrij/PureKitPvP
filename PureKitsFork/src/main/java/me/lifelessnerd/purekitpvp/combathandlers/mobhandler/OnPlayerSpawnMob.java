@@ -1,11 +1,9 @@
 package me.lifelessnerd.purekitpvp.combathandlers.mobhandler;
 
+import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,8 +12,11 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.SpawnEgg;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 public class OnPlayerSpawnMob implements Listener {
     Plugin plugin;
@@ -52,28 +54,69 @@ public class OnPlayerSpawnMob implements Listener {
             return;
         }
 
+        EntityType entityTypeTBS;
+        ItemStack item = player.getInventory().getItemInMainHand();
+        boolean customMob = false;
+        if (item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "custom_mob_id"), PersistentDataType.STRING)){
+            // Custom Mob has been attempted to spawn
+            String customMobId = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "custom_mob_id"), PersistentDataType.STRING);
+            String mobType = MobSpawnConfig.get().getString(customMobId + ".type");
+            entityTypeTBS = EntityType.valueOf(mobType);
+            plugin.getLogger().info("custom mob spawned");
+            customMob = true;
+        }
+        else {
+            String[] entityToBeSpawnedList = item.getType().toString().split("_SPAWN_EGG");
+            String entityToBeSpawned = entityToBeSpawnedList[0];
 
-        String[] entityToBeSpawnedList = player.getInventory().getItemInMainHand().getType().toString().split("_SPAWN_EGG");
-        String entityToBeSpawned = entityToBeSpawnedList[0];
+            entityTypeTBS = EntityType.valueOf(entityToBeSpawned);
 
-        EntityType entityTypeTBS = EntityType.valueOf(entityToBeSpawned);
+        }
         Location lookPlace = e.getInteractionPoint();
         Entity spawnedEntity = player.getWorld().spawnEntity(lookPlace, entityTypeTBS);
 
-        if (spawnedEntity instanceof Horse){
+        if (spawnedEntity instanceof Horse) {
             ((Horse) spawnedEntity).setTamed(true);
             ((Horse) spawnedEntity).getInventory().addItem(new ItemStack(Material.SADDLE));
 
         }
-        if (spawnedEntity instanceof Monster){
+        if (spawnedEntity instanceof Monster) {
             Player closestPlayer = getNearestPlayer(player);
             ((Monster) spawnedEntity).setTarget(closestPlayer);
             System.out.println(spawnedEntity + "'s target set to " + closestPlayer);
             spawnedEntity.customName(Component.text(player.getName() + "'s " + spawnedEntity.getType().name()));
         }
-        if (spawnedEntity instanceof Zombie){
-            //if(MobSpawnConfig. this instance. child == true)
-            ((Zombie) spawnedEntity).setBaby();
+
+        if (customMob) {
+            String customModId = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "custom_mob_id"), PersistentDataType.STRING);
+            System.out.println(customModId);
+            if (spawnedEntity instanceof Mob){
+                ItemStack mainHand = MobSpawnConfig.get().getItemStack(customModId + ".mainhand");
+                ((Mob) spawnedEntity).getEquipment().setItemInMainHand(mainHand);
+                ItemStack offHand = MobSpawnConfig.get().getItemStack(customModId + ".offhand");
+                ((Mob) spawnedEntity).getEquipment().setItemInOffHand(offHand);
+                ItemStack boots = MobSpawnConfig.get().getItemStack(customModId + ".boots");
+                ((Mob) spawnedEntity).getEquipment().setBoots(boots);
+                ItemStack chestplate = MobSpawnConfig.get().getItemStack(customModId + ".chestplate");
+                ((Mob) spawnedEntity).getEquipment().setChestplate(chestplate);
+                ItemStack leggings = MobSpawnConfig.get().getItemStack(customModId + ".leggings");
+                ((Mob) spawnedEntity).getEquipment().setLeggings(leggings);
+                ItemStack helmet = MobSpawnConfig.get().getItemStack(customModId + ".helmet");
+                ((Mob) spawnedEntity).getEquipment().setHelmet(helmet);
+            }
+
+            if (spawnedEntity instanceof Zombie) {
+                if (MobSpawnConfig.get().getBoolean(customModId + ".child")) {
+                    ((Zombie) spawnedEntity).setBaby();
+                }
+                ((Zombie) spawnedEntity).setVisualFire(false);
+                ((Zombie) spawnedEntity).addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1000000, 20, false, false));
+
+            }
+            if (spawnedEntity instanceof Skeleton) {
+                ((Skeleton) spawnedEntity).setVisualFire(false);
+                ((Skeleton) spawnedEntity).addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1000000, 20, false, false));
+            }
         }
 
         toBeCancelled = true;
@@ -87,8 +130,11 @@ public class OnPlayerSpawnMob implements Listener {
         }, 10L);
 
         mobOwners.put(spawnedEntity, player);
-        ItemStack heldItem = player.getInventory().getItemInMainHand();
-        player.getInventory().remove(heldItem);
+        int amount = item.getAmount();
+        item.setAmount(amount - 1);
+        player.getInventory().remove(item);
+        player.getInventory().setItemInMainHand(item);
+
 
 
     }

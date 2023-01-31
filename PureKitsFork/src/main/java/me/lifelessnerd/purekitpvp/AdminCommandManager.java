@@ -35,7 +35,7 @@ public class AdminCommandManager implements TabExecutor {
         subcommands.add(new DeleteKit(plugin));
         subcommands.add(new ResetKit());
         subcommands.add(new SetKillItem(plugin));
-        subcommands.add(new SetPerk(plugin));
+        //subcommands.add(new SetPerk(plugin));
         subcommands.add(new CreateLootTable(plugin));
         subcommands.add(new GetCustomItem());
         subcommands.add(new CustomMobCommand());
@@ -103,11 +103,15 @@ public class AdminCommandManager implements TabExecutor {
             else if (args[1].equalsIgnoreCase("golden_head")){
                 return new ArrayList<>();
             }
+            else if (args[1].equalsIgnoreCase("custom_mob_egg")){
+                return new ArrayList<>(MobSpawnConfig.get().getKeys(false));
+            }
 
             List<String> arguments = new ArrayList<>();
             arguments.add("random_chest");
             arguments.add("golden_head");
-            return arguments;
+            arguments.add("custom_mob_egg");
+            return arguments; //TODO: make this only appear when args.length == 1
 
         }
         if (args[0].equalsIgnoreCase("createloottable")){

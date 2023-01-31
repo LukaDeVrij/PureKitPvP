@@ -2,6 +2,7 @@ package me.lifelessnerd.purekitpvp.perks.perkCommand;
 
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PerkData;
+import me.lifelessnerd.purekitpvp.kitCommand.GetKit;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
@@ -45,6 +46,10 @@ public class PerkCommand implements CommandExecutor {
             player.sendMessage(ChatColor.RED + "You can only use this menu in " + ChatColor.GRAY + plugin.getConfig().getString("world"));
             return true;
         }
+        if (GetKit.hasKit.contains(player.getName())){
+            player.sendMessage(ChatColor.RED + "You can only change perks when you have no kit selected!");
+            return true;
+        }
         //Create inventory GUI
         TextComponent invTitle = Component.text("Perks Menu").color(TextColor.color(255, 150, 20));
         Inventory perksInventory = Bukkit.createInventory(null, 54, invTitle);
@@ -61,6 +66,14 @@ public class PerkCommand implements CommandExecutor {
         infoMeta = ComponentUtils.setLore(infoMeta, "&7Duplicate perks do not stack.", 4);
         infoItem.setItemMeta(infoMeta);
         perksInventory.setItem(13, infoItem);
+
+        //Back to kits item
+        ItemStack kitItem = new ItemStack(Material.ARROW);
+        TextComponent kitItemName = Component.text("Back to Kits").color(TextColor.color(0, 255, 47));
+        ItemMeta kitItemMeta = kitItem.getItemMeta();
+        kitItemMeta.displayName(kitItemName);
+        kitItem.setItemMeta(kitItemMeta);
+        perksInventory.setItem(49, kitItem);
 
 
         //Fill perk slots with either empty or actual perk icon

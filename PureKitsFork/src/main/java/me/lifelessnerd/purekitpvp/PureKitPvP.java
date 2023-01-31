@@ -77,10 +77,14 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OpenRandomChest(this), this);
         getServer().getPluginManager().registerEvents(new OnPlayerSpawnMob(this), this);
         getServer().getPluginManager().registerEvents(new PearlListener(this), this);
+
+        PluginGetter.plugin = this; //TODO this is dumb
     }
 
     @Override
     public void onDisable() {
         getLogger().info("Goodbye!");
     }
+
+
 }
