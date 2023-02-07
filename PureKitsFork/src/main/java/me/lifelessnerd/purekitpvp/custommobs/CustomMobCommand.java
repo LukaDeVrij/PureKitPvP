@@ -34,8 +34,15 @@ public class CustomMobCommand extends Subcommand {
 
     @Override
     public boolean perform(Player player, String[] args) {
-
+        if (args.length <= 1){
+            player.sendMessage("Please provide arguments!");
+            return true;
+        }
         if (args[1].equalsIgnoreCase("create")){
+            if (args.length <= 3){
+                player.sendMessage("Please provide arguments!");
+                return true;
+            }
             //String customMobName = args[2];
             MobSpawnConfig.get().set(args[2], null);
             MobSpawnConfig.get().set(args[2] + ".type", EntityType.valueOf(args[3]).toString());
@@ -54,6 +61,10 @@ public class CustomMobCommand extends Subcommand {
 
         }
         if (args[1].equalsIgnoreCase("set")){
+            if (args.length <= 4){
+                player.sendMessage("Please provide arguments!");
+                return true;
+            }
             // First the identifier as arg, check if there is such a key
             if (!(MobSpawnConfig.get().isSet(args[2]))) {
                 player.sendMessage("That custom mob is not defined!");

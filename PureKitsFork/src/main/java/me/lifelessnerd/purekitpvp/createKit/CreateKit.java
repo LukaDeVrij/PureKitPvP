@@ -52,7 +52,7 @@ public class CreateKit extends Subcommand {
             return true;
         }
 
-        if (!(args.length >= 2)){
+        if (!(args.length >= 4)){
             player.sendMessage(ChatColor.RED + "Please provide arguments!");
             return false;
         }
