@@ -3,6 +3,7 @@ package me.lifelessnerd.purekitpvp.combathandlers.killhandler;
 import me.lifelessnerd.purekitpvp.combathandlers.PlayerLeveling;
 import me.lifelessnerd.purekitpvp.combathandlers.libs.DamageCauseLib;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.MobRemover;
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillCosmetics;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkFireHandler;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
@@ -265,7 +266,7 @@ public class DeathHandler implements Listener {
 
                     if (creditStats.getInt(creditPlayer.getName() + ".killstreak") >= 5) {
                         int duration = plugin.getConfig().getInt("killstreak-glowing-duration");
-                        creditPlayer.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, duration * 20, 2));
+                        creditPlayer.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, duration * 20, 2, true, false));
                     }
                 }
 
@@ -308,6 +309,8 @@ public class DeathHandler implements Listener {
                 //PerkHandler
                 PerkFireHandler.fireKillPerks(creditPlayer);
 
+                //The killcosmetic that the creditPlayer has fires
+                KillCosmetics.fireKillCosmetic(player, creditPlayer);
 
 
 

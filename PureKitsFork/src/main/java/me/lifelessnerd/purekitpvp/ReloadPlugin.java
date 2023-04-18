@@ -50,6 +50,8 @@ public class ReloadPlugin extends Subcommand {
         PerkData.save();
         MobSpawnConfig.reload();
         MobSpawnConfig.save();
+        CosmeticsConfig.reload();
+        CosmeticsConfig.save();
 
         plugin.reloadConfig();
         plugin.getConfig();

@@ -207,7 +207,7 @@ public class KitsGUI implements TabExecutor {
             loreList2.add(txt21);
             perkHelpButtonMeta.lore(loreList2);
             perkHelpButton.setItemMeta(perkHelpButtonMeta);
-            kits.setItem(52, perkHelpButton);
+            kits.setItem(49, perkHelpButton);
 
 
             player.openInventory(kits);

@@ -4,6 +4,7 @@ import me.lifelessnerd.purekitpvp.combathandlers.libs.commands.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.VoidKiller;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillCosmetics;
 import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkCommand;
 import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkGUIListener;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkFireHandler;
@@ -58,6 +59,10 @@ public final class PureKitPvP extends JavaPlugin {
         PlayerStatsConfig.get().options().copyDefaults(true);
         PlayerStatsConfig.save();
 
+        CosmeticsConfig.setup();
+        CosmeticsConfig.get().options().copyDefaults(true);
+        CosmeticsConfig.save();
+
         PerkFireHandler perkFireHandler = new PerkFireHandler(this);
         getCommand("getkit").setExecutor(new GetKit(this));
         getCommand("kit").setExecutor(new KitsGUI(this));
@@ -77,6 +82,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OpenRandomChest(this), this);
         getServer().getPluginManager().registerEvents(new OnPlayerSpawnMob(this), this);
         getServer().getPluginManager().registerEvents(new PearlListener(this), this);
+        getServer().getPluginManager().registerEvents(new KillCosmetics(this), this);
 
         PluginGetter.plugin = this; //TODO this is dumb
     }

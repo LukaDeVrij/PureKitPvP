@@ -31,13 +31,13 @@ public class GetStats implements TabExecutor {
         if (!(sender instanceof Player player)) {
             return true;
         }
-        if (!(args.length > 0)){
-            player.sendMessage("Provide a player!");
-            return false;
-        }
 
         FileConfiguration playerStatsConfig = PlayerStatsConfig.get();
-        String argumentPlayer = args[0];
+        String argumentPlayer = player.getName();
+        if (args.length == 1){
+            argumentPlayer = args[0];
+        }
+
         Set<String> allKeys = playerStatsConfig.getKeys(true);
         if (!(allKeys.contains(argumentPlayer))){
             player.sendMessage("That player does not have any stats attached to them.");
