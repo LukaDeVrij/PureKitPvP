@@ -36,10 +36,10 @@ public class KillCosmetics implements Listener {
             case "firework" -> {
                 firework(killLocation);
             }
-            case "bloodExplosion" -> {
+            case "blood_explosion" -> {
                 bloodExplosion(killLocation);
             }
-            case "fieryShock" -> {
+            case "fiery_shock" -> {
                 fieryShock(killLocation);
             }
             case "tornado" -> {
