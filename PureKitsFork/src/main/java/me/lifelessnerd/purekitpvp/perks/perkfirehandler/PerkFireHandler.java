@@ -10,8 +10,11 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -52,7 +55,7 @@ public class PerkFireHandler {
                     break;
                 case "BULLDOZER":
 
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 60, 1));
                     break;
                 case "KNOWLEDGE":
 
@@ -60,7 +63,7 @@ public class PerkFireHandler {
                     break;
                 case "NOTORIETY":
 
-                    if(Math.random() <= 0.1) {
+                    if(Math.random() <= 0.15) {
                         ItemStack weapon = player.getInventory().getItemInMainHand();
                         ItemMeta weaponMeta = weapon.getItemMeta();
                         if (weaponMeta == null){continue;} // If weapon is hand
@@ -90,7 +93,7 @@ public class PerkFireHandler {
                     break;
                 case "SPEEDSTER":
 
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 2));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1));
                     break;
 
             }
@@ -184,7 +187,7 @@ public class PerkFireHandler {
 
     }
 
-    public static void fireSnowballPerks(Player damaged, Player shooter) {
+    public static void fireSnowballPerks(ProjectileHitEvent event, Player damaged, Player shooter) {
         ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(shooter.getName());
 
         if (playerPerks == null){
@@ -201,10 +204,14 @@ public class PerkFireHandler {
 
             switch(perk){
                 case "SNOWMAN":
-                    damaged.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
+                    if (event.getEntity() instanceof Snowball) {
+                        damaged.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
+                    }
                     break;
                 case "DISRUPTOR":
-                    damaged.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 0));
+                    if (event.getEntity() instanceof Egg) {
+                        damaged.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 0));
+                    }
                     break;
             }
 

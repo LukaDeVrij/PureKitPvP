@@ -63,6 +63,9 @@ public class DeathHandler implements Listener {
         player.setExp(0f);
         player.setLevel(0);
         player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5, 254)); //Kinda jank, works tho
+        player.setFireTicks(0);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 5, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10 , 1));
 
 
         DamageCauseLib damageCauseLib = new DamageCauseLib();
@@ -73,7 +76,7 @@ public class DeathHandler implements Listener {
         String message = "&c&lYou died!";
         player.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Death Recap:"));
-
+        // Printing process and formatting
         int totalDamageDone = 0;
         for (String hashmapKey : damageData.damageDistributionMap.keySet()){
             totalDamageDone += damageData.damageDistributionMap.get(hashmapKey);
@@ -153,7 +156,9 @@ public class DeathHandler implements Listener {
 
         String highestAssistor = null;
         for (String key2 : damageData.damageDistributionMap.keySet()){
-            if (!(key2.equalsIgnoreCase(credit)) && pvpPlayers.contains(key2)){ // Dont count the killer in the assist check
+            if (!(key2.equalsIgnoreCase(credit)) && pvpPlayers.contains(key2) && pvpPlayers.contains(player.getName())){
+                // Don't count the killer in the assist check
+                // Don't count the killed player himself in the assist check
                 //Only check players for assist
                 if (highestAssistor == null){
                     highestAssistor = key2;
@@ -177,10 +182,6 @@ public class DeathHandler implements Listener {
         player.getPersistentDataContainer().remove(key);
 
 
-        player.setFireTicks(0);
-
-        player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 5, 1));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10 , 1));
         //Sound effects and such
         player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_HURT, 1,0);
 
@@ -213,8 +214,8 @@ public class DeathHandler implements Listener {
 
             //update level
             PlayerLeveling.createLevelXPPath(player.getName());
-            PlayerLeveling.addExperience(player, 1, "Death"); // 1 for DEATH
-            PlayerLeveling.updateLevels();
+//            PlayerLeveling.addExperience(player, 1, "Death"); // 1 for DEATH// Ah no: can be exploited
+//            PlayerLeveling.updateLevels();
 
             //remove any mobs player spawned
             MobRemover.removeMobs(player);
@@ -344,7 +345,7 @@ public class DeathHandler implements Listener {
 
                 assistor.sendActionBar(actionBarText);
 
-                //update level
+                //update level TODO: check this: I think this is in the wrong spot since it doesn't seem to work?
                 PlayerLeveling.createLevelXPPath(assistor.getName());
                 PlayerLeveling.addExperience(assistor, 3, "Assist"); // 3 for assists
                 PlayerLeveling.updateLevels();
@@ -580,7 +581,7 @@ public class DeathHandler implements Listener {
 
             shooter = (Player) event.getEntity().getShooter();
 
-            PerkFireHandler.fireSnowballPerks(player, shooter);
+            PerkFireHandler.fireSnowballPerks(event, player, shooter);
 
         }
         else {

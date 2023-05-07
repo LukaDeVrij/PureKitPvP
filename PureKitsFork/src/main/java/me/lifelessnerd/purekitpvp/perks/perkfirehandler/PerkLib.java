@@ -12,16 +12,16 @@ public class PerkLib {
 
     public PerkLib(){
         perks.put("JUGGERNAUT", "Gain regeneration 1 (5s) after every kill");
-        perks.put("BULLDOZER", "Gain strength 2 (5s) after every kill");
+        perks.put("BULLDOZER", "Gain strength 2 (3s) after every kill");
         perks.put("KNOWLEDGE", "Gain 1 XP level on kill");
-        perks.put("NOTORIETY","10% chance of gaining a sharpness level on each kill\nSharpness will be added to the item held");
+        perks.put("NOTORIETY","15% chance of gaining a sharpness level on each kill\nSharpness will be added to the item held");
         perks.put("ENDERMAGIC", "30% chance of gaining an ender pearl on kill");
         perks.put("SPEEDSTER","Gain 10 seconds of speed 2 after every kill");
         perks.put("ROBBERY","30% chance of disarming someone if hit with your fist\nThe weapon will be swapped with a slot in the inventory");
         perks.put("SNOWMAN","Give slowness 1 (3s) when you hit someone with a snowball");
         perks.put("DISRUPTOR","Give poison 1 (5s) when you hit someone with an egg");
         perks.put("ENDERMAN", "Ender pearls behave differently, teleporting on\nclick, to the location you are looking at, max 50 blocks away\nThey do no damage");
-        perks.put("VAMPIRE", "On critical hits, gain 50% of the damage\nyou dealt, as regeneration");
+        perks.put("VAMPIRE", "On critical hits, gain 50% of the damage\nyou dealt, as instant health");
 
         perkIcons.put("JUGGERNAUT" , Material.DIAMOND_CHESTPLATE);
         perkIcons.put("BULLDOZER" , Material.ANVIL);
