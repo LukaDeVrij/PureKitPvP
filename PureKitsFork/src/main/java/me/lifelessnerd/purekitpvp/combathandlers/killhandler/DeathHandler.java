@@ -56,17 +56,18 @@ public class DeathHandler implements Listener {
 
         Bukkit.getScheduler().runTaskLater((Plugin)this.plugin, () ->
                 player.teleport(new Location(player.getWorld(), x, y, z, 0, 0)), 1L);
-        Bukkit.getScheduler().runTaskLater((Plugin)this.plugin, () ->
-                player.setHealth(20), 2L);
-        player.getInventory().clear();
-        player.getActivePotionEffects().clear();
-        player.setExp(0f);
-        player.setLevel(0);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5, 254)); //Kinda jank, works tho
-        player.setFireTicks(0);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 5, 1));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10 , 1));
-
+        Bukkit.getScheduler().runTaskLater((Plugin)this.plugin, () -> {
+            player.getInventory().clear();
+            player.getActivePotionEffects().clear();
+            player.setExp(0f);
+            player.setLevel(0);
+            player.setArrowsInBody(0);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5, 254)); //Kinda jank, works tho
+            player.setFireTicks(0);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 5, 1));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10 , 1));
+            player.setHealth(20);
+            }, 2L);
 
         DamageCauseLib damageCauseLib = new DamageCauseLib();
 
@@ -386,17 +387,24 @@ public class DeathHandler implements Listener {
             PerkFireHandler.fireCombatPerks(player, damager);
             PerkFireHandler.fireVampirePerk(event);
 
-        } else if (event.getDamager() instanceof Arrow && event.getEntity() instanceof Player) {
+        } else if ((event.getDamager() instanceof Arrow || event.getDamager() instanceof SpectralArrow) && event.getEntity() instanceof Player) {
 
             //Projectile combat
             player = (Player) event.getEntity();
-            Arrow arrow = (Arrow) event.getDamager();
+            if (event.getDamager() instanceof Arrow){
+                Arrow arrow = (Arrow) event.getDamager();
+                damager = (Player) arrow.getShooter();
+            } else {
+                SpectralArrow arrow = (SpectralArrow) event.getDamager();
+                damager = (Player) arrow.getShooter();
+            }
 
             if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
                 return;
             }
 
-            damager = (Player) arrow.getShooter();
+            PerkFireHandler.fireRangedPerks(event, damager);
+
             double damage = event.getDamage();
             double playerHP = player.getHealth() - damage;
             if (playerHP < 0){

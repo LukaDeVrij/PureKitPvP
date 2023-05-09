@@ -27,3 +27,8 @@ suicide-command: true
 #If the notoriety perk is too OP, restrict the maximum level of sharpness that can be gained
 #Set to -1 if infinite
 notoriety-maximum: -1
+
+#Marksman perk boundary
+#If the marksman perk is too OP, restrict the maximum level of power that can be gained
+#Set to -1 if infinite
+power-maximum: -1

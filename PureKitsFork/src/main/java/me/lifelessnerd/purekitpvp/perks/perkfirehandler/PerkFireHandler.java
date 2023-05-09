@@ -10,9 +10,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Egg;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -95,11 +93,67 @@ public class PerkFireHandler {
 
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1));
                     break;
+                case "MARKSMAN":
+                    if(Math.random() <= 0.5) {
+                        ItemStack weapon = player.getInventory().getItemInMainHand();
+                        ItemMeta weaponMeta = weapon.getItemMeta();
+                        if (weapon.getType() != Material.BOW){continue;}
+                        if (weaponMeta == null){continue;} // If weapon is hand
+                        int powerLevel = weaponMeta.getEnchantLevel(Enchantment.ARROW_DAMAGE);
+
+                        if (plugin.getConfig().getInt("marksman-maximum") != -1){
+                            // So if the boundary is set to SOME value
+                            if (powerLevel >= plugin.getConfig().getInt("marksman-maximum")){
+                                player.sendMessage(ChatColor.YELLOW + "You have reached the maximum power level!");
+                                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_FALL, 1,0);
+                                continue;
+                            }
+                        }
+                        weaponMeta.removeEnchant(Enchantment.ARROW_DAMAGE);
+                        weaponMeta.addEnchant(Enchantment.ARROW_DAMAGE, powerLevel + 1, true);
+                        weapon.setItemMeta(weaponMeta);
+                        player.sendMessage(ChatColor.YELLOW + "Your power level has increased!");
+                    }
+                    break;
 
             }
         }
     }
 
+    public static void fireRangedPerks(EntityDamageByEntityEvent event, Player damager){
+        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(damager.getName());
+
+        if (playerPerks == null){
+            return;
+        }
+
+        Set<String> perkSlots = playerPerks.getKeys(false);
+        Set<String> perks = new HashSet<>();
+        for (String perkSlot : perkSlots){
+            perks.add(playerPerks.getString(perkSlot));
+        }
+        for(String perk : perks){
+            //System.out.println(perk);
+            switch(perk){
+                case "APOLLO":
+                    // Event is already Arrow on Player; damager has already been extracted out of the event
+                    if (event.getDamager() instanceof SpectralArrow arrow){
+                        ItemStack arrowItem = arrow.getItemStack();
+                        arrowItem.setAmount(1);
+                        damager.getInventory().addItem(arrowItem);
+                    } else {
+                        Arrow arrow = (Arrow) event.getDamager();
+                        ItemStack arrowItem = arrow.getItemStack();
+                        arrowItem.setAmount(1);
+                        damager.getInventory().addItem(arrowItem);
+                    }
+
+                    damager.playSound(damager.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1,0);
+                    break;
+            }
+        }
+
+    }
     public static void fireCombatPerks(Player damaged, Player damager){
 
         ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(damager.getName());
