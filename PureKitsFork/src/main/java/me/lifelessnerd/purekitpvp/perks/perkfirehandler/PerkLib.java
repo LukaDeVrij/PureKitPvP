@@ -24,6 +24,7 @@ public class PerkLib {
         perks.put("VAMPIRE", "On critical hits, gain 50% of the damage\nyou dealt, as instant health");
         perks.put("MARKSMAN", "50% chance of gaining a power level on each bow kill\nPower is added to the item held, if it's a bow");
         perks.put("APOLLO", "You get each arrow you hit on a player back\nA kill nets one extra arrow of that type");
+        perks.put("ADRENALINE", "When below 6 HP (3 hearts), you get speed 1");
 
         perkIcons.put("JUGGERNAUT" , Material.DIAMOND_CHESTPLATE);
         perkIcons.put("BULLDOZER" , Material.ANVIL);
@@ -38,5 +39,6 @@ public class PerkLib {
         perkIcons.put("VAMPIRE", Material.REDSTONE);
         perkIcons.put("MARKSMAN", Material.BOW);
         perkIcons.put("APOLLO", Material.ARROW);
+        perkIcons.put("ADRENALINE", Material.GHAST_TEAR);
     }
 }

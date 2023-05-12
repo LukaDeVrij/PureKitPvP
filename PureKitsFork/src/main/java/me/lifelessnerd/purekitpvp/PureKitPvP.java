@@ -1,4 +1,5 @@
 package me.lifelessnerd.purekitpvp;
+import me.lifelessnerd.purekitpvp.combathandlers.HealthEvents;
 import me.lifelessnerd.purekitpvp.combathandlers.PearlListener;
 import me.lifelessnerd.purekitpvp.combathandlers.libs.commands.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.VoidKiller;
@@ -83,6 +84,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnPlayerSpawnMob(this), this);
         getServer().getPluginManager().registerEvents(new PearlListener(this), this);
         getServer().getPluginManager().registerEvents(new KillCosmetics(this), this);
+        getServer().getPluginManager().registerEvents(new HealthEvents(this), this);
 
         PluginGetter.plugin = this; //TODO this is dumb
     }

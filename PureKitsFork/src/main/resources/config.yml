@@ -31,4 +31,4 @@ notoriety-maximum: -1
 #Marksman perk boundary
 #If the marksman perk is too OP, restrict the maximum level of power that can be gained
 #Set to -1 if infinite
-power-maximum: -1
+marksman-maximum: -1

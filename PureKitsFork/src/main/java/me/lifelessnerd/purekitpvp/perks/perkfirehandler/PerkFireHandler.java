@@ -307,4 +307,33 @@ public class PerkFireHandler {
 
     }
 
+    public static void fireHealthPerks(Player player){
+        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(player.getName());
+
+        if (playerPerks == null){
+            return;
+        }
+
+        Set<String> perkSlots = playerPerks.getKeys(false);
+        Set<String> perks = new HashSet<>();
+        for (String perkSlot : perkSlots){
+            perks.add(playerPerks.getString(perkSlot));
+        }
+
+        for(String perk : perks) {
+
+            switch (perk) {
+                case "ADRENALINE":
+
+                    if (!(player.getHealth() < 6)){
+                        player.removePotionEffect(PotionEffectType.SPEED); //TODO might interfere with speedster perk > needs testing
+                        break;
+                    }
+
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 0));
+
+            }
+        }
+    }
+
 }
