@@ -113,6 +113,8 @@ public class DeathHandler implements Listener {
         //Check who should get credit
         if (damageData.lastPlayerDamager == null && damageData.lastOtherDamager != null){
             //This means the player was completely killed by environment, no player killer
+            // Except when the killer is a zombie of a player; TODO
+
             lastEnvironmentHit = damageData.lastOtherDamager;
             credit = damageCauseLib.deathMessages.get(lastEnvironmentHit);
             playerInvolved = false;
@@ -388,30 +390,40 @@ public class DeathHandler implements Listener {
             PerkFireHandler.fireVampirePerk(event);
 
         } else if ((event.getDamager() instanceof Arrow || event.getDamager() instanceof SpectralArrow) && event.getEntity() instanceof Player) {
+            //This branch is a fuckin nightmare: too many hacked in exceptions because fucking spectral arrows and fucking skeletons
+            //Projectile combat///TODO: add exception for arrows from skeleton; hopefully that automatically attributes it to player aswell
+            if(((AbstractArrow) event.getDamager()).getShooter() instanceof Player){
+                player = (Player) event.getEntity();
+                if (event.getDamager() instanceof Arrow) {
+                    Arrow arrow = (Arrow) event.getDamager();
+                    damager = (Player) arrow.getShooter();
+                } else {
+                    SpectralArrow arrow = (SpectralArrow) event.getDamager();
+                    damager = (Player) arrow.getShooter();
+                }
 
-            //Projectile combat
-            player = (Player) event.getEntity();
-            if (event.getDamager() instanceof Arrow){
-                Arrow arrow = (Arrow) event.getDamager();
-                damager = (Player) arrow.getShooter();
-            } else {
-                SpectralArrow arrow = (SpectralArrow) event.getDamager();
-                damager = (Player) arrow.getShooter();
+                if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) {
+                    return;
+                }
+
+                PerkFireHandler.fireRangedPerks(event, damager);
+
+                double damage = event.getDamage();
+                double playerHP = player.getHealth() - damage;
+                if (playerHP < 0) {
+                    playerHP = 0;
+                }
+                damager.sendMessage(ChatColor.translateAlternateColorCodes(
+                        '&', "&a" + player.getName() + " &cis on &a" + (int) playerHP + " &cHP."));
+            } else if(((AbstractArrow) event.getDamager()).getShooter() instanceof Monster){
+                // Shooter is a skeleton probably
+                player = (Player) event.getEntity();
+                Monster skeleton = (Monster) ((AbstractArrow) event.getDamager()).getShooter();
+                String mobName = skeleton.getName();
+
+                damager = Bukkit.getPlayerExact(mobName.split("'s")[0]);
+
             }
-
-            if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-                return;
-            }
-
-            PerkFireHandler.fireRangedPerks(event, damager);
-
-            double damage = event.getDamage();
-            double playerHP = player.getHealth() - damage;
-            if (playerHP < 0){
-                playerHP = 0;
-            }
-            damager.sendMessage(ChatColor.translateAlternateColorCodes(
-                    '&', "&a" + player.getName() + " &cis on &a" + (int) playerHP + " &cHP."));
         } else if (event.getDamager() instanceof ThrownPotion && event.getEntity() instanceof Player){
 
             //Splash potion threw (only potions that do damage, only those are seen by this event)
@@ -433,7 +445,7 @@ public class DeathHandler implements Listener {
 
         } else if (event.getDamager() instanceof Trident && event.getEntity() instanceof Player){
 
-            //Splash potion threw (only potions that do damage, only those are seen by this event)
+            //Trident
             player = (Player) event.getEntity();
             Trident trident = (Trident) event.getDamager();
 
@@ -449,6 +461,12 @@ public class DeathHandler implements Listener {
             }
             damager.sendMessage(ChatColor.translateAlternateColorCodes(
                     '&', "&a" + player.getName() + " &cis on &a" + (int) playerHP + " &cHP."));
+
+        } else if (event.getDamager() instanceof Monster && event.getEntity() instanceof Player) {
+
+            String mobName = event.getDamager().getName();
+            damager = Bukkit.getPlayerExact(mobName.split("'s")[0]);
+            player = ((Player) event.getEntity()).getPlayer();
 
         } else {
             //If we end up here idk what happened but nothing relevant (probably a zombie hitting a pig or something)
@@ -517,7 +535,7 @@ public class DeathHandler implements Listener {
         }
 
         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK){
-            //This is handled by onPlayerCombatHit
+            //This is handled by onPlayerCombatHit TODO: not when its a custom mob
             return;
         }
         if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){

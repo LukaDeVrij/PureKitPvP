@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.combathandlers.mobhandler;
 
+import me.lifelessnerd.purekitpvp.PluginGetter;
 import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -9,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.SpawnEgg;
@@ -83,8 +85,9 @@ public class OnPlayerSpawnMob implements Listener {
         if (spawnedEntity instanceof Monster) {
             Player closestPlayer = getNearestPlayer(player);
             ((Monster) spawnedEntity).setTarget(closestPlayer);
-            System.out.println(spawnedEntity + "'s target set to " + closestPlayer);
+//            System.out.println(spawnedEntity + "'s target set to " + closestPlayer);
             spawnedEntity.customName(Component.text(player.getName() + "'s " + spawnedEntity.getType().name()));
+            spawnedEntity.getPersistentDataContainer().set(new NamespacedKey(plugin, "custom_mob"), PersistentDataType.INTEGER, 1);
         }
 
         if (customMob) {
@@ -136,7 +139,6 @@ public class OnPlayerSpawnMob implements Listener {
         player.getInventory().setItemInMainHand(item);
 
 
-
     }
     // Stolen from https://www.spigotmc.org/threads/how-do-i-get-the-nearest-player.506654/
     public static @Nullable Player getNearestPlayer(Player player) {
@@ -144,7 +146,7 @@ public class OnPlayerSpawnMob implements Listener {
         Location location = player.getLocation();
         ArrayList<Player> playersInWorld = new ArrayList<>(world.getEntitiesByClass(Player.class));
         if(playersInWorld.size()==1) return null;
-        playersInWorld.remove(player);
+        playersInWorld.remove(player); //Removes player itself
         playersInWorld.sort(Comparator.comparingDouble(o -> o.getLocation().distanceSquared(location)));
         return playersInWorld.get(0);
     }
@@ -160,6 +162,27 @@ public class OnPlayerSpawnMob implements Listener {
         if(toBeCancelled){
             e.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void mobTargetEvent(EntityTargetEvent e){
+        e.setCancelled(true);
+        Entity entity = e.getEntity();
+        Entity target = e.getTarget();
+        if (!(entity.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) {
+            return;
+        }
+        if (!(entity instanceof Monster)) {
+            return;
+        }
+        String entityName = entity.getName();
+        String playerName = entityName.split("'s")[0]; // Gets name of player who spawned it
+        Player player = Bukkit.getPlayerExact(playerName); // TODOX: This is quite janky, requires testing: seems to work!
+        Player closestPlayer = getNearestPlayer(player); // NPE has no effect it seems; target becomes null and zombie is fine with that
+        ((Monster) entity).setTarget(closestPlayer);
+//        System.out.println(entity + "'s target set to " + closestPlayer);
+
+
     }
 
 }
