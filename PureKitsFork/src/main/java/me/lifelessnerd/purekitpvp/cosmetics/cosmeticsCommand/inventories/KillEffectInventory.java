@@ -1,12 +1,12 @@
 package me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.inventories;
 
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsLib;
+import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,6 +33,7 @@ public class KillEffectInventory implements Listener {
             effectItem.getItemMeta().displayName(Component.text(killEffect));
             cosmeticsInventory.addItem(effectItem);
         }
+        player.openInventory(cosmeticsInventory);
 
     }
 
@@ -53,5 +54,7 @@ public class KillEffectInventory implements Listener {
         Component itemDisplayName = clickedItem.displayName();
         PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
         String itemName = serializer.serialize(itemDisplayName);
+        String attachedCosmeticName = MyStringUtils.itemNameToCosmeticId(itemName);
+        // Do stuff to the config with this string
     }
 }

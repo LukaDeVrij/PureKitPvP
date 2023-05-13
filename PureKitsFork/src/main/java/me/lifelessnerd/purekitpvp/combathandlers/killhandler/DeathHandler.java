@@ -303,6 +303,7 @@ public class DeathHandler implements Listener {
                     if (!(KitConfig.get().getString("kits." + kitName + ".killitem") == null)) {
                         ItemStack fromFile = (ItemStack) KitConfig.get().get("kits." + kitName + ".killitem");
                         killItem.setType(fromFile.getType());
+                        killItem.setAmount(fromFile.getAmount());
 
                         creditPlayer.getInventory().addItem(killItem);
                     }
@@ -391,7 +392,7 @@ public class DeathHandler implements Listener {
 
         } else if ((event.getDamager() instanceof Arrow || event.getDamager() instanceof SpectralArrow) && event.getEntity() instanceof Player) {
             //This branch is a fuckin nightmare: too many hacked in exceptions because fucking spectral arrows and fucking skeletons
-            //Projectile combat///TODO: add exception for arrows from skeleton; hopefully that automatically attributes it to player aswell
+            //Projectile combat
             if(((AbstractArrow) event.getDamager()).getShooter() instanceof Player){
                 player = (Player) event.getEntity();
                 if (event.getDamager() instanceof Arrow) {
@@ -468,7 +469,12 @@ public class DeathHandler implements Listener {
             damager = Bukkit.getPlayerExact(mobName.split("'s")[0]);
             player = ((Player) event.getEntity()).getPlayer();
 
-        } else {
+        } else if (event.getDamager() instanceof EnderPearl && event.getEntity() instanceof Player) {
+
+            PerkFireHandler.fireEnderpearlDamagePerks((Player) event.getEntity(), event);
+            return;
+        }
+        else {
             //If we end up here idk what happened but nothing relevant (probably a zombie hitting a pig or something)
             return;
         }

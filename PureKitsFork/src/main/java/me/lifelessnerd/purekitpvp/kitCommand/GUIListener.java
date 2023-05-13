@@ -43,7 +43,7 @@ public class GUIListener implements Listener {
                 InventoryView inv = e.getView();
                 if (inv.title().toString().contains("Kits")) { //I hate component
 
-                    if (e.getRawSlot() < 52){
+                    if (e.getRawSlot() < 49){
                         e.setCancelled(true);
                         if(clickedItem == null){
                             return;
@@ -63,7 +63,7 @@ public class GUIListener implements Listener {
                             player.chat("/suicide");
                         }
 
-                    } else if (e.getRawSlot() == 52){ // Perk help button
+                    } else if (e.getRawSlot() == 49){ // Perk help button
                         e.setCancelled(true);
 
                         player.chat("/perks");

@@ -14,7 +14,7 @@ public class CosmeticsLib {
 
         killEffects.put("firework", Material.FIREWORK_ROCKET);
         killEffects.put("blood_explosion", Material.REDSTONE);
-        killEffects.put("fiery_shock", Material.FIRE_CHARGE);
+        killEffects.put("ritual", Material.FIRE_CHARGE);
         killEffects.put("tornado", Material.STRING);
 
 //        messageEffects.put("JUGGERNAUT", Material.DIAMOND_CHESTPLATE);

@@ -74,8 +74,8 @@ public class CosmeticsCommand implements CommandExecutor {
         killMessageEffect.setItemMeta(killMessageEffectItemMeta);
         cosmeticsInventory.setItem(24, killMessageEffect);
 
+        player.openInventory(cosmeticsInventory);
 
-
-        return false;
+        return true;
     }
 }

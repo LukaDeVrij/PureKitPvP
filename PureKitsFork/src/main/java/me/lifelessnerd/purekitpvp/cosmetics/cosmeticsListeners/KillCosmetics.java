@@ -23,30 +23,30 @@ public class KillCosmetics implements Listener {
     }
 
     public static void fireKillCosmetic(Player player, Player creditPlayer) {
-        String activeCosmetic = "null";
+        String activeCosmetic = "firework";
         try {
             activeCosmetic = CosmeticsConfig.get().getString(creditPlayer.getName());
         } catch (Exception e) {
-            activeCosmetic = "null";
+            activeCosmetic = "firework";
             plugin.getLogger().log(Level.WARNING, e.getMessage());
         } // If something in the config is wrong; switch statement will pick default and do nothing
         Location killLocation = player.getLocation();
         Location killerLocation = creditPlayer.getLocation();
-        switch (activeCosmetic) {//NPE lies
+        switch (activeCosmetic) {
             case "firework" -> {
                 firework(killLocation);
             }
             case "blood_explosion" -> {
                 bloodExplosion(killLocation);
             }
-            case "fiery_shock" -> {
-                fieryShock(killLocation);
+            case "ritual" -> {
+                ritual(killLocation);
             }
             case "tornado" -> {
                 tornado(killLocation);
             }
             default -> {
-                // Do nothing
+                //Idk how you would end up here: Do nothing
             }
 
         }
@@ -86,7 +86,7 @@ public class KillCosmetics implements Listener {
 
     }
 
-    public static void fieryShock(Location location) {
+    public static void ritual(Location location) {
         for (int i = 0; i < 360; i += 20) {
             Location flameloc = addHeightToLocation(location, 1.2);
             flameloc.setZ(flameloc.getZ() + Math.cos(i) * 0.7);

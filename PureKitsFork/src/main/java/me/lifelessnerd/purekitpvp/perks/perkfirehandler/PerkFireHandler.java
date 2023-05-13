@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PerkData;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -18,6 +19,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,19 +34,26 @@ public class PerkFireHandler {
         PerkFireHandler.plugin = plugin;
     }
 
-    public static void fireKillPerks(Player player){
-
+    public static Set<String> getPerks(Player player) {
         ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(player.getName());
 
         if (playerPerks == null){
-            return;
+            return new HashSet<>(); // No perks? Return empty set; this way nothing happens
         }
 
         Set<String> perkSlots = playerPerks.getKeys(false);
         Set<String> perks = new HashSet<>();
+
         for (String perkSlot : perkSlots){
             perks.add(playerPerks.getString(perkSlot));
         }
+        return perks;
+    }
+
+    public static void fireKillPerks(Player player){
+
+        Set<String> perks = getPerks(player);
+
         for(String perk : perks){
             //System.out.println(perk);
             switch(perk){
@@ -121,17 +131,9 @@ public class PerkFireHandler {
     }
 
     public static void fireRangedPerks(EntityDamageByEntityEvent event, Player damager){
-        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(damager.getName());
 
-        if (playerPerks == null){
-            return;
-        }
+        Set<String> perks = getPerks(damager);
 
-        Set<String> perkSlots = playerPerks.getKeys(false);
-        Set<String> perks = new HashSet<>();
-        for (String perkSlot : perkSlots){
-            perks.add(playerPerks.getString(perkSlot));
-        }
         for(String perk : perks){
             //System.out.println(perk);
             switch(perk){
@@ -156,17 +158,8 @@ public class PerkFireHandler {
     }
     public static void fireCombatPerks(Player damaged, Player damager){
 
-        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(damager.getName());
+        Set<String> perks = getPerks(damager);
 
-        if (playerPerks == null){
-            return;
-        }
-
-        Set<String> perkSlots = playerPerks.getKeys(false);
-        Set<String> perks = new HashSet<>();
-        for (String perkSlot : perkSlots){
-            perks.add(playerPerks.getString(perkSlot));
-        }
         for(String perk : perks){
 
             switch(perk){
@@ -206,17 +199,9 @@ public class PerkFireHandler {
     }
     public static void fireVampirePerk(EntityDamageByEntityEvent event) {
 
-        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(event.getDamager().getName());
         Player player = (Player) event.getDamager();
-        if (playerPerks == null){
-            return;
-        }
+        Set<String> perks = getPerks(player);
 
-        Set<String> perkSlots = playerPerks.getKeys(false);
-        Set<String> perks = new HashSet<>();
-        for (String perkSlot : perkSlots){
-            perks.add(playerPerks.getString(perkSlot));
-        }
         for(String perk : perks){
 
             if (perk.equalsIgnoreCase("VAMPIRE")){
@@ -242,17 +227,8 @@ public class PerkFireHandler {
     }
 
     public static void fireSnowballPerks(ProjectileHitEvent event, Player damaged, Player shooter) {
-        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(shooter.getName());
 
-        if (playerPerks == null){
-            return;
-        }
-
-        Set<String> perkSlots = playerPerks.getKeys(false);
-        Set<String> perks = new HashSet<>();
-        for (String perkSlot : perkSlots){
-            perks.add(playerPerks.getString(perkSlot));
-        }
+        Set<String> perks = getPerks(shooter);
 
         for(String perk : perks){
 
@@ -273,30 +249,29 @@ public class PerkFireHandler {
 
     }
     public static void fireEnderpearlPerks(Player player, PlayerLaunchProjectileEvent event) {
-        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(player.getName());
 
-        if (playerPerks == null){
-            return;
-        }
-
-        Set<String> perkSlots = playerPerks.getKeys(false);
-        Set<String> perks = new HashSet<>();
-        for (String perkSlot : perkSlots){
-            perks.add(playerPerks.getString(perkSlot));
-        }
+        Set<String> perks = getPerks(player);
 
         for(String perk : perks){
 
             switch(perk){
                 case "ENDERMAN":
 
-                    Block lookingAt = event.getPlayer().getTargetBlock(50);
-                    player.teleport(lookingAt.getLocation());
-                    event.setCancelled(true);
-                    int epAmount = player.getInventory().getItemInMainHand().getAmount();
-                    ItemStack toBeGiven = player.getInventory().getItemInMainHand();
-                    toBeGiven.setAmount(epAmount - 1);
-                    player.getInventory().setItemInMainHand(toBeGiven);
+                    new BukkitRunnable() {
+
+                        @Override
+                        public void run() {
+                            for (Entity en : event.getPlayer().getNearbyEntities(2, 2, 2)) {
+                                //This has to be here; event.getProjectile does not work; idk why https://www.spigotmc.org/threads/ride-enderpearl.263710/
+
+                                if (en.getType() == EntityType.ENDER_PEARL) {
+
+                                    en.addPassenger(event.getPlayer());
+
+                                }
+                            }
+                        }
+                    }.runTaskLater(plugin, 1);
 
                     break;
 
@@ -308,29 +283,36 @@ public class PerkFireHandler {
     }
 
     public static void fireHealthPerks(Player player){
-        ConfigurationSection playerPerks = PerkData.get().getConfigurationSection(player.getName());
 
-        if (playerPerks == null){
-            return;
-        }
-
-        Set<String> perkSlots = playerPerks.getKeys(false);
-        Set<String> perks = new HashSet<>();
-        for (String perkSlot : perkSlots){
-            perks.add(playerPerks.getString(perkSlot));
-        }
+        Set<String> perks = getPerks(player);
 
         for(String perk : perks) {
 
             switch (perk) {
                 case "ADRENALINE":
 
-                    if (!(player.getHealth() < 6)){
+                    if (player.getHealth() >= 6){
+
                         player.removePotionEffect(PotionEffectType.SPEED); //TODO might interfere with speedster perk > needs testing
                         break;
                     }
 
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 0));
+
+            }
+        }
+    }
+
+    public static void fireEnderpearlDamagePerks(Player player, EntityDamageByEntityEvent event){
+        Set<String> perks = getPerks(player);
+
+        for(String perk : perks) {
+
+            switch (perk) {
+                case "ENDERMAN":
+
+                    event.setCancelled(true); // Negates not only the damage but also the tick
+                    break;
 
             }
         }

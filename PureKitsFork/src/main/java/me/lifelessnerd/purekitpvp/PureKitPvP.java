@@ -5,6 +5,8 @@ import me.lifelessnerd.purekitpvp.combathandlers.libs.commands.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.VoidKiller;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsGUIListener;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillCosmetics;
 import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkCommand;
 import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkGUIListener;
@@ -64,7 +66,6 @@ public final class PureKitPvP extends JavaPlugin {
         CosmeticsConfig.get().options().copyDefaults(true);
         CosmeticsConfig.save();
 
-        PerkFireHandler perkFireHandler = new PerkFireHandler(this);
         getCommand("getkit").setExecutor(new GetKit(this));
         getCommand("kit").setExecutor(new KitsGUI(this));
         getCommand("perk").setExecutor(new PerkCommand(this));
@@ -72,6 +73,7 @@ public final class PureKitPvP extends JavaPlugin {
         getCommand("getstats").setExecutor(new GetStats(this));
         getCommand("purekitpvphelp").setExecutor(new HelpCommand());
         getCommand("purekitpvp").setExecutor(new AdminCommandManager(this));
+        getCommand("cosmetics").setExecutor(new CosmeticsCommand(this));
         getServer().getPluginManager().registerEvents(new GetKit(this), this);
         getServer().getPluginManager().registerEvents(new GUIListener(this), this);
         getServer().getPluginManager().registerEvents(new PerkGUIListener(this), this);
@@ -85,6 +87,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PearlListener(this), this);
         getServer().getPluginManager().registerEvents(new KillCosmetics(this), this);
         getServer().getPluginManager().registerEvents(new HealthEvents(this), this);
+        getServer().getPluginManager().registerEvents(new CosmeticsGUIListener(this), this);
 
         PluginGetter.plugin = this; //TODO this is dumb
     }

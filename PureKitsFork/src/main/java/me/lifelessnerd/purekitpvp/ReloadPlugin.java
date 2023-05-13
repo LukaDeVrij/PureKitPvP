@@ -40,16 +40,22 @@ public class ReloadPlugin extends Subcommand {
         // NO WORKIE
         KitConfig.reload();
         KitConfig.save();
+
         KitStatsConfig.reload();
         KitStatsConfig.save();
+
         LootTablesConfig.reload();
         LootTablesConfig.save();
+
         PlayerStatsConfig.reload();
         PlayerStatsConfig.save();
+
         PerkData.reload();
         PerkData.save();
+
         MobSpawnConfig.reload();
         MobSpawnConfig.save();
+
         CosmeticsConfig.reload();
         CosmeticsConfig.save();
 

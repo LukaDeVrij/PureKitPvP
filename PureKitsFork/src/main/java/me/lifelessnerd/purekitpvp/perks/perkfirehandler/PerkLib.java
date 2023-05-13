@@ -20,7 +20,7 @@ public class PerkLib {
         perks.put("ROBBERY","30% chance of disarming someone if hit with your fist\nThe weapon will be swapped with a slot in the inventory");
         perks.put("SNOWMAN","Give slowness 1 (3s) when you hit someone with a snowball");
         perks.put("DISRUPTOR","Give poison 1 (5s) when you hit someone with an egg");
-        perks.put("ENDERMAN", "Ender pearls behave differently, teleporting on\nclick, to the location you are looking at, max 50 blocks away\nThey do no damage");
+        perks.put("ENDERMAN", "You can now ride ender pearls; they do no damage");
         perks.put("VAMPIRE", "On critical hits, gain 50% of the damage\nyou dealt, as instant health");
         perks.put("MARKSMAN", "50% chance of gaining a power level on each bow kill\nPower is added to the item held, if it's a bow");
         perks.put("APOLLO", "You get each arrow you hit on a player back\nA kill nets one extra arrow of that type");

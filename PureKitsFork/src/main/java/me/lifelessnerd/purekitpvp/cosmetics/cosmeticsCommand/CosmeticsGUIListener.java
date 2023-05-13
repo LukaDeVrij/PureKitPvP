@@ -29,6 +29,9 @@ public class CosmeticsGUIListener implements Listener {
         if (!(e.getView().title().toString().contains("Cosmetics Menu"))) {
             return;
         }
+        if (e.getCurrentItem() == null){
+            return;
+        }
         ItemStack clickedItem = e.getCurrentItem();
         e.setCancelled(true);
 

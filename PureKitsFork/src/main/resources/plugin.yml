@@ -37,6 +37,11 @@ commands:
     usage: /perk
     aliases:
       - perk
+  cosmetics:
+    description: Open cosmetics menu
+    usage: /cosmetics
+    aliases:
+      - cosmetic
 
 
 

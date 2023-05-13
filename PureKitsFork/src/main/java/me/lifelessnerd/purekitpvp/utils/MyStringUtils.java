@@ -115,4 +115,12 @@ public class MyStringUtils {
         return output;
     }
 
+    public static String itemNameToCosmeticId(String input){
+        // Input: Blood Explosion -> blood_explosion //TODO: needs testing
+        String processed = input.toLowerCase();
+        processed = processed.replace(' ', '_');
+
+        return processed;
+    }
+
 }
