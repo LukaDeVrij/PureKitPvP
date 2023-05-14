@@ -33,12 +33,12 @@ public class CosmeticsGUIListener implements Listener {
             return;
         }
         ItemStack clickedItem = e.getCurrentItem();
-        e.setCancelled(true);
 
+        e.setCancelled(true);
         Component itemDisplayName = clickedItem.displayName();
         PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
         String itemName = serializer.serialize(itemDisplayName);
-
+        itemName = itemName.substring(1, itemName.length() - 1); // For some reason the itemname has [] around it; frick Component
         switch(itemName){
             case "Kill Effect":
                 KillEffectInventory.openKillEffectInventory(player);
@@ -50,6 +50,8 @@ public class CosmeticsGUIListener implements Listener {
                 return;
 
         }
+
+
 
 
 

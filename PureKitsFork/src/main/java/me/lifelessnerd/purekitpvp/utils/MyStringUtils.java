@@ -123,4 +123,10 @@ public class MyStringUtils {
         return processed;
     }
 
+    // Opposite of function above
+    public static String cosmeticIdToItemName(String input){
+        // Input: blood_explosion -> Blood Explosion
+        return itemCamelCase(input).trim();
+    }
+
 }

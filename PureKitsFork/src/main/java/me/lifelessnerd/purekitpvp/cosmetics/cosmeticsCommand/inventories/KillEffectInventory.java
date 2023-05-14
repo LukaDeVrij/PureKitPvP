@@ -1,10 +1,14 @@
 package me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.inventories;
 
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsLib;
+import me.lifelessnerd.purekitpvp.files.CosmeticsConfig;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,7 +16,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 public class KillEffectInventory implements Listener {
@@ -30,7 +36,20 @@ public class KillEffectInventory implements Listener {
         Inventory cosmeticsInventory = Bukkit.createInventory(null, 54, invTitle);
         for (String killEffect : lib.killEffects.keySet()) {
             ItemStack effectItem = new ItemStack(lib.killEffects.get(killEffect), 1);
-            effectItem.getItemMeta().displayName(Component.text(killEffect));
+            ItemMeta itemMeta = effectItem.getItemMeta();
+            itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+            itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            Component displayName = Component.text(MyStringUtils.cosmeticIdToItemName(killEffect));
+            if (CosmeticsConfig.get().getString(player.getName()).equalsIgnoreCase(killEffect)){
+                // TODO: NPE, if player is not present in file; I have to find some place to add playername to file if not present
+                displayName = displayName.color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false);
+            } else {
+                displayName = displayName.color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false);;
+            }
+
+            itemMeta.displayName(displayName);
+            effectItem.setItemMeta(itemMeta);
             cosmeticsInventory.addItem(effectItem);
         }
         player.openInventory(cosmeticsInventory);

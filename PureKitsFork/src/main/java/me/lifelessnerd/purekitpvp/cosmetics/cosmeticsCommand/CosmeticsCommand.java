@@ -4,6 +4,7 @@ import me.lifelessnerd.purekitpvp.kitCommand.GetKit;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,6 +13,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -46,7 +48,9 @@ public class CosmeticsCommand implements CommandExecutor {
         // Kill cosmetics button
         ItemStack killEffectButton = new ItemStack(Material.DIAMOND_SWORD);
         ItemMeta killEffectButtonMeta = killEffectButton.getItemMeta();
-        killEffectButtonMeta.displayName(Component.text("Kill Effect"));
+        killEffectButtonMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        killEffectButtonMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        killEffectButtonMeta.displayName(Component.text("Kill Effect").color(TextColor.color(200, 152, 0)).decoration(TextDecoration.ITALIC, false));
         List<Component> loreList2 = new ArrayList<>();
         TextComponent txt21 = Component.text("Change your kill effect cosmetic!").color(TextColor.color(100,100,100));
         loreList2.add(txt21);
@@ -56,7 +60,7 @@ public class CosmeticsCommand implements CommandExecutor {
 
         ItemStack trailEffectButton = new ItemStack(Material.ARROW);
         ItemMeta trailEffectButtonItemMeta = trailEffectButton.getItemMeta();
-        trailEffectButtonItemMeta.displayName(Component.text("Projectile Trail"));
+        trailEffectButtonItemMeta.displayName(Component.text("Projectile Trail").color(TextColor.color(200, 152, 0)).decoration(TextDecoration.ITALIC, false));
         List<Component> loreList3 = new ArrayList<>();
         TextComponent txt22 = Component.text("Change your projectile trail cosmetic!").color(TextColor.color(100,100,100));
         loreList3.add(txt22);
@@ -66,7 +70,7 @@ public class CosmeticsCommand implements CommandExecutor {
 
         ItemStack killMessageEffect = new ItemStack(Material.OAK_SIGN);
         ItemMeta killMessageEffectItemMeta = killMessageEffect.getItemMeta();
-        killMessageEffectItemMeta.displayName(Component.text("Kill Message"));
+        killMessageEffectItemMeta.displayName(Component.text("Kill Message").color(TextColor.color(200, 152, 0)).decoration(TextDecoration.ITALIC, false));
         List<Component> loreList = new ArrayList<>();
         TextComponent txt = Component.text("Change your kill message cosmetic!").color(TextColor.color(100,100,100));
         loreList.add(txt);

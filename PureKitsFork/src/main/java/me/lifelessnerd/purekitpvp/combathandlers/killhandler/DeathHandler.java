@@ -318,7 +318,6 @@ public class DeathHandler implements Listener {
                 KillCosmetics.fireKillCosmetic(player, creditPlayer);
 
 
-
             } else {
                 //Player does not have an entry; creating one with new data
                 PlayerStatsConfig.get().set(creditPlayer.getName(), "");
@@ -550,14 +549,30 @@ public class DeathHandler implements Listener {
         }
         if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC){
             return;
-
         }
 
         int damageAmount = (int) event.getDamage();
         EntityDamageEvent.DamageCause cause = event.getCause();
 
+        // This branch prevents fall damage from happening in the spawn area; it also returns so that it does not get added to damageDistribution
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL){
+            Location fallLocation = player.getLocation();
 
+            // - 0.5 because block and player location are off by 0.5 because Minecraft
+            double minX = plugin.getConfig().getDouble("respawnX") - 0.5 - plugin.getConfig().getInt("spawn-radius");
+            double maxX = plugin.getConfig().getDouble("respawnX") - 0.5 + plugin.getConfig().getInt("spawn-radius");
 
+            double minZ = plugin.getConfig().getDouble("respawnZ") - 0.5 - plugin.getConfig().getInt("spawn-radius");
+            double maxZ = plugin.getConfig().getDouble("respawnZ") - 0.5 + plugin.getConfig().getInt("spawn-radius");
+
+            if(fallLocation.getBlockX() >= minX && fallLocation.getBlockX() <= maxX){
+                if(fallLocation.getBlockZ() >= minZ && fallLocation.getBlockZ() <= maxZ) { // If inside spawn square
+//                    event.setDamage(0);
+                    event.setCancelled(true); //TODO: might have other implications
+                    return;
+                }
+            }
+        }
 
         //If player has just started combat, make a dataContainer with the empty object above
         NamespacedKey key = new NamespacedKey(plugin, "damageDistributionInfo");

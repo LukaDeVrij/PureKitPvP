@@ -10,12 +10,16 @@ quick-voidkill: true
 #If above true, Y level at which you should die in pvp, please provide double
 voidY: 0.0
 
-#respawn X, Y, Z in world
+#respawn X, Y, Z in world, this is basically the spawn region
 respawnX: 0.5
 respawnY: 142.0
 respawnZ: 0.5
 
-#Whether people who get a killstreak will get glowing effect
+# Spawn region radius; you won't get fall damage in this area (square area)
+spawn-radius: 6
+
+
+#Whether people who get a kill streak will get glowing effect
 killstreak-glowing: true
 #If above true, the duration in seconds
 killstreak-glowing-duration: 100
