@@ -11,6 +11,8 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,8 +44,10 @@ public class KillEffectInventory implements Listener {
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             Component displayName = Component.text(MyStringUtils.cosmeticIdToItemName(killEffect));
             if (CosmeticsConfig.get().getString(player.getName()).equalsIgnoreCase(killEffect)){
-                // TODO: NPE, if player is not present in file; I have to find some place to add playername to file if not present
+                // TODO: NPE, if player is not present in file; I have to find some place to add player name to file if not present
                 displayName = displayName.color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false);
+                displayName = displayName.decoration(TextDecoration.BOLD, true);
+                itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
             } else {
                 displayName = displayName.color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false);;
             }
@@ -52,6 +56,12 @@ public class KillEffectInventory implements Listener {
             effectItem.setItemMeta(itemMeta);
             cosmeticsInventory.addItem(effectItem);
         }
+
+        ItemStack backArrow = new ItemStack(Material.ARROW);
+        ItemMeta backArrowIM = backArrow.getItemMeta();
+        backArrowIM.displayName(Component.text("Go Back").decoration(TextDecoration.ITALIC, false).color(NamedTextColor.GREEN));
+        backArrow.setItemMeta(backArrowIM);
+        cosmeticsInventory.setItem(49, backArrow);
         player.openInventory(cosmeticsInventory);
 
     }
@@ -64,16 +74,28 @@ public class KillEffectInventory implements Listener {
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) {
             return;
         }
+
         if (!(e.getView().title().toString().contains("Change Kill Effect"))) {
             return;
         }
         ItemStack clickedItem = e.getCurrentItem();
+        if (clickedItem == null){
+            return;
+        }
         e.setCancelled(true);
 
-        Component itemDisplayName = clickedItem.displayName();
-        PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
-        String itemName = serializer.serialize(itemDisplayName);
-        String attachedCosmeticName = MyStringUtils.itemNameToCosmeticId(itemName);
+        String itemDisplayName = MyStringUtils.componentToString(clickedItem.displayName());
+        String attachedCosmeticName = MyStringUtils.itemNameToCosmeticId(itemDisplayName);
         // Do stuff to the config with this string
+        System.out.println(attachedCosmeticName);
+
+        if (itemDisplayName.equalsIgnoreCase("Go Back")){
+            player.closeInventory();
+            player.chat("/cosmetics");
+            return;
+        }
+
+        CosmeticsConfig.get().set(player.getName(), attachedCosmeticName);
+
     }
 }

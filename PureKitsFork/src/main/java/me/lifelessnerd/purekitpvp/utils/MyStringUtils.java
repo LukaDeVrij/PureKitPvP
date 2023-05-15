@@ -1,5 +1,8 @@
 package me.lifelessnerd.purekitpvp.utils;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+
 public class MyStringUtils {
 
     public static String itemCamelCase(String string){
@@ -127,6 +130,13 @@ public class MyStringUtils {
     public static String cosmeticIdToItemName(String input){
         // Input: blood_explosion -> Blood Explosion
         return itemCamelCase(input).trim();
+    }
+
+    public static String componentToString(Component singleLineComponent){
+        PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
+        String processed = serializer.serialize(singleLineComponent);
+        processed = processed.substring(1, processed.length() - 1);
+        return processed;
     }
 
 }

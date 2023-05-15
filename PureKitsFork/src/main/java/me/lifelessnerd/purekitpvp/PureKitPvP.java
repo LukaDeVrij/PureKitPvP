@@ -7,6 +7,7 @@ import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsGUIListener;
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.inventories.KillEffectInventory;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillCosmetics;
 import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkCommand;
 import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkGUIListener;
@@ -88,6 +89,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new KillCosmetics(this), this);
         getServer().getPluginManager().registerEvents(new HealthEvents(this), this);
         getServer().getPluginManager().registerEvents(new CosmeticsGUIListener(this), this);
+        getServer().getPluginManager().registerEvents(new KillEffectInventory(this), this);
 
         PluginGetter.plugin = this; //TODO this is dumb
     }
