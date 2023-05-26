@@ -304,6 +304,7 @@ public class DeathHandler implements Listener {
                         ItemStack fromFile = (ItemStack) KitConfig.get().get("kits." + kitName + ".killitem");
                         killItem.setType(fromFile.getType());
                         killItem.setAmount(fromFile.getAmount());
+                        killItem.setItemMeta(fromFile.getItemMeta());
 
                         creditPlayer.getInventory().addItem(killItem);
                     }

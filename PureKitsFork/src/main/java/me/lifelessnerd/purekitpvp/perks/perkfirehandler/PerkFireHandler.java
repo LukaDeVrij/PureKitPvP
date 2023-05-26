@@ -293,11 +293,11 @@ public class PerkFireHandler {
 
                     if (player.getHealth() >= 6){
 
-                        player.removePotionEffect(PotionEffectType.SPEED); //TODO might interfere with speedster perk > needs testing
+                        player.setWalkSpeed(0.2f);
                         break;
                     }
 
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 0));
+                    player.setWalkSpeed(0.3f);
 
             }
         }
