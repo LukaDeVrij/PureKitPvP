@@ -46,7 +46,7 @@ public class GoldenHeadEat implements Listener {
 
 
         ItemStack heldItem = player.getInventory().getItemInMainHand();
-        String desiredLore = "Healing Item"; //TODO: Might have broken it by changing it Golden Head > Healing Item
+        String desiredLore = "Healing Item";
 
 
         if (!(heldItem.getItemMeta().hasLore())) {
@@ -57,10 +57,15 @@ public class GoldenHeadEat implements Listener {
             return;
         }
 
+        heldItem.setAmount(heldItem.getAmount() - 1); //TODO does not work? see comment below
+
         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 2));
         player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 400, 0));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1));
         player.getInventory().remove(heldItem);
+        player.getInventory().addItem(heldItem); //TODO: I HATE THIS
+        // This is suboptimal, but apparently removing itemstack with amount 1 does not work
+        // Side effect is change in inventory slot possible
 
     }
 }

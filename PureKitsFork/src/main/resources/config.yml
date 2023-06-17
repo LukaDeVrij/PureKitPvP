@@ -1,6 +1,6 @@
 # PureKitPvP by LifelessNerd
 # Made to work with PureKits kit files
-# 2022
+# 2022 - 2023
 
 # World in which the plugin should be active: i.e. kits, deaths, stats and such
 world: pvp
@@ -36,3 +36,6 @@ notoriety-maximum: -1
 #If the marksman perk is too OP, restrict the maximum level of power that can be gained
 #Set to -1 if infinite
 marksman-maximum: -1
+
+#Default kill effect
+default-kill-effect: "firework"

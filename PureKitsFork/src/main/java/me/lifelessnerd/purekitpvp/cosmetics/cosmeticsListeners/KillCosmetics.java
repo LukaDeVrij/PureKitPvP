@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ServiceConfigurationError;
 import java.util.logging.Level;
 
 public class KillCosmetics implements Listener {
@@ -25,10 +26,21 @@ public class KillCosmetics implements Listener {
     public static void fireKillCosmetic(Player player, Player creditPlayer) {
         String activeCosmetic = "firework";
         try {
-            activeCosmetic = CosmeticsConfig.get().getString(creditPlayer.getName());
+            // This construct is weird; it works tho
+            activeCosmetic = CosmeticsConfig.get().getString("kill_effect." + creditPlayer.getName());
+            if (activeCosmetic == null){
+                throw new NullPointerException("Player is not defined in Cosmetics config! They have been added with default.");
+            }
         } catch (Exception e) {
-            activeCosmetic = "firework";
-            plugin.getLogger().log(Level.WARNING, e.getMessage());
+            String configValue = CosmeticsConfig.get().getString("kill_effect." + creditPlayer.getName());
+            // if player is not present in file; add it to config and try again
+            if (configValue == null){
+                CosmeticsConfig.get().set("kill_effect." + creditPlayer.getName(), plugin.getConfig().getString("default-kill-effect"));
+                CosmeticsConfig.save();
+                CosmeticsConfig.reload();
+                activeCosmetic = CosmeticsConfig.get().getString("kill_effect." + creditPlayer.getName());
+            }
+            plugin.getLogger().log(Level.INFO, e.getMessage());
         } // If something in the config is wrong; switch statement will pick default and do nothing
         Location killLocation = player.getLocation();
         Location killerLocation = creditPlayer.getLocation();

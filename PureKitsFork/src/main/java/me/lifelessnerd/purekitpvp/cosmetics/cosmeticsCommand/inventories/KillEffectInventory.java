@@ -11,7 +11,9 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,14 +26,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 public class KillEffectInventory implements Listener {
-    Plugin plugin;
+    static Plugin plugin; // static?
 
     public KillEffectInventory(Plugin plugin) {
-        this.plugin = plugin;
-    }
+        KillEffectInventory.plugin = plugin;
+    } // could make this this.plugin
 
     public static void openKillEffectInventory(Player player){
-
+        // This method is responsible for drawing items in inventory on clicking 'Kill Effect'
         CosmeticsLib lib = new CosmeticsLib();
 
         TextComponent invTitle = Component.text("Change Kill Effect").color(TextColor.color(255, 150, 20));
@@ -43,8 +45,18 @@ public class KillEffectInventory implements Listener {
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             Component displayName = Component.text(MyStringUtils.cosmeticIdToItemName(killEffect));
-            if (CosmeticsConfig.get().getString(player.getName()).equalsIgnoreCase(killEffect)){
-                // TODO: NPE, if player is not present in file; I have to find some place to add player name to file if not present
+
+            //MEH: This 4x is not needed; just once at the start and then add green to that item?
+            String configValue = CosmeticsConfig.get().getString("kill_effect." + player.getName());
+            // if player is not present in file; add it to config and try again
+            if (configValue == null){
+                CosmeticsConfig.get().set(player.getName(), plugin.getConfig().getString("default-kill-effect"));
+                CosmeticsConfig.save();
+                CosmeticsConfig.reload();
+                configValue = CosmeticsConfig.get().getString("kill_effect." + player.getName());
+            }
+
+            if (configValue.equalsIgnoreCase(killEffect)){
                 displayName = displayName.color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false);
                 displayName = displayName.decoration(TextDecoration.BOLD, true);
                 itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
@@ -68,7 +80,7 @@ public class KillEffectInventory implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-
+        // This method is responsible for logic after a cosmetics item is clicked
         Player player = (Player) e.getWhoClicked();
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) {
@@ -87,7 +99,7 @@ public class KillEffectInventory implements Listener {
         String itemDisplayName = MyStringUtils.componentToString(clickedItem.displayName());
         String attachedCosmeticName = MyStringUtils.itemNameToCosmeticId(itemDisplayName);
         // Do stuff to the config with this string
-        System.out.println(attachedCosmeticName);
+//        System.out.println(attachedCosmeticName);
 
         if (itemDisplayName.equalsIgnoreCase("Go Back")){
             player.closeInventory();
@@ -95,7 +107,12 @@ public class KillEffectInventory implements Listener {
             return;
         }
 
-        CosmeticsConfig.get().set(player.getName(), attachedCosmeticName);
+        CosmeticsConfig.get().set("kill_effect." + player.getName(), attachedCosmeticName);
+        CosmeticsConfig.save();
+        CosmeticsConfig.reload();
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1,0);
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Selected " + "&c" + itemDisplayName));
+        e.getInventory().close(); // This is a choice I made, may not be optimal
 
     }
 }

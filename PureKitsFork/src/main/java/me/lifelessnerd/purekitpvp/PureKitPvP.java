@@ -90,7 +90,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new HealthEvents(this), this);
         getServer().getPluginManager().registerEvents(new CosmeticsGUIListener(this), this);
         getServer().getPluginManager().registerEvents(new KillEffectInventory(this), this);
-
+        PerkFireHandler.plugin = this; //idk? fixes npe?
         PluginGetter.plugin = this; //TODO this is dumb
     }
 
