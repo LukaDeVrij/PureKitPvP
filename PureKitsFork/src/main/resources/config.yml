@@ -7,7 +7,7 @@ world: pvp
 
 #Quick kill when falling in void, only works when suicide-command is enabled
 quick-voidkill: true
-#If above true, Y level at which you should die in pvp, please provide double
+#If above true, Y level at which you should die in pvp, please provide double (something like 0.0 or -10.0)
 voidY: 0.0
 
 #respawn X, Y, Z in world, this is basically the spawn region
@@ -15,9 +15,8 @@ respawnX: 0.5
 respawnY: 142.0
 respawnZ: 0.5
 
-# Spawn region radius; you won't get fall damage in this area (square area)
+# Spawn region radius; you won't get fall damage in this area (square area relative to respawnX and respawnZ)
 spawn-radius: 6
-
 
 #Whether people who get a kill streak will get glowing effect
 killstreak-glowing: true
@@ -26,6 +25,9 @@ killstreak-glowing-duration: 100
 
 #Suicide command from PureKitPvP, ensures death recaps work correctly
 suicide-command: true
+
+# Whether the level of the player should be displayed in front of the message as prefix  (only in the pvp world)
+level-chat: true
 
 #Notoriety perk boundary
 #If the notoriety perk is too OP, restrict the maximum level of sharpness that can be gained
@@ -39,3 +41,14 @@ marksman-maximum: -1
 
 #Default kill effect
 default-kill-effect: "firework"
+
+#Default projectile trail
+default-projectile-trail: "none"
+
+# Projectile trail period delay
+# The amount of time between each particle, in ticks (20 ticks = 1 particle per second)
+projectile-trail-period: 1
+
+# Projectile trail count
+# Amount of particles per spawn (controlled by projectile-trail-period)
+projectile-trail-count: 5

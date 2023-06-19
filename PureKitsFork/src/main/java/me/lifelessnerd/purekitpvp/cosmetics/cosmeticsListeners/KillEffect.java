@@ -12,15 +12,14 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ServiceConfigurationError;
 import java.util.logging.Level;
 
-public class KillCosmetics implements Listener {
+public class KillEffect implements Listener {
 
     public static Plugin plugin;
 
-    public KillCosmetics(Plugin plugin) {
-        KillCosmetics.plugin = plugin;
+    public KillEffect(Plugin plugin) {
+        KillEffect.plugin = plugin;
     }
 
     public static void fireKillCosmetic(Player player, Player creditPlayer) {
@@ -44,7 +43,7 @@ public class KillCosmetics implements Listener {
         } // If something in the config is wrong; switch statement will pick default and do nothing
         Location killLocation = player.getLocation();
         Location killerLocation = creditPlayer.getLocation();
-        switch (activeCosmetic) {
+        switch (activeCosmetic) { // NPE lies, try catch above fixes this
             case "firework" -> {
                 firework(killLocation);
             }

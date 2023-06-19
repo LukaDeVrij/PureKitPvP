@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand;
 
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.inventories.KillEffectInventory;
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.inventories.ProjectileTrailInventory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
@@ -44,7 +45,7 @@ public class CosmeticsGUIListener implements Listener {
                 KillEffectInventory.openKillEffectInventory(player);
                 return;
             case "Projectile Trail":
-
+                ProjectileTrailInventory.openProjectileTrailInventory(player);
                 return;
             case "Kill Message":
                 return;

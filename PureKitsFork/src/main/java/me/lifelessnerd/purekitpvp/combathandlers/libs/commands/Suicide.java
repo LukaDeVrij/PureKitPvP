@@ -37,7 +37,7 @@ public class Suicide implements CommandExecutor {
         }
         player.teleport(new Location(player.getWorld(),
                 player.getLocation().getX(),
-                plugin.getConfig().getDouble("voidY") - 150.0,
+                plugin.getConfig().getDouble("voidY"),
                 player.getLocation().getY()
         ));
 

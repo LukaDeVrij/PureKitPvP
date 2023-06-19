@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp;
 import me.lifelessnerd.purekitpvp.combathandlers.HealthEvents;
 import me.lifelessnerd.purekitpvp.combathandlers.PearlListener;
+import me.lifelessnerd.purekitpvp.combathandlers.leveling.PlayerLevelChat;
 import me.lifelessnerd.purekitpvp.combathandlers.libs.commands.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.VoidKiller;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
@@ -8,7 +9,9 @@ import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsGUIListener;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.inventories.KillEffectInventory;
-import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillCosmetics;
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.inventories.ProjectileTrailInventory;
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillEffect;
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.ProjectileTrail;
 import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkCommand;
 import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkGUIListener;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkFireHandler;
@@ -86,12 +89,16 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OpenRandomChest(this), this);
         getServer().getPluginManager().registerEvents(new OnPlayerSpawnMob(this), this);
         getServer().getPluginManager().registerEvents(new PearlListener(this), this);
-        getServer().getPluginManager().registerEvents(new KillCosmetics(this), this);
         getServer().getPluginManager().registerEvents(new HealthEvents(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerLevelChat(this), this);
+
         getServer().getPluginManager().registerEvents(new CosmeticsGUIListener(this), this);
+        getServer().getPluginManager().registerEvents(new KillEffect(this), this);
         getServer().getPluginManager().registerEvents(new KillEffectInventory(this), this);
+        getServer().getPluginManager().registerEvents(new ProjectileTrail(this), this);
+        getServer().getPluginManager().registerEvents(new ProjectileTrailInventory(this), this);
         PerkFireHandler.plugin = this; //idk? fixes npe?
-        PluginGetter.plugin = this; //TODO this is dumb
+        PluginGetter.plugin = this; //TODO this is dumb ~DEPRECATED-> used in 1 instance
     }
 
     @Override

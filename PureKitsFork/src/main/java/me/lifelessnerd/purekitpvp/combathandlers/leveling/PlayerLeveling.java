@@ -1,4 +1,4 @@
-package me.lifelessnerd.purekitpvp.combathandlers;
+package me.lifelessnerd.purekitpvp.combathandlers.leveling;
 
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import org.bukkit.Bukkit;

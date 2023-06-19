@@ -21,11 +21,15 @@ public class CosmeticsLib {
 //        messageEffects.put("BULLDOZER", Material.ANVIL);
 //        messageEffects.put("KNOWLEDGE", Material.BOOK);
 //        messageEffects.put("NOTORIETY", Material.DIAMOND_SWORD);
-//
-//        trailEffects.put("JUGGERNAUT", Material.DIAMOND_CHESTPLATE);
-//        trailEffects.put("BULLDOZER", Material.ANVIL);
-//        trailEffects.put("KNOWLEDGE", Material.BOOK);
-//        trailEffects.put("NOTORIETY", Material.DIAMOND_SWORD);
+
+        trailEffects.put("none", Material.BARRIER);
+        trailEffects.put("flame", Material.FIRE_CHARGE);
+        trailEffects.put("sparkle", Material.END_ROD);
+        trailEffects.put("water_drip", Material.LILY_PAD);
+        trailEffects.put("heart", Material.GOLD_INGOT);
+        trailEffects.put("firework", Material.FIREWORK_ROCKET);
+        trailEffects.put("totem", Material.TOTEM_OF_UNDYING);
+        trailEffects.put("smoke", Material.CAMPFIRE);
 
     }
 }

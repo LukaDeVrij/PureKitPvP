@@ -1,9 +1,10 @@
 package me.lifelessnerd.purekitpvp.combathandlers.killhandler;
 
-import me.lifelessnerd.purekitpvp.combathandlers.PlayerLeveling;
+import me.lifelessnerd.purekitpvp.combathandlers.leveling.PlayerLeveling;
 import me.lifelessnerd.purekitpvp.combathandlers.libs.DamageCauseLib;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.MobRemover;
-import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillCosmetics;
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillEffect;
+import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillMessage;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkFireHandler;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
@@ -33,6 +34,13 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 public class DeathHandler implements Listener {
+
+    // To whoever sees this; I profoundly apologise: this code is garbage
+    // It hangs together with duct tape and iterative bug fixes everywhere
+    // I should really redesign or at least clean up this class
+    // But I feel like I would just make it worse; so I probably won't ever do that
+    // good luck trying to read what is going on
+    // You can ping me, but I won't probably know either
 
     Plugin plugin;
 
@@ -67,7 +75,11 @@ public class DeathHandler implements Listener {
             player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 5, 1));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10 , 1));
             player.setHealth(20);
+
+            player.chat("/kit");
             }, 2L);
+
+
 
         DamageCauseLib damageCauseLib = new DamageCauseLib();
 
@@ -103,12 +115,10 @@ public class DeathHandler implements Listener {
         //Broadcasting and stuff
         // use 'lastPlayerBlow' to determine kill message and such
 
-        String deathMessage = player.getName();
-
-        String credit = " was killed by a mysterious force";
+        String deathMessage = "";
         String lastEnvironmentHit;
+        String credit = ""; // Needed for later
         boolean playerInvolved = true;
-
 
         //Check who should get credit
         if (damageData.lastPlayerDamager == null && damageData.lastOtherDamager != null){
@@ -117,24 +127,29 @@ public class DeathHandler implements Listener {
 
             lastEnvironmentHit = damageData.lastOtherDamager;
             credit = damageCauseLib.deathMessages.get(lastEnvironmentHit);
+            deathMessage = KillMessage.create.byEnvironment(player.getName(), lastEnvironmentHit);
             playerInvolved = false;
 
         }
         if (damageData.lastPlayerDamager != null && damageData.lastOtherDamager != null){
             //This means player got damage from both
             credit = damageData.lastPlayerDamager;
-            deathMessage += " was killed by ";
-
+//            deathMessage += " was killed by ";
+//            System.out.println(damageData.lastOtherDamager);
+//            if (damageData.lastOtherDamager.equalsIgnoreCase("VOID")){
+//                System.out.println("thrown in void");
+//            }
+            deathMessage = KillMessage.create.byEnvironmentAndPlayer(player.getName(), damageData.lastPlayerDamager, damageData.lastOtherDamager);
 
         }
         if (damageData.lastPlayerDamager != null && damageData.lastOtherDamager == null){
             //Means player has only been hit by other players
             credit = damageData.lastPlayerDamager;
-            deathMessage += " was killed by ";
+            deathMessage = KillMessage.create.byPlayer(player.getName(), damageData.lastPlayerDamager);
 
         }
 
-        deathMessage = deathMessage + credit;
+//        deathMessage = deathMessage + credit;
         // Death message shows who got credit, broadcast to every player in pvp world
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (onlinePlayer.getWorld() == player.getWorld()) {
@@ -316,7 +331,7 @@ public class DeathHandler implements Listener {
                 PerkFireHandler.fireKillPerks(creditPlayer);
 
                 //The killcosmetic that the creditPlayer has fires
-                KillCosmetics.fireKillCosmetic(player, creditPlayer);
+                KillEffect.fireKillCosmetic(player, creditPlayer);
 
 
             } else {
@@ -366,8 +381,6 @@ public class DeathHandler implements Listener {
 
             }
         }
-
-
     }
 
 
@@ -376,6 +389,10 @@ public class DeathHandler implements Listener {
         Player player = null;
         Player damager = null;
         // HAND TO HAND COMBAT
+        if (!(event.getEntity().getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+            // If the entity that is damaged is in this world, the entire event should be in this world
+            return;
+        } // TODO This function should make all others obsolete, cleanup of this class is necessary
 
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
 
@@ -393,6 +410,9 @@ public class DeathHandler implements Listener {
         } else if ((event.getDamager() instanceof Arrow || event.getDamager() instanceof SpectralArrow) && event.getEntity() instanceof Player) {
             //This branch is a fuckin nightmare: too many hacked in exceptions because fucking spectral arrows and fucking skeletons
             //Projectile combat
+            if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+                return;
+            }
             if(((AbstractArrow) event.getDamager()).getShooter() instanceof Player){
                 player = (Player) event.getEntity();
                 if (event.getDamager() instanceof Arrow) {
@@ -401,10 +421,6 @@ public class DeathHandler implements Listener {
                 } else {
                     SpectralArrow arrow = (SpectralArrow) event.getDamager();
                     damager = (Player) arrow.getShooter();
-                }
-
-                if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) {
-                    return;
                 }
 
                 PerkFireHandler.fireRangedPerks(event, damager);
@@ -465,6 +481,9 @@ public class DeathHandler implements Listener {
 
         } else if (event.getDamager() instanceof Monster && event.getEntity() instanceof Player) {
 
+            if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+                return;
+            }
             String mobName = event.getDamager().getName();
             damager = Bukkit.getPlayerExact(mobName.split("'s")[0]);
             player = ((Player) event.getEntity()).getPlayer();
@@ -476,6 +495,7 @@ public class DeathHandler implements Listener {
         }
         else {
             //If we end up here idk what happened but nothing relevant (probably a zombie hitting a pig or something)
+
             return;
         }
 

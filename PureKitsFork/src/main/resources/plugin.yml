@@ -40,8 +40,6 @@ commands:
   cosmetics:
     description: Open cosmetics menu
     usage: /cosmetics
-    aliases:
-      - cosmetic
 
 
 

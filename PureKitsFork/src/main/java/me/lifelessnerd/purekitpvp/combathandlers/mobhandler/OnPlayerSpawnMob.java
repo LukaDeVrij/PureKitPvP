@@ -85,7 +85,7 @@ public class OnPlayerSpawnMob implements Listener {
         if (spawnedEntity instanceof Monster) {
             Player closestPlayer = getNearestPlayer(player);
             ((Monster) spawnedEntity).setTarget(closestPlayer);
-//            System.out.println(spawnedEntity + "'s target set to " + closestPlayer);
+            System.out.println(spawnedEntity + "'s target set to " + closestPlayer);
             spawnedEntity.customName(Component.text(player.getName() + "'s " + spawnedEntity.getType().name()));
             spawnedEntity.getPersistentDataContainer().set(new NamespacedKey(plugin, "custom_mob"), PersistentDataType.INTEGER, 1);
         }
@@ -166,7 +166,7 @@ public class OnPlayerSpawnMob implements Listener {
 
     @EventHandler
     public void mobTargetEvent(EntityTargetEvent e){
-        e.setCancelled(true);
+
         Entity entity = e.getEntity();
         Entity target = e.getTarget();
         if (!(entity.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) {
@@ -175,12 +175,13 @@ public class OnPlayerSpawnMob implements Listener {
         if (!(entity instanceof Monster)) {
             return;
         }
+        e.setCancelled(true);
         String entityName = entity.getName();
         String playerName = entityName.split("'s")[0]; // Gets name of player who spawned it
         Player player = Bukkit.getPlayerExact(playerName); // TODOX: This is quite janky, requires testing: seems to work!
         Player closestPlayer = getNearestPlayer(player); // NPE has no effect it seems; target becomes null and zombie is fine with that
         ((Monster) entity).setTarget(closestPlayer);
-//        System.out.println(entity + "'s target set to " + closestPlayer);
+        System.out.println(entity + "'s target set to " + closestPlayer);
 
 
     }
