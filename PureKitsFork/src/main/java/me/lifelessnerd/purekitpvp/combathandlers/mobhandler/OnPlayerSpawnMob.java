@@ -77,9 +77,9 @@ public class OnPlayerSpawnMob implements Listener {
         Location lookPlace = e.getInteractionPoint();
         Entity spawnedEntity = player.getWorld().spawnEntity(lookPlace, entityTypeTBS);
 
-        if (spawnedEntity instanceof Horse) {
-            ((Horse) spawnedEntity).setTamed(true);
-            ((Horse) spawnedEntity).getInventory().addItem(new ItemStack(Material.SADDLE));
+        if (spawnedEntity instanceof AbstractHorse) {
+            ((AbstractHorse) spawnedEntity).setTamed(true);
+            ((AbstractHorse) spawnedEntity).getInventory().addItem(new ItemStack(Material.SADDLE));
 
         }
         if (spawnedEntity instanceof Monster) {
