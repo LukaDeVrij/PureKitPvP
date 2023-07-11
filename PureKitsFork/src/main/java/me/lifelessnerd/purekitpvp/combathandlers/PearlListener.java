@@ -5,11 +5,13 @@ import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkFireHandler;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderPearl;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.spigotmc.event.entity.EntityDismountEvent;
 
 public class PearlListener implements Listener {
 
@@ -33,7 +35,13 @@ public class PearlListener implements Listener {
 
         PerkFireHandler.fireEnderpearlPerks(player, event);
 
+    }
 
+    @EventHandler
+    public void onDismount(EntityDismountEvent e) {
+        if(e.getDismounted() instanceof EnderPearl) {
 
+            e.getDismounted().remove();
+        }
     }
 }

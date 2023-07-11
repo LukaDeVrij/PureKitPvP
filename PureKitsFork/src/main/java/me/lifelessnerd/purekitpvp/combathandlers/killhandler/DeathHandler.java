@@ -28,6 +28,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,8 +114,6 @@ public class DeathHandler implements Listener {
         }
 
         //Broadcasting and stuff
-        // use 'lastPlayerBlow' to determine kill message and such
-
         String deathMessage = "";
         String lastEnvironmentHit;
         String credit = ""; // Needed for later
@@ -123,7 +122,7 @@ public class DeathHandler implements Listener {
         //Check who should get credit
         if (damageData.lastPlayerDamager == null && damageData.lastOtherDamager != null){
             //This means the player was completely killed by environment, no player killer
-            // Except when the killer is a zombie of a player; TODO
+            // Except when the killer is a zombie of a player -> handled down below
 
             lastEnvironmentHit = damageData.lastOtherDamager;
             credit = damageCauseLib.deathMessages.get(lastEnvironmentHit);
@@ -139,7 +138,12 @@ public class DeathHandler implements Listener {
 //            if (damageData.lastOtherDamager.equalsIgnoreCase("VOID")){
 //                System.out.println("thrown in void");
 //            }
-            deathMessage = KillMessage.create.byEnvironmentAndPlayer(player.getName(), damageData.lastPlayerDamager, damageData.lastOtherDamager);
+            if (e.getEntity().getLastDamageCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)){
+                // TODO: check of dit werkt; als last blow human is moet byPlayer, als last blow environemnet is de ander
+                deathMessage = KillMessage.create.byPlayer(player.getName(), damageData.lastPlayerDamager);
+            } else {
+                deathMessage = KillMessage.create.byEnvironmentAndPlayer(player.getName(), damageData.lastPlayerDamager, damageData.lastOtherDamager);
+            }
 
         }
         if (damageData.lastPlayerDamager != null && damageData.lastOtherDamager == null){
@@ -388,11 +392,11 @@ public class DeathHandler implements Listener {
     public void onPlayerCombatHit(EntityDamageByEntityEvent event){
         Player player = null;
         Player damager = null;
-        // HAND TO HAND COMBAT
+        // HAND-TO-HAND COMBAT
         if (!(event.getEntity().getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
             // If the entity that is damaged is in this world, the entire event should be in this world
             return;
-        } // TODO This function should make all others obsolete, cleanup of this class is necessary
+        } // TODO This function should make all other copies obsolete, cleanup of this class is necessary
 
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
 
@@ -410,9 +414,7 @@ public class DeathHandler implements Listener {
         } else if ((event.getDamager() instanceof Arrow || event.getDamager() instanceof SpectralArrow) && event.getEntity() instanceof Player) {
             //This branch is a fuckin nightmare: too many hacked in exceptions because fucking spectral arrows and fucking skeletons
             //Projectile combat
-            if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-                return;
-            }
+
             if(((AbstractArrow) event.getDamager()).getShooter() instanceof Player){
                 player = (Player) event.getEntity();
                 if (event.getDamager() instanceof Arrow) {
@@ -447,10 +449,6 @@ public class DeathHandler implements Listener {
             player = (Player) event.getEntity();
             ThrownPotion potion = (ThrownPotion) event.getDamager();
 
-            if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-                return;
-            }
-
             damager = (Player) potion.getShooter(); //works
             double damage = event.getDamage();
             double playerHP = player.getHealth() - damage;
@@ -466,10 +464,6 @@ public class DeathHandler implements Listener {
             player = (Player) event.getEntity();
             Trident trident = (Trident) event.getDamager();
 
-            if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-                return;
-            }
-
             damager = (Player) trident.getShooter(); //works
             double damage = event.getDamage();
             double playerHP = player.getHealth() - damage;
@@ -481,9 +475,6 @@ public class DeathHandler implements Listener {
 
         } else if (event.getDamager() instanceof Monster && event.getEntity() instanceof Player) {
 
-            if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-                return;
-            }
             String mobName = event.getDamager().getName();
             damager = Bukkit.getPlayerExact(mobName.split("'s")[0]);
             player = ((Player) event.getEntity()).getPlayer();
@@ -492,6 +483,13 @@ public class DeathHandler implements Listener {
 
             PerkFireHandler.fireEnderpearlDamagePerks((Player) event.getEntity(), event);
             return;
+        }
+        else if (event.getDamager() instanceof Firework && event.getEntity() instanceof Player){
+            Firework fw = (Firework) event.getDamager();
+            if (fw.getShooter() instanceof Player){
+                player = (Player) event.getEntity();
+                damager = (Player) fw.getShooter();
+            } else {return;}
         }
         else {
             //If we end up here idk what happened but nothing relevant (probably a zombie hitting a pig or something)
@@ -543,7 +541,6 @@ public class DeathHandler implements Listener {
         //Put the edited object back in the player
         player.getPersistentDataContainer().set(key, new PlayerDamageDistributionDataType(), pulledPlayerData);
 
-
     }
 
     @EventHandler
@@ -561,7 +558,7 @@ public class DeathHandler implements Listener {
         }
 
         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK){
-            //This is handled by onPlayerCombatHit TODO: not when its a custom mob
+            //This is handled by onPlayerCombatHit
             return;
         }
         if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){
@@ -590,6 +587,16 @@ public class DeathHandler implements Listener {
                 if(fallLocation.getBlockZ() >= minZ && fallLocation.getBlockZ() <= maxZ) { // If inside spawn square
 //                    event.setDamage(0);
                     event.setCancelled(true); //TODO: might have other implications
+                    return;
+                }
+            }
+        }
+        // This branch negates any firework damage if it is of killeffect origin -> fireworks from a crossbow still count
+        if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+            EntityDamageByEntityEvent newEvent = (EntityDamageByEntityEvent) event;
+            if (newEvent.getDamager() instanceof Firework fw) {
+                if (fw.hasMetadata("nodamage")) {
+                    event.setCancelled(true);
                     return;
                 }
             }

@@ -17,10 +17,9 @@ public class CosmeticsLib {
         killEffects.put("ritual", Material.FIRE_CHARGE);
         killEffects.put("tornado", Material.STRING);
 
-//        messageEffects.put("JUGGERNAUT", Material.DIAMOND_CHESTPLATE);
-//        messageEffects.put("BULLDOZER", Material.ANVIL);
-//        messageEffects.put("KNOWLEDGE", Material.BOOK);
-//        messageEffects.put("NOTORIETY", Material.DIAMOND_SWORD);
+        messageEffects.put("default", Material.DIAMOND_SWORD);
+        messageEffects.put("flex", Material.GOLDEN_APPLE);
+        messageEffects.put("nerd", Material.GLASS);
 
         trailEffects.put("none", Material.BARRIER);
         trailEffects.put("flame", Material.FIRE_CHARGE);

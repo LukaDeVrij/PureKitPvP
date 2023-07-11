@@ -64,7 +64,6 @@ public class OnPlayerSpawnMob implements Listener {
             String customMobId = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "custom_mob_id"), PersistentDataType.STRING);
             String mobType = MobSpawnConfig.get().getString(customMobId + ".type");
             entityTypeTBS = EntityType.valueOf(mobType);
-            plugin.getLogger().info("custom mob spawned");
             customMob = true;
         }
         else {
@@ -85,14 +84,14 @@ public class OnPlayerSpawnMob implements Listener {
         if (spawnedEntity instanceof Monster) {
             Player closestPlayer = getNearestPlayer(player);
             ((Monster) spawnedEntity).setTarget(closestPlayer);
-            System.out.println(spawnedEntity + "'s target set to " + closestPlayer);
+//            System.out.println(spawnedEntity + "'s target set to " + closestPlayer);
             spawnedEntity.customName(Component.text(player.getName() + "'s " + spawnedEntity.getType().name()));
             spawnedEntity.getPersistentDataContainer().set(new NamespacedKey(plugin, "custom_mob"), PersistentDataType.INTEGER, 1);
         }
 
         if (customMob) {
             String customModId = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "custom_mob_id"), PersistentDataType.STRING);
-            System.out.println(customModId);
+//            System.out.println(customModId);
             if (spawnedEntity instanceof Mob){
                 ItemStack mainHand = MobSpawnConfig.get().getItemStack(customModId + ".mainhand");
                 ((Mob) spawnedEntity).getEquipment().setItemInMainHand(mainHand);
@@ -181,7 +180,7 @@ public class OnPlayerSpawnMob implements Listener {
         Player player = Bukkit.getPlayerExact(playerName); // TODOX: This is quite janky, requires testing: seems to work!
         Player closestPlayer = getNearestPlayer(player); // NPE has no effect it seems; target becomes null and zombie is fine with that
         ((Monster) entity).setTarget(closestPlayer);
-        System.out.println(entity + "'s target set to " + closestPlayer);
+//        System.out.println(entity + "'s target set to " + closestPlayer);
 
 
     }

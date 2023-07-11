@@ -36,6 +36,7 @@ public class DamageCauseLib {
                 deathMessages.put("DRYOUT"," had no more water");
                 deathMessages.put("FREEZE"," froze to death");
                 deathMessages.put("SONIC_BOOM"," got pummeled by a Warden");
+                deathMessages.put("MONSTER", " was killed by a mob, what a noob.");
 
                 damageCauseTranslations.put("CONTACT"," Cactus");
                 damageCauseTranslations.put("SUFFOCATION"," Suffocation");
@@ -64,6 +65,7 @@ public class DamageCauseLib {
                 damageCauseTranslations.put("DRYOUT"," Dryout");
                 damageCauseTranslations.put("FREEZE"," Freezing");
                 damageCauseTranslations.put("SONIC_BOOM"," Warden");
+                damageCauseTranslations.put("MONSTER"," Custom Mob");
         }
 }
 

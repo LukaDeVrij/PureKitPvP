@@ -40,7 +40,9 @@ public class MyStringUtils {
 
             String[] splitAgain = word.split(",");
             String levelString = splitAgain[1];
-            int level = Integer.parseInt(String.valueOf(levelString.charAt(levelString.length() - 1)));
+            String[] isolateLevel = levelString.split("=");
+            int level = Integer.parseInt(isolateLevel[isolateLevel.length - 1]); //HERE
+            // TODO does not account for enchantment levels >= 10, this will output 0
             word = splitAgain[0];
             word = MyStringUtils.itemCamelCase(word);
             result.append(word).append(level).append(" ");

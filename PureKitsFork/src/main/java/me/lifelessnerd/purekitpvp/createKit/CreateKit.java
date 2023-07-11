@@ -64,7 +64,7 @@ public class CreateKit extends Subcommand {
         String kitName = args[1].toLowerCase();
         kitName = kitName.substring(0, 1).toUpperCase() + kitName.substring(1);
         String displayColor = args[2];
-        if (!(args.length >= 4)){
+        if (!(args.length >= 5)){
             player.sendMessage("Provide arguments!");
             return false;
 
