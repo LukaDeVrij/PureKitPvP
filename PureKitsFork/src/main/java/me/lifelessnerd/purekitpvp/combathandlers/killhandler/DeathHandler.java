@@ -138,10 +138,11 @@ public class DeathHandler implements Listener {
 //            if (damageData.lastOtherDamager.equalsIgnoreCase("VOID")){
 //                System.out.println("thrown in void");
 //            }
-            if (e.getEntity().getLastDamageCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)){
-                // TODO: check of dit werkt; als last blow human is moet byPlayer, als last blow environemnet is de ander
+            if (e.getEntity().getLastDamageCause().getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)){
+
                 deathMessage = KillMessage.create.byPlayer(player.getName(), damageData.lastPlayerDamager);
             } else {
+
                 deathMessage = KillMessage.create.byEnvironmentAndPlayer(player.getName(), damageData.lastPlayerDamager, damageData.lastOtherDamager);
             }
 

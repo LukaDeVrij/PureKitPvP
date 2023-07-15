@@ -16,11 +16,13 @@ public class KillMessage {
 
     public static class create {
         public static String byEnvironment(String player, String lastEnvironmentHit){
-
-            return player + getCosmeticMessage(player, lastEnvironmentHit, false);
+            System.out.println("byEnvironment");
+            DamageCauseLib damageCauseLib = new DamageCauseLib();
+            return player + damageCauseLib.deathMessages.get(lastEnvironmentHit);
         }
 
         public static String byEnvironmentAndPlayer(String player, String killer, String environmentHit){
+            System.out.println("byEnvironmentAndPlayer");
             DeathCauseLib deathCauseLib = new DeathCauseLib();
             Set<String> interestingCauses = deathCauseLib.defaultDeathMessages.keySet();
             if(interestingCauses.contains(environmentHit)){
@@ -33,7 +35,7 @@ public class KillMessage {
         }
 
         public static String byPlayer(String player, String killer){
-
+            System.out.println("byPlayer");
             String preprocessed = getCosmeticMessage(killer, null, true);
 //            System.out.println(preprocessed);
             return player + preprocessed.replace("{killer}", killer);

@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.bukkit.util.NumberConversions.floor;
+
 public class KitsGUI implements TabExecutor {
 
     Plugin plugin;
@@ -52,24 +54,67 @@ public class KitsGUI implements TabExecutor {
             player.sendMessage(ChatColor.RED + "You can only use this menu in " + ChatColor.GRAY + plugin.getConfig().getString("world"));
             return true;
         }
+
+        // Only argument is used for page, the plugin will run /kits 2 at some point for the second page of kits
+        int currentPage = 1;
+        if (args.length >= 1) {
+            currentPage = Integer.parseInt(args[0]);
+        }
         //Create inventory GUI
-        TextComponent inventoryTitle = Component.text("Kits").color(TextColor.color(255, 150, 20));
+        TextComponent inventoryTitle = Component.text("Kits - ").
+                color(TextColor.color(255, 150, 20)).
+                append(Component.text(currentPage));
         Inventory kits = Bukkit.createInventory(null, 54, inventoryTitle);
+        int amountOfKits = KitConfig.get().getConfigurationSection("kits").getKeys(false).size();
+
+        // Will a second page be necessary?
+        if (amountOfKits >= 45){
+            // Create next page item
+            ItemStack nextPageButton = new ItemStack(Material.ARROW);
+            ItemMeta nextPageButtonMeta = nextPageButton.getItemMeta();
+            nextPageButtonMeta.displayName(Component.text("Next"));
+            List<Component> loreList = new ArrayList<>();
+            TextComponent txt = Component.text("Go to the next kit selection page.").color(TextColor.color(100,100,100));
+            loreList.add(txt);
+            nextPageButtonMeta.lore(loreList);
+            nextPageButton.setItemMeta(nextPageButtonMeta);
+            kits.setItem(50, nextPageButton);
+            loreList.clear();
+
+        }
+        if (currentPage > 1){
+            // If this, we need a prev button too
+            ItemStack prevPageButton = new ItemStack(Material.ARROW);
+            ItemMeta prevPageButtonMeta = prevPageButton.getItemMeta();
+            prevPageButtonMeta.displayName(Component.text("Previous"));
+            List<Component> loreList = new ArrayList<>();
+            TextComponent txt = Component.text("Go to the previous kit selection page.").color(TextColor.color(100,100,100));
+            loreList.add(txt);
+            prevPageButtonMeta.lore(loreList);
+            prevPageButton.setItemMeta(prevPageButtonMeta);
+            kits.setItem(48, prevPageButton);
+            loreList.clear();
+        }
+
+        int kitNumber = 1;
         for (String key : KitConfig.get().getConfigurationSection("kits").getKeys(false)) {
+
+            // What page should this kit be put on?
+            int intendedPage = floor(((double) kitNumber / 45)) + 1;
+            kitNumber++;
+            if (intendedPage != currentPage){ // Not this page? Don't do anything
+                continue;
+            }
 
             ItemStack itemStack = new ItemStack(Material.BARRIER);
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
-            //NPE GALORE, TODO: idiot proof if these keys do not exist, instead of crashing entire plugin with an NPE
-            //TODO: Actually i have no idea what this is referring to, I get no NPE's in the GUI ever
             //Set block
-
             itemStack.setType(Material.getMaterial(KitConfig.get().getString("kits." + key + ".guiitem")));
 
             //Set lore
-
             String loreText = KitConfig.get().getString("kits." + key + ".guilore");
             loreText = ChatColor.translateAlternateColorCodes('&', loreText);
             ArrayList<String> lore = new ArrayList<>();
@@ -104,6 +149,7 @@ public class KitsGUI implements TabExecutor {
                 if (item == null) {
                     item = new ItemStack(Material.AIR);
                 } else if (item.getType().toString().equalsIgnoreCase("DIAMOND")){
+                    // Some old kits have a diamond for identification of that kit, that is legacy
                     //Diamond check; do nothing
 
                 } else if (item.getType().toString().equalsIgnoreCase("SPLASH_POTION")){
@@ -162,17 +208,6 @@ public class KitsGUI implements TabExecutor {
                 lore.add(ChatColor.GRAY + "" +  amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(killItem.getType().toString()));
 
             }
-            //Add some final lines with active perks on this kit
-//            ConfigurationSection perksSection = KitConfig.get().getConfigurationSection("kits." + key + ".perks");
-//            if (perksSection == null || perksSection.getKeys(false).size() == 0){
-//                lore.add(ChatColor.RED + "No Perks");
-//            } else {
-//                lore.add(ChatColor.RED + "Perks:");
-//                for (String perkKey : perksSection.getKeys(false)) {
-//                    lore.add("    " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(perkKey));
-//                }
-//            }
-            //LEGACY, PERKS ARE NOW SELECTION BASED PER PLAYER
 
             itemMeta.setLore(lore); //Heck you Component
 
