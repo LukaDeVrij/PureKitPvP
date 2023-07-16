@@ -49,7 +49,7 @@ public class GUIListener implements Listener {
 
                 if (inv.title().toString().contains("Kits")) { //I hate component
 
-                    if (e.getRawSlot() < 49){
+                    if (e.getRawSlot() < 45){
                         e.setCancelled(true);
                         if(clickedItem == null){
                             return;
@@ -84,9 +84,12 @@ public class GUIListener implements Listener {
                         player.chat("/kit " + prevPage);
 
                     } else if (e.getRawSlot() == 50){ // Next page button
+                        if (e.getCurrentItem().equals(new ItemStack(Material.AIR))){
+                            return;
+                        }
                         e.setCancelled(true);
                         String title = serializer.serialize(e.getView().title());
-                        int nextPage = Integer.parseInt(title.split(" - ")[1]) - 1;
+                        int nextPage = Integer.parseInt(title.split(" - ")[1]) + 1;
                         player.chat("/kit " + nextPage);
 
                         // TODO: this is what you were doing;

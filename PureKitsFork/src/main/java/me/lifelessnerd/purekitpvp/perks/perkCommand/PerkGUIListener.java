@@ -6,9 +6,12 @@ import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -58,15 +61,26 @@ public class PerkGUIListener implements Listener {
                 TextComponent invTitle = Component.text("Perk Slot " + slot).color(TextColor.color(255, 150, 20));
                 Inventory perkSlotInventory = Bukkit.createInventory(null, 54, invTitle);
 
-                //Fill inventory with interactive perk items that are currently activated
+                //Fill inventory with interactive perk items
                 PerkLib perkLib = new PerkLib();
                 for (String perk : perkLib.perkIcons.keySet()) {
 
                     ItemStack icon = new ItemStack(perkLib.perkIcons.get(perk));
                     ItemMeta itemMeta = icon.getItemMeta();
-                    itemMeta.displayName(Component.text(perk).color(TextColor.color(200, 0, 0)));
                     itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
                     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                    itemMeta.displayName(Component.text(perk).color(TextColor.color(200, 0, 0)).decoration(TextDecoration.ITALIC, false));
+
+                    // Check if it is selected: if so add glint
+                    for(String selectedPerkKey : PerkData.get().getConfigurationSection(player.getName()).getKeys(false)){
+                        String selectedPerk = PerkData.get().getString(player.getName() + "." + selectedPerkKey);
+                        if (perk.equals(selectedPerk)){
+                            itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+                            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                            itemMeta.displayName(Component.text(perk).color(TextColor.color(50, 200, 0)).decoration(TextDecoration.BOLD, true));
+                        }
+                    }
+
                     icon.setItemMeta(itemMeta);
 
                     ArrayList<Component> loreTBA = new ArrayList<>();
@@ -74,10 +88,10 @@ public class PerkGUIListener implements Listener {
                     if (perkLib.perks.get(perk).contains("\n")) {
                         String[] decodedLore = MyStringUtils.perkLoreDecoder(perkLib.perks.get(perk));
                         for (String line : decodedLore) {
-                            loreTBA.add(Component.text(line).color(TextColor.color(150, 150, 150)));
+                            loreTBA.add(Component.text(line).color(TextColor.color(150, 150, 150)).decoration(TextDecoration.ITALIC, false));
                         }
                     } else {
-                        loreTBA.add(Component.text(perkLib.perks.get(perk)).color(TextColor.color(150, 150, 150)));
+                        loreTBA.add(Component.text(perkLib.perks.get(perk)).color(TextColor.color(150, 150, 150)).decoration(TextDecoration.ITALIC, false));
                     }
 
                     icon.lore(loreTBA);
@@ -86,7 +100,7 @@ public class PerkGUIListener implements Listener {
 
                 ItemStack backButton = new ItemStack(Material.ARROW);
                 ItemMeta backButtonMeta = backButton.getItemMeta();
-                backButtonMeta.displayName(Component.text("Go Back").color(TextColor.color(0, 250, 0)));
+                backButtonMeta.displayName(Component.text("Go Back").color(TextColor.color(0, 250, 0)).decoration(TextDecoration.ITALIC, false));
                 backButtonMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 backButton.setItemMeta(backButtonMeta);
                 perkSlotInventory.setItem(49,backButton);
@@ -116,6 +130,7 @@ public class PerkGUIListener implements Listener {
                 String displayName = serializer.serialize(clickedPerk.displayName());
                 displayName = displayName.substring(1, displayName.length() - 1);
                 PerkData.setPerk(player, displayName, slot);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1,0);
                 PerkData.save();
                 PerkData.reload();
 

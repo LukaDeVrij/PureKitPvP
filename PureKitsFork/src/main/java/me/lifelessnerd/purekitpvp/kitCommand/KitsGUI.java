@@ -6,6 +6,7 @@ import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -66,15 +67,17 @@ public class KitsGUI implements TabExecutor {
                 append(Component.text(currentPage));
         Inventory kits = Bukkit.createInventory(null, 54, inventoryTitle);
         int amountOfKits = KitConfig.get().getConfigurationSection("kits").getKeys(false).size();
-
+        int lastPage = floor(((double) amountOfKits / 46)) + 1;
         // Will a second page be necessary?
-        if (amountOfKits >= 45){
+        if (amountOfKits >= 45 && (currentPage != lastPage)){ // On last page? Don't show next item
             // Create next page item
             ItemStack nextPageButton = new ItemStack(Material.ARROW);
             ItemMeta nextPageButtonMeta = nextPageButton.getItemMeta();
-            nextPageButtonMeta.displayName(Component.text("Next"));
+            nextPageButtonMeta.displayName(Component.text("Next").decoration(TextDecoration.ITALIC, false));
             List<Component> loreList = new ArrayList<>();
-            TextComponent txt = Component.text("Go to the next kit selection page.").color(TextColor.color(100,100,100));
+            TextComponent txt = Component.text("Go to the next kit selection page.").
+                    decoration(TextDecoration.ITALIC, false).
+                    color(TextColor.color(100,100,100));
             loreList.add(txt);
             nextPageButtonMeta.lore(loreList);
             nextPageButton.setItemMeta(nextPageButtonMeta);
@@ -86,9 +89,11 @@ public class KitsGUI implements TabExecutor {
             // If this, we need a prev button too
             ItemStack prevPageButton = new ItemStack(Material.ARROW);
             ItemMeta prevPageButtonMeta = prevPageButton.getItemMeta();
-            prevPageButtonMeta.displayName(Component.text("Previous"));
+            prevPageButtonMeta.displayName(Component.text("Previous").decoration(TextDecoration.ITALIC, false));
             List<Component> loreList = new ArrayList<>();
-            TextComponent txt = Component.text("Go to the previous kit selection page.").color(TextColor.color(100,100,100));
+            TextComponent txt = Component.text("Go to the previous kit selection page.").
+                    decoration(TextDecoration.ITALIC, false).
+                    color(TextColor.color(100,100,100));
             loreList.add(txt);
             prevPageButtonMeta.lore(loreList);
             prevPageButton.setItemMeta(prevPageButtonMeta);
@@ -100,7 +105,7 @@ public class KitsGUI implements TabExecutor {
         for (String key : KitConfig.get().getConfigurationSection("kits").getKeys(false)) {
 
             // What page should this kit be put on?
-            int intendedPage = floor(((double) kitNumber / 45)) + 1;
+            int intendedPage = floor(((double) kitNumber / 46)) + 1;
             kitNumber++;
             if (intendedPage != currentPage){ // Not this page? Don't do anything
                 continue;
@@ -223,10 +228,10 @@ public class KitsGUI implements TabExecutor {
             //Reset button
             ItemStack resetButton = new ItemStack(Material.BARRIER);
             ItemMeta resetButtonMeta = resetButton.getItemMeta();
-            resetButtonMeta.displayName(Component.text("Reset kit"));
+            resetButtonMeta.displayName(Component.text("Reset kit").decoration(TextDecoration.ITALIC, false));
             List<Component> loreList = new ArrayList<>();
-            TextComponent txt = Component.text("If you do not have permission to reset your kit,").color(TextColor.color(100,100,100));
-            TextComponent txt2 = Component.text("this will run /suicide on your behalf.").color(TextColor.color(100,100,100));
+            TextComponent txt = Component.text("If you do not have permission to reset your kit,").decoration(TextDecoration.ITALIC, false).color(TextColor.color(100,100,100));
+            TextComponent txt2 = Component.text("this will run /suicide on your behalf.").decoration(TextDecoration.ITALIC, false).color(TextColor.color(100,100,100));
             loreList.add(txt);
             loreList.add(txt2);
             resetButtonMeta.lore(loreList);
@@ -236,9 +241,9 @@ public class KitsGUI implements TabExecutor {
 //            Perk Redirect Button
             ItemStack perkHelpButton = new ItemStack(Material.BOOK);
             ItemMeta perkHelpButtonMeta = perkHelpButton.getItemMeta();
-            perkHelpButtonMeta.displayName(Component.text("Perk Info"));
+            perkHelpButtonMeta.displayName(Component.text("Perk Info").decoration(TextDecoration.ITALIC, false));
             List<Component> loreList2 = new ArrayList<>();
-            TextComponent txt21 = Component.text("Click here to change your perks!").color(TextColor.color(100,100,100));
+            TextComponent txt21 = Component.text("Click here to change your perks!").decoration(TextDecoration.ITALIC, false).color(TextColor.color(100,100,100));
             loreList2.add(txt21);
             perkHelpButtonMeta.lore(loreList2);
             perkHelpButton.setItemMeta(perkHelpButtonMeta);

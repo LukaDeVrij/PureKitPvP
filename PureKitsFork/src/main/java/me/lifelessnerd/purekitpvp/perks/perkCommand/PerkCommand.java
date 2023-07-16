@@ -9,6 +9,7 @@ import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -56,7 +57,7 @@ public class PerkCommand implements CommandExecutor {
 
         //Info item
         ItemStack infoItem = new ItemStack(Material.BOOK);
-        TextComponent infoItemName = Component.text("Perks Info").color(TextColor.color(233, 67, 47));
+        TextComponent infoItemName = Component.text("Perks Info").color(TextColor.color(233, 67, 47)).decoration(TextDecoration.ITALIC, false);
         ItemMeta infoMeta = infoItem.getItemMeta();
         infoMeta.displayName(infoItemName);
         infoMeta = ComponentUtils.setLore(infoMeta, "&aYou can equip a total of &e5 &aperks total.", 0);
@@ -69,7 +70,7 @@ public class PerkCommand implements CommandExecutor {
 
         //Back to kits item
         ItemStack kitItem = new ItemStack(Material.ARROW);
-        TextComponent kitItemName = Component.text("Back to Kits").color(TextColor.color(0, 255, 47));
+        TextComponent kitItemName = Component.text("Back to Kits").color(TextColor.color(0, 255, 47)).decoration(TextDecoration.ITALIC, false);
         ItemMeta kitItemMeta = kitItem.getItemMeta();
         kitItemMeta.displayName(kitItemName);
         kitItem.setItemMeta(kitItemMeta);
@@ -82,9 +83,9 @@ public class PerkCommand implements CommandExecutor {
             String fileContent = PerkData.get().getString(player.getName() + ".slot" + slot);
             //System.out.println(fileContent);
             if (fileContent == null){
-                // No perk selected in this slot; show red stained glass
+                // No perk selected in this slot; show red stained-glass
                 ItemStack perkSlot = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-                TextComponent perkSlotName = Component.text("Perk Slot " + slot).color(TextColor.color(233, 67, 47));
+                TextComponent perkSlotName = Component.text("Perk Slot " + slot).color(TextColor.color(233, 67, 47)).decoration(TextDecoration.ITALIC, false);
                 ItemMeta perkSlotMeta = perkSlot.getItemMeta();
                 perkSlotMeta.displayName(perkSlotName);
                 perkSlotMeta = ComponentUtils.setLore(perkSlotMeta, "&aClick to select a perk for this slot!", 0);
@@ -93,21 +94,21 @@ public class PerkCommand implements CommandExecutor {
             } else {
                 PerkLib perkLib = new PerkLib();
                 ItemStack perkSlot = new ItemStack(perkLib.perkIcons.get(fileContent));
-                TextComponent perkSlotName = Component.text("Perk Slot " + slot).color(TextColor.color(233, 67, 47));
+                TextComponent perkSlotName = Component.text("Perk Slot " + slot).color(TextColor.color(233, 67, 47)).decoration(TextDecoration.ITALIC, false);
                 ItemMeta perkSlotMeta = perkSlot.getItemMeta();
                 perkSlotMeta.displayName(perkSlotName);
 
                 //Component style - not my own class util (okay, only the decoder)
                 ArrayList<Component> loreTBA = new ArrayList<>();
-                TextComponent loreTitle = Component.text(fileContent).color(TextColor.color(0, 230, 0));
+                TextComponent loreTitle = Component.text(fileContent).color(TextColor.color(0, 230, 0)).decoration(TextDecoration.ITALIC, false);
                 loreTBA.add(loreTitle);
                 if (perkLib.perks.get(fileContent).contains("\n")) {
                     String[] decodedLore = MyStringUtils.perkLoreDecoder(perkLib.perks.get(fileContent));
                     for (String line : decodedLore) {
-                        loreTBA.add(Component.text(line).color(TextColor.color(150, 150, 150)));
+                        loreTBA.add(Component.text(line).color(TextColor.color(150, 150, 150)).decoration(TextDecoration.ITALIC, false));
                     }
                 } else {
-                    loreTBA.add(Component.text(perkLib.perks.get(fileContent)).color(TextColor.color(150, 150, 150)));
+                    loreTBA.add(Component.text(perkLib.perks.get(fileContent)).color(TextColor.color(150, 150, 150)).decoration(TextDecoration.ITALIC, false));
                 }
                 perkSlotMeta.lore(loreTBA);
                 perkSlotMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);

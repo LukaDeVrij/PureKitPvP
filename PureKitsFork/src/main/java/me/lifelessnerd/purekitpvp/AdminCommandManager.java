@@ -2,7 +2,6 @@ package me.lifelessnerd.purekitpvp;
 
 import me.lifelessnerd.purekitpvp.custommobs.CustomMobCommand;
 import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
-import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
 import me.lifelessnerd.purekitpvp.createKit.*;
 import me.lifelessnerd.purekitpvp.customitems.GetCustomItem;
 import me.lifelessnerd.purekitpvp.customitems.loottablelogic.CreateLootTable;
@@ -14,18 +13,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
+import java.util.function.Consumer;
 
 public class AdminCommandManager implements TabExecutor {
     ArrayList<Subcommand> subcommands = new ArrayList<>();
@@ -107,11 +102,15 @@ public class AdminCommandManager implements TabExecutor {
                 return new ArrayList<>(MobSpawnConfig.get().getKeys(false));
             }
 
+            if (args.length > 3){
+                return new ArrayList<>();
+            }
+
             List<String> arguments = new ArrayList<>();
             arguments.add("random_chest");
             arguments.add("golden_head");
             arguments.add("custom_mob_egg");
-            return arguments; //TODO: make this only appear when args.length == 1
+            return arguments; //TODO: make this only appear when args.length == 1 // What do you mean?
 
         }
         if (args[0].equalsIgnoreCase("createloottable")){
@@ -140,33 +139,6 @@ public class AdminCommandManager implements TabExecutor {
                     key = key.toLowerCase();
                     autoComplete.add(key);
                 };
-                return autoComplete;
-            }
-        }
-        if (args[0].equalsIgnoreCase("setperk")){
-
-            if (args.length == 2){ //kit
-                List<String> autoComplete = new ArrayList<>();
-                for(String key : KitConfig.get().getConfigurationSection("kits.").getKeys(false)){
-                    key = key.toLowerCase();
-                    autoComplete.add(key);
-                };
-                autoComplete.add("all");
-                return autoComplete;
-            }
-            if (args.length == 3){ //perk
-                List<String> autoComplete = new ArrayList<>();
-                PerkLib perkLib = new PerkLib();
-                for(String perkName : perkLib.perks.keySet()){
-                    autoComplete.add(perkName.toLowerCase());
-                };
-                autoComplete.add("all");
-                return autoComplete;
-            }
-            if (args.length == 4){ //true/false
-                List<String> autoComplete = new ArrayList<>();
-                autoComplete.add("true");
-                autoComplete.add("false");
                 return autoComplete;
             }
         }
@@ -227,7 +199,6 @@ public class AdminCommandManager implements TabExecutor {
                 arguments.add("delete");
                 return arguments;
             }
-
             if (args[1].equalsIgnoreCase("create")){
                 if (args.length == 3){
                     List<String> arguments = new ArrayList<>();
@@ -235,8 +206,11 @@ public class AdminCommandManager implements TabExecutor {
                     return arguments;
                 }
                 if (args.length == 4){
-                    List<String> arguments = new ArrayList<>();
-                    arguments.add("<type>");
+                    List<EntityType> entities = Arrays.asList(EntityType.values());
+                    ArrayList<String> arguments = new ArrayList<>();
+                    // AAAH LAMBDA IN JAVA? sure
+                    Consumer<EntityType> method = (entity) -> {arguments.add(entity.toString().toLowerCase());};
+                    entities.forEach(method);
                     return arguments;
                 }
             }

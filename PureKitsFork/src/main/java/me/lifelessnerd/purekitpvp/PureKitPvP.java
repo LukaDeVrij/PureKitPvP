@@ -1,4 +1,5 @@
 package me.lifelessnerd.purekitpvp;
+import me.lifelessnerd.purekitpvp.combathandlers.ChickenPrevention;
 import me.lifelessnerd.purekitpvp.combathandlers.HealthEvents;
 import me.lifelessnerd.purekitpvp.combathandlers.PearlListener;
 import me.lifelessnerd.purekitpvp.combathandlers.leveling.PlayerLevelChat;
@@ -93,6 +94,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PearlListener(this), this);
         getServer().getPluginManager().registerEvents(new HealthEvents(this), this);
         getServer().getPluginManager().registerEvents(new PlayerLevelChat(this), this);
+        getServer().getPluginManager().registerEvents(new ChickenPrevention(this), this);
 
         getServer().getPluginManager().registerEvents(new CosmeticsGUIListener(this), this);
         getServer().getPluginManager().registerEvents(new KillEffect(this), this);
@@ -101,7 +103,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ProjectileTrailInventory(this), this);
         getServer().getPluginManager().registerEvents(new KillMessageInventory(this), this);
         PerkFireHandler.plugin = this; //idk? fixes npe?
-        PluginGetter.plugin = this; //TODO this is dumb ~DEPRECATED-> used in 1 instance
+        PluginGetter.plugin = this; //TODO this is dumb ~DEPRECATED-> used in 2 instances
     }
 
     @Override

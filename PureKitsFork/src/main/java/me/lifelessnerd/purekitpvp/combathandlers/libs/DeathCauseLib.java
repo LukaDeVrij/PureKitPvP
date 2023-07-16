@@ -37,7 +37,7 @@ public class DeathCauseLib {
         nerdDeathMessages.put("LAVA", " jumped into lava trying to escape {killer}");
         nerdDeathMessages.put("FIRE", " stood in fire trying to escape {killer}");
         nerdDeathMessages.put("FIRE_TICK", " burnt to a crisp trying to escape {killer}");
-        nerdDeathMessages.put("ENTITY_EXPLOSION", " burnt to a crisp trying to escape {killer}");
+        nerdDeathMessages.put("ENTITY_EXPLOSION", " exploded trying to escape {killer}");
         nerdDeathMessages.put("FALL", " thought this was Borderlands, being chased by {killer}");
 
         nerdKillMessages.add(" was Ctrl+Alt+Deleted by {killer}");

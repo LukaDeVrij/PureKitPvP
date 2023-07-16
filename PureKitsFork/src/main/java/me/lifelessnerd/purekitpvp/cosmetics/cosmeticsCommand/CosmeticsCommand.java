@@ -52,7 +52,7 @@ public class CosmeticsCommand implements CommandExecutor {
         killEffectButtonMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         killEffectButtonMeta.displayName(Component.text("Kill Effect").color(TextColor.color(200, 152, 0)).decoration(TextDecoration.ITALIC, false));
         List<Component> loreList2 = new ArrayList<>();
-        TextComponent txt21 = Component.text("Change your kill effect cosmetic!").color(TextColor.color(100,100,100));
+        TextComponent txt21 = Component.text("Change your kill effect cosmetic!").color(TextColor.color(100,100,100)).decoration(TextDecoration.ITALIC, false);
         loreList2.add(txt21);
         killEffectButtonMeta.lore(loreList2);
         killEffectButton.setItemMeta(killEffectButtonMeta);
@@ -62,7 +62,7 @@ public class CosmeticsCommand implements CommandExecutor {
         ItemMeta trailEffectButtonItemMeta = trailEffectButton.getItemMeta();
         trailEffectButtonItemMeta.displayName(Component.text("Projectile Trail").color(TextColor.color(200, 152, 0)).decoration(TextDecoration.ITALIC, false));
         List<Component> loreList3 = new ArrayList<>();
-        TextComponent txt22 = Component.text("Change your projectile trail cosmetic!").color(TextColor.color(100,100,100));
+        TextComponent txt22 = Component.text("Change your projectile trail cosmetic!").color(TextColor.color(100,100,100)).decoration(TextDecoration.ITALIC, false);
         loreList3.add(txt22);
         trailEffectButtonItemMeta.lore(loreList3);
         trailEffectButton.setItemMeta(trailEffectButtonItemMeta);
@@ -72,7 +72,7 @@ public class CosmeticsCommand implements CommandExecutor {
         ItemMeta killMessageEffectItemMeta = killMessageEffect.getItemMeta();
         killMessageEffectItemMeta.displayName(Component.text("Kill Message").color(TextColor.color(200, 152, 0)).decoration(TextDecoration.ITALIC, false));
         List<Component> loreList = new ArrayList<>();
-        TextComponent txt = Component.text("Change your kill message cosmetic!").color(TextColor.color(100,100,100));
+        TextComponent txt = Component.text("Change your kill message cosmetic!").color(TextColor.color(100,100,100)).decoration(TextDecoration.ITALIC, false);
         loreList.add(txt);
         killMessageEffectItemMeta.lore(loreList);
         killMessageEffect.setItemMeta(killMessageEffectItemMeta);

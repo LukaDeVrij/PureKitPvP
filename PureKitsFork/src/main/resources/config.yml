@@ -26,7 +26,7 @@ killstreak-glowing-duration: 100
 #Suicide command from PureKitPvP, ensures death recaps work correctly
 suicide-command: true
 
-# Whether the level of the player should be displayed in front of the message as prefix  (only in the pvp world)
+# Whether the level of the player should be displayed in front of the message as prefix  (only in the enabled world)
 level-chat: true
 
 #Notoriety perk boundary
@@ -50,5 +50,5 @@ default-projectile-trail: "none"
 projectile-trail-period: 1
 
 # Projectile trail count
-# Amount of particles per spawn (controlled by projectile-trail-period)
+# Amount of particles per spawn (also controlled by projectile-trail-period)
 projectile-trail-count: 5

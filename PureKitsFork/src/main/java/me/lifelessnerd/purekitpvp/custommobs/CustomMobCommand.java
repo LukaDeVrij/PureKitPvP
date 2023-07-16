@@ -29,7 +29,7 @@ public class CustomMobCommand extends Subcommand {
 
     @Override
     public String getSyntax() {
-        return "/purekits custommob";
+        return "/purekitpvp custommob <create/delete/set> <identifier>";
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CustomMobCommand extends Subcommand {
             }
             //String customMobName = args[2];
             MobSpawnConfig.get().set(args[2], null);
-            MobSpawnConfig.get().set(args[2] + ".type", EntityType.valueOf(args[3]).toString());
+            MobSpawnConfig.get().set(args[2] + ".type", EntityType.valueOf(args[3].toUpperCase()).toString());
             MobSpawnConfig.get().set(args[2] + ".child", false);
             MobSpawnConfig.get().set(args[2] + ".helmet", null);
             MobSpawnConfig.get().set(args[2] + ".chestplate", null);
@@ -55,14 +55,17 @@ public class CustomMobCommand extends Subcommand {
             MobSpawnConfig.get().set(args[2] + ".offhand", null);
 
             player.sendMessage("Custom mob created with type " + args[3] + ", identifier " + args[2]);
+            player.sendMessage("You can now change its equipment using /purekitpvp custommob set");
+
             MobSpawnConfig.save();
             MobSpawnConfig.reload();
             return true;
 
         }
         if (args[1].equalsIgnoreCase("set")){
-            if (args.length <= 4){
+            if (args.length <= 3){
                 player.sendMessage("Please provide arguments!");
+                player.sendMessage("Usage: /purekitpvp custommob set <helmet/chestplate/leggings/boots/mainhand/offhand>");
                 return true;
             }
             // First the identifier as arg, check if there is such a key
@@ -74,8 +77,19 @@ public class CustomMobCommand extends Subcommand {
             if (Arrays.asList(possibleArgs).contains(args[3])) {
                 setEquipment(player, args[2], args[3]);
                 player.sendMessage(args[2] + "'s " + args[3] + " was changed to the item you held.");
+            } else if(args[3].equalsIgnoreCase("child")){
+                if (args.length == 5 && (args[4].equalsIgnoreCase("true") || args[4].equalsIgnoreCase("false"))){
+                    MobSpawnConfig.get().set(args[2] + ".child", Boolean.valueOf(args[4]));
+                    MobSpawnConfig.save();
+                    MobSpawnConfig.reload();
+                    player.sendMessage("Custom mob " + args[2] + " property " + args[3] + " set to " + args[4]);
+
+                } else {
+                    player.sendMessage("When using argument 'child', follow with either true or false.");
+                    return true;
+                }
             } else {
-                player.sendMessage("Possible arguments are: type, helmet, chestplate, leggings, boots, mainhand, offhand");
+                player.sendMessage("Possible arguments are: child (requires true/false argument), helmet, chestplate, leggings, boots, mainhand, offhand");
             }
             return true;
 

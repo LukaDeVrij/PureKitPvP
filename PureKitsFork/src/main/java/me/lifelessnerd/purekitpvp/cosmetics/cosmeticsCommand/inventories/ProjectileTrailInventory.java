@@ -49,7 +49,7 @@ public class ProjectileTrailInventory implements Listener {
             String configValue = CosmeticsConfig.get().getString("projectile_trail." + player.getName());
             // if player is not present in file; add it to config and try again
             if (configValue == null){
-                CosmeticsConfig.get().set(player.getName(), plugin.getConfig().getString("default-projectile-trail"));
+                CosmeticsConfig.get().set("projectile_trail." + player.getName(), plugin.getConfig().getString("default-projectile-trail"));
                 CosmeticsConfig.save();
                 CosmeticsConfig.reload();
                 configValue = CosmeticsConfig.get().getString("projectile_trail." + player.getName());

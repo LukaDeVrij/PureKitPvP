@@ -22,7 +22,7 @@ commands:
       - pvpstats
   purekitpvp:
     description: All admin commands. See documentation for help.
-    usage: /purekitpvp <createkit/deletekit/kitstats/setkillitem/setperk/getcustomitem/createloottable/reload>
+    usage: /purekitpvp <createkit/deletekit/kitstats/setkillitem/getcustomitem/createloottable/reload/help/info>
     aliases:
       - kitpvp
       - pkpvp
