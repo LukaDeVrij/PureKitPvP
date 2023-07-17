@@ -73,7 +73,7 @@ public class GetKit implements TabExecutor, Listener {
         }
 
         if(!KitConfig.get().isSet("kits." + kitNameArg + ".permission")){
-            player.sendMessage(ChatColor.GRAY + "That kit does not have a permission associated. Please report to your administrator.");
+            player.sendMessage(ChatColor.GRAY + "That kit does not have a permission associated. Please report this to your administrator.");
             return true;
         }
 

@@ -52,3 +52,6 @@ projectile-trail-period: 1
 # Projectile trail count
 # Amount of particles per spawn (also controlled by projectile-trail-period)
 projectile-trail-count: 5
+
+# Chicken prevention: kits with eggs might spawn chicken; when this is true they are prevented from spawning
+chicken-prevention: true

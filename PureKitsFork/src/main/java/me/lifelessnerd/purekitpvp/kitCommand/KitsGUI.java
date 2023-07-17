@@ -116,14 +116,21 @@ public class KitsGUI implements TabExecutor {
             itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
-            //Set block
+            //Set gui item
             itemStack.setType(Material.getMaterial(KitConfig.get().getString("kits." + key + ".guiitem")));
+
 
             //Set lore
             String loreText = KitConfig.get().getString("kits." + key + ".guilore");
             loreText = ChatColor.translateAlternateColorCodes('&', loreText);
             ArrayList<String> lore = new ArrayList<>();
             lore.add(loreText);
+
+            // If no permission: set gui item to red stained glass pane and a bit of lore is added to explain the situation
+            if (!(player.hasPermission(KitConfig.get().getString("kits." + key + ".permission")))){
+                itemStack.setType(Material.RED_STAINED_GLASS_PANE);
+                lore.add(ChatColor.translateAlternateColorCodes('&', "&4&lNo permission for this kit!"));
+            }
 
             // Item lore that consists of contents of kit
             FileConfiguration fileConfiguration = KitConfig.get();

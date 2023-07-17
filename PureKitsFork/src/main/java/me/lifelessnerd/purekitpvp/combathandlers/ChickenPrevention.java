@@ -16,6 +16,10 @@ public class ChickenPrevention implements Listener {
     @EventHandler
     public void onChickenSpawn(EntitySpawnEvent event) {
 
+        if (!(plugin.getConfig().getBoolean("chicken-prevention"))){
+            return;
+        }
+
         Entity spawned = event.getEntity();
 
         if (!(spawned.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) {
@@ -24,7 +28,6 @@ public class ChickenPrevention implements Listener {
 
         if (spawned.getType().equals(EntityType.CHICKEN)){
             event.setCancelled(true);
-            return;
         }
     }
 

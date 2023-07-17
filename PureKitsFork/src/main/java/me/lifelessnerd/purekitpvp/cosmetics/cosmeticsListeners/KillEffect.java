@@ -56,6 +56,9 @@ public class KillEffect implements Listener {
             case "tornado" -> {
                 tornado(killLocation);
             }
+            case "cowrocket" -> {
+                cowrocket(killLocation);
+            }
             default -> {
                 //Idk how you would end up here: Do nothing
             }
@@ -122,6 +125,18 @@ public class KillEffect implements Listener {
     }
 
     public static void tornado(Location location) {
+        for (double i = 1; i < 4; i = i + 0.4) {
+            double newY = location.getY() + i;
+            for (double j = 0; j < 360; j += 20) {
+                double newZ = (location.getZ() + Math.cos(j) * (1 * Math.sqrt(i) - 0.5));
+                double newX = (location.getX() + Math.sin(j) * (1 * Math.sqrt(i) - 0.5));
+                location.getWorld().spawnParticle(Particle.FLAME, newX, newY, newZ, 1, 0.1, 0.5, 0.1, 0.001);
+            }
+        }
+        location.getWorld().playSound(location, Sound.ENTITY_ENDER_DRAGON_SHOOT, 1f, 1);
+    }
+
+    public static void cowrocket(Location location) {
         for (double i = 1; i < 4; i = i + 0.4) {
             double newY = location.getY() + i;
             for (double j = 0; j < 360; j += 20) {

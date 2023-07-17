@@ -33,7 +33,7 @@ public final class PureKitPvP extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getLogger().info("Enabled PureKitPvP");
+
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
@@ -104,6 +104,9 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new KillMessageInventory(this), this);
         PerkFireHandler.plugin = this; //idk? fixes npe?
         PluginGetter.plugin = this; //TODO this is dumb ~DEPRECATED-> used in 2 instances
+
+        getLogger().info("Enabled PureKitPvP");
+        getLogger().warning("Plugin active in world " + getConfig().getString("world")  + ". To change this, see the config.");
     }
 
     @Override

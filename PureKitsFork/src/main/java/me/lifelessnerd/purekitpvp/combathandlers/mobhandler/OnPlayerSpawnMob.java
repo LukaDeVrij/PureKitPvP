@@ -4,6 +4,7 @@ import me.lifelessnerd.purekitpvp.PluginGetter;
 import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -72,9 +73,17 @@ public class OnPlayerSpawnMob implements Listener {
 
             entityTypeTBS = EntityType.valueOf(entityToBeSpawned);
 
+
         }
         Location lookPlace = e.getInteractionPoint();
         Entity spawnedEntity = player.getWorld().spawnEntity(lookPlace, entityTypeTBS);
+
+        if (spawnedEntity instanceof Chicken){
+            if (plugin.getConfig().getBoolean("chicken-prevention")){
+                player.sendMessage(Component.text("ChickenPrevention prevented your chicken from spawning.").color(NamedTextColor.RED));
+                return;
+            }
+        }
 
         if (spawnedEntity instanceof AbstractHorse) {
             ((AbstractHorse) spawnedEntity).setTamed(true);
