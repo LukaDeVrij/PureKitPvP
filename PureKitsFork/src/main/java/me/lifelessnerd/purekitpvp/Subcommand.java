@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

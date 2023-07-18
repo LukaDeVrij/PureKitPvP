@@ -1,17 +1,22 @@
 package me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners;
 
 import me.lifelessnerd.purekitpvp.files.CosmeticsConfig;
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.swing.text.html.HTMLDocument;
 import java.util.logging.Level;
 
 public class KillEffect implements Listener {
@@ -56,8 +61,14 @@ public class KillEffect implements Listener {
             case "tornado" -> {
                 tornado(killLocation);
             }
-            case "cowrocket" -> {
-                cowrocket(killLocation);
+            case "cow_rocket" -> {
+                cow_rocket(killLocation);
+            }
+            case "dragon_breath" -> {
+                dragon_breath(killLocation);
+            }
+            case "diamond_rain" -> {
+                diamond_rain(killLocation);
             }
             default -> {
                 //Idk how you would end up here: Do nothing
@@ -68,7 +79,7 @@ public class KillEffect implements Listener {
     }
 
     public static void firework(Location location) {
-        location = addHeightToLocation(location, 1.4);
+        location = location.add(0,1.4,0);
         Firework fw = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
         FireworkMeta fwm = fw.getFireworkMeta();
         fwm.addEffect(FireworkEffect.builder().withColor(Color.RED).withColor(Color.WHITE).flicker(true).build());
@@ -92,7 +103,7 @@ public class KillEffect implements Listener {
         for (float i = 0.5f; i < 1.8f; i += 0.1) {
             location.getWorld().spawnParticle(
                     Particle.BLOCK_CRACK,
-                    addHeightToLocation(location, i),
+                    location.add(0,i,0),
                     20,
                     Material.REDSTONE_BLOCK.createBlockData()
             );
@@ -102,19 +113,19 @@ public class KillEffect implements Listener {
 
     public static void ritual(Location location) {
         for (int i = 0; i < 360; i += 20) {
-            Location flameloc = addHeightToLocation(location, 1.2);
+            Location flameloc = location.add(0,1.2,0);
             flameloc.setZ(flameloc.getZ() + Math.cos(i) * 0.7);
             flameloc.setX(flameloc.getX() + Math.sin(i) * 0.7);
             location.getWorld().spawnParticle(Particle.FLAME, flameloc, 10, 0, 0, 0, 0.001);
         }
         for (int i = 0; i < 360; i += 10) {
-            Location flameloc = addHeightToLocation(location, 0.6);
+            Location flameloc = location.add(0,0.6,0);
             flameloc.setZ(flameloc.getZ() + Math.cos(i) * 1.5);
             flameloc.setX(flameloc.getX() + Math.sin(i) * 1.5);
             location.getWorld().spawnParticle(Particle.FLAME, flameloc, 10, 0, 0, 0, 0.001);
         }
         for (int i = 0; i < 360; i += 5) {
-            Location flameloc = addHeightToLocation(location, 0);
+            Location flameloc = location;
             double extendedZ = flameloc.getZ() + Math.cos(i) / 2;
             double extendedX = flameloc.getZ() + Math.cos(i) / 2;
             flameloc.setZ(flameloc.getZ() + Math.cos(i) * 2);
@@ -136,24 +147,61 @@ public class KillEffect implements Listener {
         location.getWorld().playSound(location, Sound.ENTITY_ENDER_DRAGON_SHOOT, 1f, 1);
     }
 
-    public static void cowrocket(Location location) {
-        for (double i = 1; i < 4; i = i + 0.4) {
-            double newY = location.getY() + i;
-            for (double j = 0; j < 360; j += 20) {
-                double newZ = (location.getZ() + Math.cos(j) * (1 * Math.sqrt(i) - 0.5));
-                double newX = (location.getX() + Math.sin(j) * (1 * Math.sqrt(i) - 0.5));
-                location.getWorld().spawnParticle(Particle.FLAME, newX, newY, newZ, 1, 0.1, 0.5, 0.1, 0.001);
+    public static void cow_rocket(Location location) {
+        Entity cow = location.getWorld().spawnEntity(location, EntityType.COW);
+        cow.setGravity(false);
+        cow.teleport(location.add(0,2,0));
+
+        new BukkitRunnable() {
+            int i = 0;
+            @Override
+            public void run () {
+                cow.teleport(location.add(0,0.2,0));
+                cow.getLocation().getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_PLING, 1, i*0.1f);
+                cow.getLocation().getWorld().spawnParticle(Particle.GLOW_SQUID_INK, location, 2,0.1, 0.1, 0.1, 0.001);
+                if (i >= 16){
+                    this.cancel();
+                    cow.remove();
+                    cow.getLocation().createExplosion(0, false, false);
+                }
+                i++;
+
             }
-        }
-        location.getWorld().playSound(location, Sound.ENTITY_ENDER_DRAGON_SHOOT, 1f, 1);
+        }.runTaskTimer(plugin, 0, 1);
+
     }
 
-    public static Location addHeightToLocation(Location location, double increaseY) {
-        double x = location.getX();
-        double z = location.getZ();
-        double y = location.getY() + increaseY;
-        // Create a new location with the updated y coordinate
-        return new Location(location.getWorld(), x, y, z);
+    private static void dragon_breath(Location location) {
+
+        location.getWorld().spawnParticle(Particle.DRAGON_BREATH, location, 500, 0.2, 1, 0.2, 0.05);
+        location.getWorld().playSound(location, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
+    }
+
+    private static void diamond_rain(Location location){
+
+        new BukkitRunnable() {
+            int i = 0;
+            @Override
+            public void run() {
+                ItemStack is = new ItemStack(Material.DIAMOND, 1);
+                ItemMeta im = is.getItemMeta();
+                im.displayName(Component.text(i)); // Change display name so they do not stack
+                is.setItemMeta(im);
+
+                Item dropped = location.getWorld().dropItemNaturally(location, is);
+                dropped.getPersistentDataContainer().set(new NamespacedKey(plugin, "cosmetic"), PersistentDataType.BOOLEAN, true);
+                // PDC attached to entity instead if itemstack, these (apparently) do not transfer between states
+                location.getWorld().playSound(location, Sound.ENTITY_ITEM_PICKUP, 1, 1);
+                Bukkit.getScheduler().runTaskLater(plugin, dropped::remove, 100L); // IDEA lambda magic
+
+                if (i >= 10){
+                    this.cancel();
+                }
+                i++;
+
+            }
+        }.runTaskTimer(plugin, 0, 2);
+
     }
 
 }

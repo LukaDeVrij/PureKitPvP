@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -54,11 +55,6 @@ public class AdminHelpCommand extends Subcommand {
         if (args.length >= 2){
 
             if (args[1].equalsIgnoreCase("2")){
-
-                if (!(player.hasPermission("purekitpvp.admin.*"))){
-                    player.sendMessage("No permission!");
-                    return true;
-                }//Obsolete, any AdminCommandManager subcommands require admin perm
 
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bPureKitPvP - Admin Commands"));
                 for (Subcommand subcommand : subcommands){

@@ -4,6 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class InfoCommand extends Subcommand{
+
+
     @Override
     public String getName() {
         return "info";

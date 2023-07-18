@@ -16,6 +16,9 @@ public class CosmeticsLib {
         killEffects.put("blood_explosion", Material.REDSTONE);
         killEffects.put("ritual", Material.FIRE_CHARGE);
         killEffects.put("tornado", Material.STRING);
+        killEffects.put("cow_rocket", Material.COW_SPAWN_EGG);
+        killEffects.put("dragon_breath", Material.DRAGON_BREATH);
+        killEffects.put("diamond_rain", Material.DIAMOND);
 
         messageEffects.put("default", Material.DIAMOND_SWORD);
         messageEffects.put("flex", Material.GOLDEN_APPLE);

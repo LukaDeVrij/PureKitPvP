@@ -1,10 +1,7 @@
 package me.lifelessnerd.purekitpvp;
-import me.lifelessnerd.purekitpvp.combathandlers.ChickenPrevention;
-import me.lifelessnerd.purekitpvp.combathandlers.HealthEvents;
-import me.lifelessnerd.purekitpvp.combathandlers.PearlListener;
+import me.lifelessnerd.purekitpvp.combathandlers.*;
 import me.lifelessnerd.purekitpvp.combathandlers.leveling.PlayerLevelChat;
 import me.lifelessnerd.purekitpvp.combathandlers.libs.commands.Suicide;
-import me.lifelessnerd.purekitpvp.combathandlers.VoidKiller;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
@@ -95,6 +92,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new HealthEvents(this), this);
         getServer().getPluginManager().registerEvents(new PlayerLevelChat(this), this);
         getServer().getPluginManager().registerEvents(new ChickenPrevention(this), this);
+        getServer().getPluginManager().registerEvents(new PickupListener(this), this);
 
         getServer().getPluginManager().registerEvents(new CosmeticsGUIListener(this), this);
         getServer().getPluginManager().registerEvents(new KillEffect(this), this);
