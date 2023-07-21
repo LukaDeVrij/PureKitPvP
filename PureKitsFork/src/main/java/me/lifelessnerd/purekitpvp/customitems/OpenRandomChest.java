@@ -64,9 +64,12 @@ public class OpenRandomChest implements Listener {
             }
         }
         if (currentLootTable == null){
+            player.sendMessage("This loottable is not defined.");
+            plugin.getLogger().warning("Player " + player.getName() + " attempted to open a loottable with lore " + itemLore + ", but no loottable was found!");
             return;
         }
 
+        player.getInventory().remove(heldItem);
         // Giving algorithm
         if (LootTablesConfig.get().getBoolean(currentLootTable + ".guaranteed.enabled")){
             //Guaranteed items algo
@@ -112,7 +115,7 @@ public class OpenRandomChest implements Listener {
         }
 
         player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
-        player.getInventory().remove(heldItem);
+
 
         if (heldItem.getAmount() > 1){
             int itemsAdded = 0;
