@@ -39,7 +39,7 @@ public class GetCustomItem extends Subcommand {
 
     @Override
     public String getSyntax() {
-        return "/purekitpvp getcustomitem <golden_head/random_chest>";
+        return "/purekitpvp getcustomitem <golden_head/random_chest/custom_mob_egg>";
     }
 
     @Override
