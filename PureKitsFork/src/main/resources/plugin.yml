@@ -2,8 +2,8 @@ name: PureKitPvP
 version: '${project.version}'
 main: me.lifelessnerd.purekitpvp.PureKitPvP
 api-version: 1.19
-authors: [ LifelessNerd, PsionicPvP ]
-description: KitPVP plugin, with kit functionality from PureKits (abandoned)
+authors: [ LifelessNerd ]
+description: KitPVP plugin, made to work with PureKits kits (abandoned)
 commands:
   getkit:
     description: Gives you a kit.

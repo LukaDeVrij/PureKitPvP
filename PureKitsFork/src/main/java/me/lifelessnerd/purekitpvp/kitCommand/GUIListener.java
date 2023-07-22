@@ -92,10 +92,6 @@ public class GUIListener implements Listener {
                         int nextPage = Integer.parseInt(title.split(" - ")[1]) + 1;
                         player.chat("/kit " + nextPage);
 
-                        // TODO: this is what you were doing;
-                        // Testing kit pages, in KitGUI and here
-                        // 89 and 83, do they woirk?
-                        // And in KitsGUI the pages and which kits end up where
 
                     }
 

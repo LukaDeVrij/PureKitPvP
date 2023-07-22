@@ -6,6 +6,7 @@ import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -49,7 +50,7 @@ public class GetCustomItem extends Subcommand {
 
             ItemStack goldenHead = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) goldenHead.getItemMeta();
-            meta.displayName(Component.text("Golden Head"));
+            meta.displayName(Component.text("Golden Head").decoration(TextDecoration.ITALIC, false));
             String[] loreList = {"Healing Item"};
             meta.setLore(Arrays.asList(loreList));
             meta.setOwningPlayer(Bukkit.getOfflinePlayer("PhantomTupac"));

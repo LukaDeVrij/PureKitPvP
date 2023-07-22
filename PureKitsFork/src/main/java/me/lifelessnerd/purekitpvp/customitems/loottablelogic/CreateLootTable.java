@@ -105,7 +105,7 @@ public class CreateLootTable extends Subcommand {
 
         player.sendMessage(
                 "Loot table created. \nTo specify chances per item, and add multi-word lore" +
-                        "please use the loottables.yml config!");
+                        " please use the loottables.yml config!");
         player.sendMessage("When manually editing loottables.yml, remember to back it up if it contains a lot of information.");
 
         LootTablesConfig.save();

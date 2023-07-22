@@ -36,8 +36,7 @@ public class ReloadPlugin extends Subcommand {
 
     @Override
     public boolean perform(Player player, String[] args) {
-        //TODO Reload should read the files, even if they are manually edited, and load them into the plugin
-        // NO WORKIE
+
         KitConfig.reload();
         KitConfig.save();
 

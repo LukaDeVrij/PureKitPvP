@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ComponentUtils {
 
-    public static ItemMeta setLore(ItemMeta itemMeta, String lore, int line){ //TODO: needs testing
+    public static ItemMeta setLore(ItemMeta itemMeta, String lore, int line){
         List<Component> currentLore = null;
         if (itemMeta.hasLore()){
             currentLore = itemMeta.lore();

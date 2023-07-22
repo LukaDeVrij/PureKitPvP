@@ -370,6 +370,7 @@ public class DeathHandler implements Listener {
                 assistor.sendActionBar(actionBarText);
 
                 //update level TODO: check this: I think this is in the wrong spot since it doesn't seem to work?
+                // Need a 3rd player or alt to test
                 PlayerLeveling.createLevelXPPath(assistor.getName());
                 PlayerLeveling.addExperience(assistor, 3, "Assist"); // 3 for assists
                 PlayerLeveling.updateLevels();
@@ -397,7 +398,7 @@ public class DeathHandler implements Listener {
         if (!(event.getEntity().getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
             // If the entity that is damaged is in this world, the entire event should be in this world
             return;
-        } // TODO This function should make all other copies obsolete, cleanup of this class is necessary
+        } // This function should make all other copies obsolete - removed all affected copies (I think)
 
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
 
@@ -587,7 +588,7 @@ public class DeathHandler implements Listener {
             if(fallLocation.getBlockX() >= minX && fallLocation.getBlockX() <= maxX){
                 if(fallLocation.getBlockZ() >= minZ && fallLocation.getBlockZ() <= maxZ) { // If inside spawn square
 //                    event.setDamage(0);
-                    event.setCancelled(true); //TODO: might have other implications
+                    event.setCancelled(true); //might have other implications - none found
                     return;
                 }
             }

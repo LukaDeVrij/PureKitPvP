@@ -112,7 +112,7 @@ public class AdminCommandManager implements TabExecutor {
             arguments.add("random_chest");
             arguments.add("golden_head");
             arguments.add("custom_mob_egg");
-            return arguments; //TODO: make this only appear when args.length == 1 // What do you mean?
+            return arguments;
 
         }
         if (args[0].equalsIgnoreCase("createloottable")) {
@@ -235,9 +235,16 @@ public class AdminCommandManager implements TabExecutor {
                     return new ArrayList<>(MobSpawnConfig.get().getKeys(false));
                 }
                 if (args.length == 4) {
-                    String[] possibleArgs = {"helmet", "chestplate", "leggings", "boots", "mainhand", "offhand"};
+                    String[] possibleArgs = {"helmet", "chestplate", "leggings", "boots", "mainhand", "offhand", "child"};
                     return Arrays.asList(possibleArgs);
                 }
+                if (args.length == 5){
+                    if (args[3].equalsIgnoreCase("child")){
+                        String[] possibleArgs = {"true", "false"};
+                        return Arrays.asList(possibleArgs);
+                    }
+                }
+
             }
             if (args.length == 3) {
                 return new ArrayList<>(MobSpawnConfig.get().getKeys(false));

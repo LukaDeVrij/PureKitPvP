@@ -6,7 +6,7 @@
 
     <groupId>me.lifelessnerd.purekitpvp</groupId>
     <artifactId>PureKitPvP</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>PureKitPvP</name>

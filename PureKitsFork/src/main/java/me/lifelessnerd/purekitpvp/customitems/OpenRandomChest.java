@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp.customitems;
 
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
+import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -66,6 +67,7 @@ public class OpenRandomChest implements Listener {
         if (currentLootTable == null){
             player.sendMessage("This loottable is not defined.");
             plugin.getLogger().warning("Player " + player.getName() + " attempted to open a loottable with lore " + itemLore + ", but no loottable was found!");
+            plugin.getLogger().warning("Player " + player.getName() + " current kit is " + PlayerStatsConfig.get().getString(player.getName() + ".current_kit"));
             return;
         }
 

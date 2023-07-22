@@ -17,7 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class ProjectileTrail implements Listener {
     /* TODO: THIS CLASS HAS DUPOLICATE CODE because of the difference in events -> can be circumvented by passing projectile and player
-    TODO: can it? since one is projectile and the other is abstractarrow?? ALSO ADD CROSSBOWS MAYBE?*/
+    TODO: can it? since one is projectile and the other is abstractarrow?? CROSSBOWS are added but is a projectile*/
     Plugin plugin;
 
     public ProjectileTrail(Plugin plugin) {
@@ -59,7 +59,8 @@ public class ProjectileTrail implements Listener {
                 }
 
                 String trail = CosmeticsConfig.get().getString("projectile_trail." + player.getName());
-                // TODO: Could be removed: pass trail into the runnable once at event (How?)
+                // Could be removed: pass trail into the runnable once at event (How?)
+                // How? with a class that implements Runnable - a lot of code -> this is fine
 
                 Location location = projectile.getLocation();
 //                System.out.println(trail);
@@ -134,7 +135,6 @@ public class ProjectileTrail implements Listener {
                 }
 
                 String trail = CosmeticsConfig.get().getString("projectile_trail." + player.getName());
-                // TODO: Could be removed: pass trail into the runnable once at event (How?)
 
                 Location location = arrow.getLocation();
 //                System.out.println(trail);

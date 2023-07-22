@@ -42,7 +42,6 @@ public class MyStringUtils {
             String levelString = splitAgain[1];
             String[] isolateLevel = levelString.split("=");
             int level = Integer.parseInt(isolateLevel[isolateLevel.length - 1]); //HERE
-            // TODO does not account for enchantment levels >= 10, this will output 0
             word = splitAgain[0];
             word = MyStringUtils.itemCamelCase(word);
             result.append(word).append(level).append(" ");
@@ -121,7 +120,6 @@ public class MyStringUtils {
     }
 
     public static String itemNameToCosmeticId(String input){
-        // Input: Blood Explosion -> blood_explosion //TODO: needs testing
         String processed = input.toLowerCase();
         processed = processed.replace(' ', '_');
 
