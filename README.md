@@ -120,6 +120,7 @@ Use /purekitpvp custommob create \<name> \<type> to create your mob . All entity
 
 ## Videos
 https://youtu.be/wZcZ4DcRfgU - Create Kits and Loot tables
+
 https://youtu.be/tLelKptr6wA - Custom Mobs and how to use them
 
 ## Known issues
