@@ -4,12 +4,14 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -46,14 +48,11 @@ public class GoldenHeadEat implements Listener {
 
 
         ItemStack heldItem = player.getInventory().getItemInMainHand();
-        String desiredLore = "Healing Item";
 
-
-        if (!(heldItem.getItemMeta().hasLore())) {
+        if (!(heldItem.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "golden_head"), PersistentDataType.BOOLEAN))){
             return;
         }
-
-        if (!(heldItem.getItemMeta().getLore().contains(desiredLore))) { //NPE lies? // Also fuck component with their serializers
+        if (!(heldItem.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "golden_head"), PersistentDataType.BOOLEAN))){
             return;
         }
 
@@ -64,6 +63,7 @@ public class GoldenHeadEat implements Listener {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1));
         player.getInventory().remove(heldItem);
         player.getInventory().setItem(slot, heldItem);
+        // FIXED
         // This is suboptimal, but apparently removing itemstack with amount 1 does not work
         // Side effect is change in inventory slot possibly
         // FIXED using SLOT

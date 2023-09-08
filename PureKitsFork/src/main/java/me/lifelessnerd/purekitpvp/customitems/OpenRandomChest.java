@@ -3,10 +3,8 @@ package me.lifelessnerd.purekitpvp.customitems;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import net.kyori.adventure.text.Component;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -15,7 +13,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -51,27 +52,24 @@ public class OpenRandomChest implements Listener {
 
         ItemStack heldItem = player.getInventory().getItemInMainHand();
 
-        if (!(heldItem.getItemMeta().hasLore())){
+        if (!(heldItem.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "loottable_id")))){
             return;
         }
-        String itemLore = heldItem.getLore().get(0);
-        List<String> lootTables = new ArrayList<>(LootTablesConfig.get().getKeys(false));
-        String currentLootTable = null;
-        for(String lootName : lootTables){
-            String lootLore = LootTablesConfig.get().getString(lootName + ".desiredLore");
-            lootLore = ChatColor.translateAlternateColorCodes('&', lootLore);
-            if (lootLore.equalsIgnoreCase(itemLore)){
-                currentLootTable = lootName;
-            }
-        }
+
+        String currentLootTable = heldItem.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "loottable_id"), PersistentDataType.STRING);
         if (currentLootTable == null){
-            player.sendMessage("This loottable is not defined.");
-            plugin.getLogger().warning("Player " + player.getName() + " attempted to open a loottable with lore " + itemLore + ", but no loottable was found!");
+            player.sendMessage(Component.text("This loottable is not defined."));
+            plugin.getLogger().warning("Player " + player.getName() + " attempted to open a loottable with name " + currentLootTable + ", but no loottable was found!");
             plugin.getLogger().warning("Player " + player.getName() + " current kit is " + PlayerStatsConfig.get().getString(player.getName() + ".current_kit"));
             return;
         }
 
+        // Remove 1 golden head
+        heldItem.setAmount(heldItem.getAmount() - 1);
+        int slot = player.getInventory().getHeldItemSlot();
         player.getInventory().remove(heldItem);
+        player.getInventory().setItem(slot, heldItem);
+
         // Giving algorithm
         if (LootTablesConfig.get().getBoolean(currentLootTable + ".guaranteed.enabled")){
             //Guaranteed items algo
@@ -88,11 +86,11 @@ public class OpenRandomChest implements Listener {
                     ItemStack itemToGive = (ItemStack) LootTablesConfig.get().get(currentLootTable + ".content." + contentKeys.get(0) + ".item");
                     player.getInventory().addItem(itemToGive);
                     itemsFilled++;
-                    if (LootTablesConfig.get().getDouble(currentLootTable + ".content." + contentKeys.get(0) + ".chance") <= 0.01){
+                    if (LootTablesConfig.get().getDouble(currentLootTable + ".content." + contentKeys.get(0) + ".chance") <= (double) plugin.getConfig().getInt("loottable-message-percentage") / 100){
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                                 "&bLUCKY! &a" + MyStringUtils.itemCamelCase(itemToGive.getType().toString()) + "&bhad a chance of &a" +
                                         LootTablesConfig.get().getDouble(currentLootTable + ".content." + contentKeys.get(0) + ".chance") * 100
-                                        + "%!"));
+                                        + "%!")); //TODO component this
                     }
                 }
             }
@@ -107,29 +105,16 @@ public class OpenRandomChest implements Listener {
                     //Succes, get the item
                     ItemStack itemToGive = (ItemStack) LootTablesConfig.get().get(currentLootTable + ".content." + key + ".item");
                     player.getInventory().addItem(itemToGive);
-                    if (LootTablesConfig.get().getDouble(currentLootTable + ".content." + key + ".chance") <= 0.01){
+                    if (LootTablesConfig.get().getDouble(currentLootTable + ".content." + key + ".chance") <= (double) plugin.getConfig().getInt("loottable-message-percentage") / 100){
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                                 "&bLUCKY! &a" + MyStringUtils.itemCamelCase(itemToGive.getType().toString()) + "&bhad a chance of&a " +
-                                LootTablesConfig.get().getDouble(currentLootTable + ".content." + key + ".chance") * 100 + "%!"));
+                                LootTablesConfig.get().getDouble(currentLootTable + ".content." + key + ".chance") * 100 + "%!"));//TODO component this
                     }
                 }
             }
         }
 
         player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
-
-
-        if (heldItem.getAmount() > 1){
-            int itemsAdded = 0;
-            int desiredAmount = heldItem.getAmount() - 1;
-            while(itemsAdded < desiredAmount){
-                ItemStack heldItemSingle = heldItem;
-                heldItemSingle.setAmount(1);
-                player.getInventory().addItem(heldItemSingle);
-                itemsAdded++;
-            }
-
-        }
 
 
         LootTablesConfig.save();

@@ -5,6 +5,7 @@ import me.lifelessnerd.purekitpvp.combathandlers.libs.DamageCauseLib;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.MobRemover;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillEffect;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillMessage;
+import me.lifelessnerd.purekitpvp.globalevents.EventDataClass;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkFireHandler;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
@@ -14,6 +15,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
+import org.apache.commons.lang3.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -31,7 +33,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 public class DeathHandler implements Listener {
@@ -53,6 +57,7 @@ public class DeathHandler implements Listener {
     public void onDeath(PlayerDeathEvent e){
 
         Player player = e.getPlayer();
+        Location deathLocation = player.getLocation();
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
             return;
@@ -63,10 +68,28 @@ public class DeathHandler implements Listener {
         double y = plugin.getConfig().getDouble("respawnY");
         double z = plugin.getConfig().getDouble("respawnZ");
 
-        Bukkit.getScheduler().runTaskLater((Plugin)this.plugin, () ->
+        Bukkit.getScheduler().runTaskLater(this.plugin, () ->
                 player.teleport(new Location(player.getWorld(), x, y, z, 0, 0)), 1L);
-        Bukkit.getScheduler().runTaskLater((Plugin)this.plugin, () -> {
-            player.getInventory().clear();
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+            if (plugin.getConfig().getBoolean("inventory-clear")){
+                if (EventDataClass.dropInventoryOnDeath){
+                    // Global Combat Event is active -> drop items on ground
+                    ItemStack[] inventoryItems = player.getInventory().getContents();
+                    ItemStack[] armorItems = player.getInventory().getArmorContents();
+                    ItemStack offhandItem = player.getInventory().getItemInOffHand();
+                    for (ItemStack item : inventoryItems) {
+                        player.getWorld().dropItemNaturally(deathLocation, item);
+                    }
+                    for (ItemStack item : armorItems) {
+                        player.getWorld().dropItemNaturally(deathLocation, item);
+                    }
+                    player.getWorld().dropItemNaturally(deathLocation, offhandItem);
+
+                } else {
+                    player.getInventory().clear();
+                }
+            }
+
             player.getActivePotionEffects().clear();
             player.setExp(0f);
             player.setLevel(0);

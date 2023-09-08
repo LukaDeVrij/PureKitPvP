@@ -5,6 +5,9 @@
 # World in which the plugin should be active: i.e. kits, deaths, stats and such
 world: pvp
 
+# Clear inventory after player is killed (EXPERIMENTAL: Not sure what consequences this has!)
+inventory-clear: true
+
 #Quick kill when falling in void, only works when suicide-command is enabled
 quick-voidkill: true
 #If above true, Y level at which you should die in pvp, please provide double (something like 0.0 or -10.0)
@@ -28,6 +31,9 @@ suicide-command: true
 
 # Whether the level of the player should be displayed in front of the message as prefix  (only in the enabled world)
 level-chat: true
+
+#In loottables, tell the player they got lucky if the drop was below or equal to this percentage
+loottable-message-percentage: 1
 
 #Notoriety perk boundary
 #If the notoriety perk is too OP, restrict the maximum level of sharpness that can be gained
@@ -55,3 +61,10 @@ projectile-trail-count: 5
 
 # Chicken prevention: kits with eggs might spawn chicken; when this is true they are prevented from spawning
 chicken-prevention: true
+
+# Global Kit PvP event loop -
+# enabled?
+global-event-loop: true
+
+# Seconds between global combat events - events themselves have different times (see below)
+global-event-period: 10

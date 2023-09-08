@@ -4,24 +4,26 @@ main: me.lifelessnerd.purekitpvp.PureKitPvP
 api-version: 1.19
 authors: [ LifelessNerd ]
 description: KitPVP plugin, made to work with PureKits kits (abandoned)
+depend:
+  - WorldGuard
 commands:
   getkit:
-    description: Gives you a kit.
+    description: Gives you a kit
     usage: /getkit <kitName>
   kit:
-    description: Shows kit selection GUI.
+    description: Shows kit selection GUI
     usage: /kit
   suicide:
-    description: Kill yourself in pvp.
+    description: Kill yourself in pvp
     usage: /suicide
   getstats:
-    description: Get the stats of a player.
+    description: Get the stats of a player
     usage: /getstats <player>
     aliases:
       - stats
       - pvpstats
   purekitpvp:
-    description: All admin commands. See documentation for help.
+    description: All admin commands. See documentation for help
     usage: /purekitpvp <createkit/deletekit/kitstats/setkillitem/getcustomitem/createloottable/reload/help/info>
     aliases:
       - kitpvp
@@ -34,7 +36,7 @@ commands:
       - pvphelp
   perks:
     description: Perk menu
-    usage: /perk
+    usage: /perks
     aliases:
       - perk
   cosmetics:

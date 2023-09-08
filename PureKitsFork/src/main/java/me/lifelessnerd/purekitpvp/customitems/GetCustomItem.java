@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,14 +46,19 @@ public class GetCustomItem extends Subcommand {
 
     @Override
     public boolean perform(Player player, String[] args) {
-
+        Plugin plugin = PluginGetter.Plugin();
         if (args[1].equalsIgnoreCase("golden_head")){
+
 
             ItemStack goldenHead = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) goldenHead.getItemMeta();
             meta.displayName(Component.text("Golden Head").decoration(TextDecoration.ITALIC, false));
-            String[] loreList = {"Healing Item"};
-            meta.setLore(Arrays.asList(loreList));
+            PersistentDataContainer itemContainer = meta.getPersistentDataContainer();
+            itemContainer.set(new NamespacedKey(plugin, "golden_head"), PersistentDataType.BOOLEAN, true);
+            // Deprecated lore system
+                String[] loreList = {"Healing Item"};
+                meta.setLore(Arrays.asList(loreList));
+            //
             meta.setOwningPlayer(Bukkit.getOfflinePlayer("PhantomTupac"));
             goldenHead.setItemMeta(meta);
 
@@ -64,14 +70,16 @@ public class GetCustomItem extends Subcommand {
         } else if (args[1].equalsIgnoreCase("random_chest")){
 
             if (!(LootTablesConfig.get().isSet(args[2]))){
-                player.sendMessage("Such loot table does not exist!");
+                player.sendMessage(Component.text("Such loot table does not exist!"));
                 return false;
             }
             String lore = LootTablesConfig.get().getString(args[2] + ".desiredLore");
             String displayName = LootTablesConfig.get().getString(args[2] + ".displayName");
 
             ItemStack chestItem = new ItemStack(Material.CHEST);
+
             ItemMeta itemMeta = chestItem.getItemMeta();
+            itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "loottable_id"), PersistentDataType.STRING, args[2]);
             List<String> loreList = new ArrayList<>();
             loreList.add(ChatColor.translateAlternateColorCodes('&', lore));
             itemMeta.setLore(loreList);
@@ -97,7 +105,7 @@ public class GetCustomItem extends Subcommand {
             eggMeta.lore(lore);
             PersistentDataContainer data = eggMeta.getPersistentDataContainer();
 
-            data.set(new NamespacedKey(PluginGetter.Plugin(), "custom_mob_id"), PersistentDataType.STRING, args[2]);
+            data.set(new NamespacedKey(plugin, "custom_mob_id"), PersistentDataType.STRING, args[2]);
 
             egg.setItemMeta(eggMeta);
             player.getInventory().addItem(egg);

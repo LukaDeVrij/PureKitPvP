@@ -12,6 +12,7 @@ import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.inventories.Project
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillEffect;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillMessage;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.ProjectileTrail;
+import me.lifelessnerd.purekitpvp.globalevents.GlobalEventManager;
 import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkCommand;
 import me.lifelessnerd.purekitpvp.perks.perkCommand.PerkGUIListener;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkFireHandler;
@@ -70,6 +71,10 @@ public final class PureKitPvP extends JavaPlugin {
         CosmeticsConfig.get().options().copyDefaults(true);
         CosmeticsConfig.save();
 
+        EventData.setup();
+        EventData.get().options().copyDefaults(true);
+        EventData.save();
+
         getCommand("getkit").setExecutor(new GetKit(this));
         getCommand("kit").setExecutor(new KitsGUI(this));
         getCommand("perk").setExecutor(new PerkCommand(this));
@@ -101,7 +106,9 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ProjectileTrailInventory(this), this);
         getServer().getPluginManager().registerEvents(new KillMessageInventory(this), this);
         PerkFireHandler.plugin = this; //idk? fixes npe?
-        PluginGetter.plugin = this; //this is dumb but used in 2 instances
+        PluginGetter.plugin = this; //this is dumb but used in >= 2 instances
+
+        GlobalEventManager globalEventManager = new GlobalEventManager(this);
 
         getLogger().info("Enabled PureKitPvP");
         getLogger().warning("Plugin active in world " + getConfig().getString("world")  + ". To change this, see the config.");
