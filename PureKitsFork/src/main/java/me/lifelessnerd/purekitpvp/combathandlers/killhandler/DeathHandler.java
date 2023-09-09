@@ -71,23 +71,28 @@ public class DeathHandler implements Listener {
         Bukkit.getScheduler().runTaskLater(this.plugin, () ->
                 player.teleport(new Location(player.getWorld(), x, y, z, 0, 0)), 1L);
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-            if (plugin.getConfig().getBoolean("inventory-clear")){
-                if (EventDataClass.dropInventoryOnDeath){
-                    // Global Combat Event is active -> drop items on ground
-                    ItemStack[] inventoryItems = player.getInventory().getContents();
-                    ItemStack[] armorItems = player.getInventory().getArmorContents();
-                    ItemStack offhandItem = player.getInventory().getItemInOffHand();
-                    for (ItemStack item : inventoryItems) {
-                        player.getWorld().dropItemNaturally(deathLocation, item);
-                    }
-                    for (ItemStack item : armorItems) {
-                        player.getWorld().dropItemNaturally(deathLocation, item);
-                    }
-                    player.getWorld().dropItemNaturally(deathLocation, offhandItem);
 
-                } else {
-                    player.getInventory().clear();
+            if (EventDataClass.dropInventoryOnDeath){
+                // Global Combat Event is active -> drop items on ground
+                ItemStack[] inventoryItems = player.getInventory().getContents();
+                ItemStack[] armorItems = player.getInventory().getArmorContents();
+                ItemStack offhandItem = player.getInventory().getItemInOffHand();
+                for (ItemStack item : inventoryItems) {
+
+                    if (item != null)
+                        player.getWorld().dropItemNaturally(deathLocation, item);
                 }
+                for (ItemStack item : armorItems) {
+                    if (item != null)
+                        player.getWorld().dropItemNaturally(deathLocation, item);
+                }
+                player.getWorld().dropItemNaturally(deathLocation, offhandItem);
+
+                player.getInventory().clear();
+            }
+
+            if (plugin.getConfig().getBoolean("inventory-clear")){
+                player.getInventory().clear();
             }
 
             player.getActivePotionEffects().clear();
@@ -101,7 +106,7 @@ public class DeathHandler implements Listener {
             player.setHealth(20);
 
             player.chat("/kit");
-            }, 2L);
+        }, 2L);
 
 
 
@@ -153,8 +158,9 @@ public class DeathHandler implements Listener {
             playerInvolved = false;
 
         }
-        if (damageData.lastPlayerDamager != null && damageData.lastOtherDamager != null){
+        if (damageData.lastPlayerDamager != null && damageData.lastOtherDamager != null && (!(damageData.lastPlayerDamager.equalsIgnoreCase(player.getName())))){
             //This means player got damage from both
+
             credit = damageData.lastPlayerDamager;
 //            deathMessage += " was killed by ";
 //            System.out.println(damageData.lastOtherDamager);
@@ -170,12 +176,14 @@ public class DeathHandler implements Listener {
             }
 
         }
-        if (damageData.lastPlayerDamager != null && damageData.lastOtherDamager == null){
+        if (damageData.lastPlayerDamager != null && damageData.lastOtherDamager == null && (!(damageData.lastPlayerDamager.equals(player.getName())))){
             //Means player has only been hit by other players
             credit = damageData.lastPlayerDamager;
             deathMessage = KillMessage.create.byPlayer(player.getName(), damageData.lastPlayerDamager);
 
         }
+        // Went all the way through? Some weird situation, this may fix
+        playerInvolved = false;
 
 //        deathMessage = deathMessage + credit;
         // Death message shows who got credit, broadcast to every player in pvp world
@@ -204,7 +212,9 @@ public class DeathHandler implements Listener {
         for (String key2 : damageData.damageDistributionMap.keySet()){
             if (!(key2.equalsIgnoreCase(credit)) && pvpPlayers.contains(key2) && pvpPlayers.contains(player.getName())){
                 // Don't count the killer in the assist check
-                // Don't count the killed player himself in the assist check
+                if (key2.equals(player.getName())){
+                    continue;// Don't count the killed player himself in the assist check
+                }
                 //Only check players for assist
                 if (highestAssistor == null){
                     highestAssistor = key2;

@@ -3,6 +3,7 @@ package me.lifelessnerd.purekitpvp.globalevents;
 import me.lifelessnerd.purekitpvp.globalevents.events.AbstractEvent;
 import me.lifelessnerd.purekitpvp.globalevents.events.PickupFrenzyEvent;
 import me.lifelessnerd.purekitpvp.globalevents.events.TeleMadnessEvent;
+import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.commons.lang3.ArrayUtils;
@@ -23,9 +24,10 @@ public class GlobalEventManager {
     int globalTimer = 0;
     int nextEventTime = 0;
     int period = 0;
+    List<AbstractEvent> events;
     public GlobalEventManager(Plugin plugin) {
 
-        List<AbstractEvent> events = new ArrayList<>();
+        events = new ArrayList<>();
         events.add(new PickupFrenzyEvent(plugin));
         events.add(new TeleMadnessEvent(plugin));
 
@@ -79,7 +81,6 @@ public class GlobalEventManager {
                         );
                     }
                 }
-                plugin.getLogger().log(Level.INFO, "Event started in pvp world -> " + currentEvent.getEventName());
 
                 nextEventTime = globalTimer + currentEvent.getEventLength() + period;
                 // This means the nextEventTime is eventTime + cooldown period after current time
@@ -91,6 +92,12 @@ public class GlobalEventManager {
 
     public void startEvent(String name) {
     // TODO rework starting event mechanism so that starting events with command is possible -> also correct timer and such
+        for (AbstractEvent event : this.events) {
+            if (MyStringUtils.itemCamelCase(event.getEventName()).equalsIgnoreCase(name){
+                System.out.println("yes!");
+            }
+        }
+        
     }
 
 }

@@ -98,6 +98,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerLevelChat(this), this);
         getServer().getPluginManager().registerEvents(new ChickenPrevention(this), this);
         getServer().getPluginManager().registerEvents(new PickupListener(this), this);
+        getServer().getPluginManager().registerEvents(new BlockRemover(this), this);
 
         getServer().getPluginManager().registerEvents(new CosmeticsGUIListener(this), this);
         getServer().getPluginManager().registerEvents(new KillEffect(this), this);

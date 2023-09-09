@@ -5,11 +5,18 @@
 # World in which the plugin should be active: i.e. kits, deaths, stats and such
 world: pvp
 
-# Clear inventory after player is killed (EXPERIMENTAL: Not sure what consequences this has!)
+# Clear inventory after player is killed (EXPERIMENTAL when setting this to false, not sure what consequences it has!)
 inventory-clear: true
 
 #Quick kill when falling in void, only works when suicide-command is enabled
 quick-voidkill: true
+
+# Remove any blocks that people in survival/adventure place in your pvp world after a set time
+remove-blocks: true
+
+# If above true, delay in seconds after which blocks should automatically be removed
+remove-blocks-delay: 30
+
 #If above true, Y level at which you should die in pvp, please provide double (something like 0.0 or -10.0)
 voidY: 0.0
 

@@ -26,6 +26,7 @@ public class PickupFrenzyEvent extends AbstractEvent{
     @Override
     public void onStart() {
         EventDataClass.dropInventoryOnDeath = true;
+        startEndListener(null);
     }
 
     @Override

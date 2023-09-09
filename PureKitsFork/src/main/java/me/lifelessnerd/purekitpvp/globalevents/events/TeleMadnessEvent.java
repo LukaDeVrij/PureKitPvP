@@ -49,7 +49,6 @@ public class TeleMadnessEvent extends AbstractEvent{
 
     @Override
     public void onEnd() {
-
     }
 
     public void giveEnderpearls(){
