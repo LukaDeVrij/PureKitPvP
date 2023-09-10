@@ -7,8 +7,13 @@ import me.lifelessnerd.purekitpvp.customitems.GetCustomItem;
 import me.lifelessnerd.purekitpvp.customitems.loottablelogic.CreateLootTable;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
+import me.lifelessnerd.purekitpvp.globalevents.EventCommand;
+import me.lifelessnerd.purekitpvp.globalevents.GlobalEventManager;
+import me.lifelessnerd.purekitpvp.globalevents.events.AbstractEvent;
 import me.lifelessnerd.purekitpvp.kitCommand.ResetKit;
 import me.lifelessnerd.purekitpvp.noncombatstats.commands.GetKitStats;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -29,12 +34,15 @@ public class AdminCommandManager implements TabExecutor {
     ArrayList<Subcommand> subcommands = new ArrayList<>();
     Plugin plugin;
 
+    GlobalEventManager globalEventManager;
+
     public AdminCommandManager(Plugin plugin) {
         subcommands.add(new CreateKit(plugin));
         subcommands.add(new DeleteKit(plugin));
         subcommands.add(new ResetKit());
         subcommands.add(new SetKillItem(plugin));
-        //subcommands.add(new SetPerk(plugin));
+        this.globalEventManager = new GlobalEventManager(plugin);
+        subcommands.add(new EventCommand(plugin, this.globalEventManager));
         subcommands.add(new CreateLootTable(plugin));
         subcommands.add(new GetCustomItem());
         subcommands.add(new CustomMobCommand());
@@ -49,18 +57,18 @@ public class AdminCommandManager implements TabExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage("The console cannot perform these commands.");
+            sender.sendMessage(Component.text("The console cannot perform these commands."));
             return false;
         }
         Player player = (Player) sender;
 
         if (!(player.hasPermission("purekitpvp.admin.*"))) {
-            player.sendMessage(ChatColor.RED + "You do not have permission!");
+            player.sendMessage(Component.text("You do not have permission!").color(NamedTextColor.RED));
             return true;
         }
 
         if (args.length < 1) {
-            player.sendMessage("Please specify what function to use.");
+            player.sendMessage(Component.text("Please specify what function to use."));
             return false;
         }
 
@@ -248,6 +256,23 @@ public class AdminCommandManager implements TabExecutor {
             }
             if (args.length == 3) {
                 return new ArrayList<>(MobSpawnConfig.get().getKeys(false));
+            }
+        }
+        if (args[0].equalsIgnoreCase("event")){
+            if (args.length == 2) {
+                List<String> autoComplete = new ArrayList<>();
+                autoComplete.add("start");
+                autoComplete.add("stop");
+                return autoComplete;
+            }
+            if (args[1].equalsIgnoreCase("start")){
+                if (args.length == 3) {
+                    List<String> autoComplete = new ArrayList<>();
+                    for (AbstractEvent event : globalEventManager.events) {
+                        autoComplete.add(event.getEventName().replace(' ', '_').toLowerCase());
+                    }
+                    return autoComplete;
+                }
             }
         }
         return new ArrayList<>();
