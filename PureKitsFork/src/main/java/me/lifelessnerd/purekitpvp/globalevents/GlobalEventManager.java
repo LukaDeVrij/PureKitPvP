@@ -39,7 +39,7 @@ public class GlobalEventManager {
         if (!(plugin.getConfig().getBoolean("global-event-loop"))){
             return;
         }
-        System.out.println("Global Combat Event loop enabled, starting!");
+//        System.out.println("Global Combat Event loop enabled, starting!");
         // Global timer (1 second increments)
         new BukkitRunnable() {
             @Override
@@ -58,7 +58,7 @@ public class GlobalEventManager {
         }.runTaskTimer(plugin, 0, 20);
 
         period = plugin.getConfig().getInt("global-event-period");
-
+        // TODO somewhere in here is a bug: first event after reload is 1 sec too long
         nextEventTime = globalTimer + period;
 
         // Runnable that starts new events, if nextEventTime is passed
@@ -71,7 +71,8 @@ public class GlobalEventManager {
                 }
                 // No event running - cooldown period over!
                 AbstractEvent randomEvent = events.get(ThreadLocalRandom.current().nextInt(0, events.size()));
-                startEvent(randomEvent.getEventName());
+//                System.out.println(randomEvent.getEventName());
+                startEvent(randomEvent.getEventName().replace(' ', '_'));
 
             }
 
@@ -80,14 +81,15 @@ public class GlobalEventManager {
     }
 
     public Component startEvent(String name) {
-//        if (this.currentEvent != null){
-//            if (this.currentEvent.timer <= this.currentEvent.getEventLength()) { // Event already running?
-//                return Component.text("An event is already/still running!").color(NamedTextColor.RED);
-//            }
-//        }
+        if (this.currentEvent != null){
+            if (this.currentEvent.running) { // Event already running?
+                return Component.text("An event is already/still running!").color(NamedTextColor.RED);
+            }
+        }
         for (AbstractEvent event : this.events) {
             String eventId = event.getEventName().replace(' ', '_');
             if(eventId.equalsIgnoreCase(name)){
+                event.eventLength = 60; // TODO manual overwrite using command arg, anders gwn default van de config (via abstractevent)
                 event.onStart();
                 this.currentEvent = event;
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
@@ -101,11 +103,29 @@ public class GlobalEventManager {
                         );
                     }
                 }
-                nextEventTime = globalTimer + this.currentEvent.getEventLength() + period;
+                this.nextEventTime = this.globalTimer + this.currentEvent.getEventLength() + this.period;
+//                System.out.println(this.nextEventTime + " Now: " + this.globalTimer);
                 // This means the nextEventTime is eventTime + cooldown period after current time
             }
         }
         return Component.text("Started event.").color(NamedTextColor.GREEN);
+    }
+
+    public Component stopEvent(){
+        if (this.currentEvent == null){
+            return Component.text("No event is running.").color(NamedTextColor.RED);
+        }
+        if (!this.currentEvent.running){
+            return Component.text("No event is running.").color(NamedTextColor.RED);
+        }
+        AbstractEvent currentEvent = this.currentEvent;
+        // Fast forward globalTimer to time event would have stopped
+        this.globalTimer = this.globalTimer + (currentEvent.getEventLength() - currentEvent.timer);
+        // Force end event
+        currentEvent.timer = currentEvent.getEventLength();
+        this.currentEvent = null;
+
+        return Component.text("Stopping current event and continuing the global event loop...").color(NamedTextColor.GREEN);
     }
 
 }

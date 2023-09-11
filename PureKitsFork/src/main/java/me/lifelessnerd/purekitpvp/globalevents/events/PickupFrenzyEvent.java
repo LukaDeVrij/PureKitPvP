@@ -20,17 +20,19 @@ public class PickupFrenzyEvent extends AbstractEvent{
 
     @Override
     public int getEventLength() {
-        return 10;
+        return this.getEventLength();
     }
 
     @Override
     public void onStart() {
+        this.running = true;
         EventDataClass.dropInventoryOnDeath = true;
         startEndListener(null);
     }
 
     @Override
     public void onEnd() {
+        this.running = false;
         EventDataClass.dropInventoryOnDeath = false;
     }
 }

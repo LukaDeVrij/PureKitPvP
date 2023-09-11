@@ -12,10 +12,14 @@ public abstract class AbstractEvent {
     public Plugin plugin;
     public int timer;
     public int taskId;
+    public boolean running;
+    public int eventLength;
     public AbstractEvent(Plugin plugin){
         this.plugin = plugin;
         this.timer = 0;
         this.taskId = 0;
+        this.running = false;
+        this.eventLength = 60; // default -> can be overwritten // TODO enorme errors in cmd
     }
     public abstract String getEventName();
     public abstract String getEventDescription();

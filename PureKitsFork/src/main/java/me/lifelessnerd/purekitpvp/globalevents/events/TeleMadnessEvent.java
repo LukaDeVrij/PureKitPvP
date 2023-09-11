@@ -1,16 +1,21 @@
 package me.lifelessnerd.purekitpvp.globalevents.events;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeleMadnessEvent extends AbstractEvent{
@@ -29,11 +34,12 @@ public class TeleMadnessEvent extends AbstractEvent{
 
     @Override
     public int getEventLength() {
-        return 10;
+        return this.eventLength;
     }
 
     @Override
     public void onStart() {
+        this.running = true;
         BukkitTask eventLoop = new BukkitRunnable() {
             @Override
             public void run() {
@@ -49,6 +55,29 @@ public class TeleMadnessEvent extends AbstractEvent{
 
     @Override
     public void onEnd() {
+        this.running = false;
+        World pvpWorld = Bukkit.getWorld(plugin.getConfig().getString("world"));
+        List<Player> players = pvpWorld.getPlayers();
+        if (players.isEmpty()){
+            return;
+        }
+
+        ItemStack pearl = new ItemStack(Material.ENDER_PEARL);
+        ItemMeta pearlMeta = pearl.getItemMeta();
+        pearlMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "telemadness"), PersistentDataType.BOOLEAN, true);
+        ArrayList<Component> lore = new ArrayList<>() {
+            {
+                add(Component.text("This is an event specific item, which").color(NamedTextColor.GRAY));
+                add(Component.text("will be removed as soon as the event ends.").color(NamedTextColor.GRAY));
+            }
+        };
+        pearlMeta.lore(lore);
+        pearlMeta.displayName(Component.text("TeleMadness Pearl").color(NamedTextColor.LIGHT_PURPLE));
+        pearl.setItemMeta(pearlMeta);
+        pearl.setAmount(99999999); // will do
+        for (Player player : players) {
+            player.getInventory().removeItemAnySlot(pearl);
+        }
     }
 
     public void giveEnderpearls(){
@@ -58,7 +87,20 @@ public class TeleMadnessEvent extends AbstractEvent{
             return;
         }
         for (Player player : players) {
-            player.getInventory().addItem(new ItemStack(Material.ENDER_PEARL, 1));
+            ItemStack pearl = new ItemStack(Material.ENDER_PEARL);
+            ItemMeta pearlMeta = pearl.getItemMeta();
+            pearlMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "telemadness"), PersistentDataType.BOOLEAN, true);
+            ArrayList<Component> lore = new ArrayList<>() {
+                {
+                    add(Component.text("This is an event specific item, which").color(NamedTextColor.GRAY));
+                    add(Component.text("will be removed as soon as the event ends.").color(NamedTextColor.GRAY));
+                }
+            };
+            pearlMeta.lore(lore);
+            pearlMeta.displayName(Component.text("TeleMadness Pearl").color(NamedTextColor.LIGHT_PURPLE));
+            pearl.setItemMeta(pearlMeta);
+            pearl.setAmount(1);
+            player.getInventory().addItem(pearl);
         }
     }
 }

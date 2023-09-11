@@ -55,17 +55,8 @@ public class EventCommand extends Subcommand {
         }
         else if (args[1].equalsIgnoreCase("stop")) {
             // Do stuff
-            AbstractEvent currentEvent = gem.currentEvent;
-//            if (currentEvent.timer >= currentEvent.getEventLength()) { // Event still running?
-//                player.sendMessage(Component.text("No events active.").color(NamedTextColor.RED));
-//                return false;
-//            }
-            // Fast forward globalTimer to time event would have stopped
-            gem.globalTimer = gem.globalTimer + (currentEvent.getEventLength() - currentEvent.timer);
-            // Force end event
-            currentEvent.timer = currentEvent.getEventLength();
-
-            player.sendMessage(Component.text("Stopping current event and continuing the global event loop...").color(NamedTextColor.GREEN));
+            Component success = gem.stopEvent();
+            player.sendMessage(success);
         }
 
 
