@@ -1,6 +1,8 @@
 package me.lifelessnerd.purekitpvp;
 
 import me.lifelessnerd.purekitpvp.files.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -63,7 +65,10 @@ public class ReloadPlugin extends Subcommand {
         plugin.saveConfig();
         plugin.saveDefaultConfig();
 
-        player.sendMessage("Plugin configs were reloaded!");
+        player.sendMessage(Component.text("Plugin configs were reloaded!"));
+        player.sendMessage(Component.text("Please note that settings relating to events are not reloaded." +
+                "\nIf you have made such changes, a server reload/restart is required.").color(NamedTextColor.GRAY));
+
 
         return true;
     }

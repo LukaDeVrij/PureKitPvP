@@ -14,7 +14,6 @@ import me.lifelessnerd.purekitpvp.kitCommand.ResetKit;
 import me.lifelessnerd.purekitpvp.noncombatstats.commands.GetKitStats;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -268,7 +267,7 @@ public class AdminCommandManager implements TabExecutor {
             if (args[1].equalsIgnoreCase("start")){
                 if (args.length == 3) {
                     List<String> autoComplete = new ArrayList<>();
-                    for (AbstractEvent event : globalEventManager.events) {
+                    for (AbstractEvent event : globalEventManager.enabledByConfig) {
                         autoComplete.add(event.getEventName().replace(' ', '_').toLowerCase());
                     }
                     return autoComplete;

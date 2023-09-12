@@ -19,8 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeleMadnessEvent extends AbstractEvent{
+    BukkitTask eventLoop;
     public TeleMadnessEvent(Plugin plugin) {
         super(plugin);
+        this.eventLength = plugin.getConfig().getInt("telemadness-length");
     }
     @Override
     public String getEventName() {
@@ -33,14 +35,9 @@ public class TeleMadnessEvent extends AbstractEvent{
     }
 
     @Override
-    public int getEventLength() {
-        return this.eventLength;
-    }
-
-    @Override
     public void onStart() {
         this.running = true;
-        BukkitTask eventLoop = new BukkitRunnable() {
+        eventLoop = new BukkitRunnable() {
             @Override
             public void run() {
                 taskId = this.getTaskId();
@@ -51,6 +48,11 @@ public class TeleMadnessEvent extends AbstractEvent{
         }.runTaskTimer(plugin, 0, 20);
 
         startEndListener(eventLoop);
+    }
+
+    @Override
+    public void pauseResumePasser(boolean paused) {
+        pauseResumeAbstractEvent(paused, eventLoop);
     }
 
     @Override

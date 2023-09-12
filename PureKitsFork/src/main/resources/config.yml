@@ -69,9 +69,17 @@ projectile-trail-count: 5
 # Chicken prevention: kits with eggs might spawn chicken; when this is true they are prevented from spawning
 chicken-prevention: true
 
-# Global Kit PvP event loop -
+# Global Kit PvP combat event loop
 # enabled?
 global-event-loop: true
 
 # Seconds between global combat events - events themselves have different times (see below)
 global-event-period: 10
+
+# Events that occur in global combat event loop
+global-events-enabled: ["TeleMadness","Pickup Frenzy"]
+
+# Event lengths in seconds
+telemadness-length: 10
+pickup-frenzy-length: 10
+

@@ -33,7 +33,7 @@ public class EventCommand extends Subcommand {
 
     @Override
     public String getSyntax() {
-        return "/purekitpvp event <start/stop> <eventName>";
+        return "/purekitpvp event <start/stop/pause> <eventName>";
     }
 
     @Override
@@ -57,6 +57,12 @@ public class EventCommand extends Subcommand {
             // Do stuff
             Component success = gem.stopEvent();
             player.sendMessage(success);
+        }
+        else if (args[1].equalsIgnoreCase("pause")) {
+            player.sendMessage(gem.pauseResumeTimer());
+
+        } else {
+            player.sendMessage(Component.text(args[0] + " is not a valid subcommand."));
         }
 
 
