@@ -15,28 +15,33 @@ public abstract class AbstractEvent {
     public boolean running;
     public int eventLength;
     public BukkitTask runnable;
-    public AbstractEvent(Plugin plugin){
+
+    public AbstractEvent(Plugin plugin) {
         this.plugin = plugin;
         this.timer = 0;
         this.taskId = 0;
         this.running = false;
         this.eventLength = 30; // default -> can be overwritten in class
     }
+
     public abstract String getEventName();
+
     public abstract String getEventDescription();
-    public int getEventLength(){
+
+    public int getEventLength() {
         return this.eventLength;
     }
+
     public abstract void onStart();
 
     /**
      * Calling this method with a BukkitTask ensures the Task is cancelled after the event ends
      */
-    public void startEndListener(BukkitTask eventLoop){
+    public void startEndListener(BukkitTask eventLoop) {
         this.runnable = new BukkitRunnable() {
             @Override
             public void run() {
-                if (timer >= getEventLength()){
+                if (timer >= getEventLength()) {
                     this.cancel();
                     if (eventLoop != null) {
                         eventLoop.cancel();
@@ -54,13 +59,15 @@ public abstract class AbstractEvent {
 
         }.runTaskTimer(plugin, 0, 20);
     }
+
     public abstract void pauseResumePasser(boolean paused);
-    public void pauseResumeAbstractEvent(boolean paused, BukkitTask eventLoop){
-        if(paused){
+
+    public void pauseResumeAbstractEvent(boolean paused, BukkitTask eventLoop) {
+        if (paused) {
             this.runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (timer >= getEventLength()){
+                    if (timer >= getEventLength()) {
                         this.cancel();
                         if (eventLoop != null) {
                             eventLoop.cancel();

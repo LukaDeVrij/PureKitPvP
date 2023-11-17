@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 public class EventCommand extends Subcommand {
     Plugin plugin;
     GlobalEventManager gem;
+
     public EventCommand(Plugin plugin, GlobalEventManager gem) {
         this.plugin = plugin;
         this.gem = gem;
@@ -39,26 +40,24 @@ public class EventCommand extends Subcommand {
     @Override
     public boolean perform(Player player, String[] args) {
 
-        if (!(args.length >= 2)){
+        if (!(args.length >= 2)) {
             player.sendMessage(Component.text("Please provide arguments!").color(NamedTextColor.RED));
             return false;
         }
 
         if (args[1].equalsIgnoreCase("start")) {
-            if (!(args.length >= 3)){
+            if (!(args.length >= 3)) {
                 player.sendMessage(Component.text("Please provide an event to start!").color(NamedTextColor.RED));
                 return false;
             }
             String eventName = args[2];
             Component success = gem.startEvent(eventName);
             player.sendMessage(success);
-        }
-        else if (args[1].equalsIgnoreCase("stop")) {
+        } else if (args[1].equalsIgnoreCase("stop")) {
             // Do stuff
             Component success = gem.stopEvent();
             player.sendMessage(success);
-        }
-        else if (args[1].equalsIgnoreCase("pause")) {
+        } else if (args[1].equalsIgnoreCase("pause")) {
             player.sendMessage(gem.pauseResumeTimer());
 
         } else {

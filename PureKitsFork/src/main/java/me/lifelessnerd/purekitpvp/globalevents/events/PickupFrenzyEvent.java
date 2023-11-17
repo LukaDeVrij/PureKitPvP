@@ -3,7 +3,7 @@ package me.lifelessnerd.purekitpvp.globalevents.events;
 import me.lifelessnerd.purekitpvp.globalevents.EventDataClass;
 import org.bukkit.plugin.Plugin;
 
-public class PickupFrenzyEvent extends AbstractEvent{
+public class PickupFrenzyEvent extends AbstractEvent {
     public PickupFrenzyEvent(Plugin plugin) {
         super(plugin);
         this.eventLength = plugin.getConfig().getInt("pickup-frenzy-length");

@@ -82,4 +82,5 @@ global-events-enabled: ["TeleMadness","Pickup Frenzy"]
 # Event lengths in seconds
 telemadness-length: 10
 pickup-frenzy-length: 10
+juggernaut-length: 10
 

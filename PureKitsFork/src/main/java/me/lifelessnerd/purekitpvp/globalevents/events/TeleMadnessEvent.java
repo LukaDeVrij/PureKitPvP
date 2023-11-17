@@ -18,12 +18,14 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeleMadnessEvent extends AbstractEvent{
+public class TeleMadnessEvent extends AbstractEvent {
     BukkitTask eventLoop;
+
     public TeleMadnessEvent(Plugin plugin) {
         super(plugin);
         this.eventLength = plugin.getConfig().getInt("telemadness-length");
     }
+
     @Override
     public String getEventName() {
         return "TeleMadness";
@@ -60,7 +62,7 @@ public class TeleMadnessEvent extends AbstractEvent{
         this.running = false;
         World pvpWorld = Bukkit.getWorld(plugin.getConfig().getString("world"));
         List<Player> players = pvpWorld.getPlayers();
-        if (players.isEmpty()){
+        if (players.isEmpty()) {
             return;
         }
 
@@ -82,10 +84,10 @@ public class TeleMadnessEvent extends AbstractEvent{
         }
     }
 
-    public void giveEnderpearls(){
+    public void giveEnderpearls() {
         World pvpWorld = Bukkit.getWorld(plugin.getConfig().getString("world"));
         List<Player> players = pvpWorld.getPlayers();
-        if (players.isEmpty()){
+        if (players.isEmpty()) {
             return;
         }
         for (Player player : players) {

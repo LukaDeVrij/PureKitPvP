@@ -29,6 +29,7 @@ public class GlobalEventManager {
     public boolean paused;
 
     public Plugin plugin;
+
     public GlobalEventManager(Plugin plugin) {
         this.plugin = plugin;
         this.allEvents = new ArrayList<>();
@@ -36,15 +37,15 @@ public class GlobalEventManager {
         allEvents.add(new TeleMadnessEvent(plugin));
 
         enabledByConfig = new ArrayList<>();
-        for (AbstractEvent event : this.allEvents){
-            for (String inConfig : plugin.getConfig().getStringList("global-events-enabled")){
-                if (event.getEventName().equalsIgnoreCase(inConfig)){
+        for (AbstractEvent event : this.allEvents) {
+            for (String inConfig : plugin.getConfig().getStringList("global-events-enabled")) {
+                if (event.getEventName().equalsIgnoreCase(inConfig)) {
                     enabledByConfig.add(event);
                 }
             }
         }
 
-        if (!(plugin.getConfig().getBoolean("global-event-loop"))){
+        if (!(plugin.getConfig().getBoolean("global-event-loop"))) {
             return;
         }
 //        System.out.println("Global Combat Event loop enabled, starting!");
@@ -75,7 +76,7 @@ public class GlobalEventManager {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!(globalTimer >= nextEventTime)){
+                if (!(globalTimer >= nextEventTime)) {
                     // Still in cooldown period (or event is running)
                     return;
                 }
@@ -91,24 +92,24 @@ public class GlobalEventManager {
     }
 
     public Component startEvent(String name) {
-        if (this.currentEvent != null){
+        if (this.currentEvent != null) {
             if (this.currentEvent.running) { // Event already running?
                 return Component.text("An event is already/still running!").color(NamedTextColor.RED);
             }
         }
         for (AbstractEvent event : this.allEvents) {
             String eventId = event.getEventName().replace(' ', '_');
-            if(eventId.equalsIgnoreCase(name)){
+            if (eventId.equalsIgnoreCase(name)) {
                 event.onStart();
                 this.currentEvent = event;
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                     if (onlinePlayer.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world"))) {
                         onlinePlayer.sendMessage(
-                            Component.text("RANDOM EVENT! ").color(NamedTextColor.AQUA).append(
-                            Component.text(this.currentEvent.getEventName()).color(NamedTextColor.LIGHT_PURPLE).append(
-                            Component.text(" has been selected!").color(NamedTextColor.GRAY).appendNewline().append(
-                            Component.text(this.currentEvent.getEventLength() + "s" + " - " + this.currentEvent.getEventDescription())
-                            )))
+                                Component.text("RANDOM EVENT! ").color(NamedTextColor.AQUA).append(
+                                        Component.text(this.currentEvent.getEventName()).color(NamedTextColor.LIGHT_PURPLE).append(
+                                                Component.text(" has been selected!").color(NamedTextColor.GRAY).appendNewline().append(
+                                                        Component.text(this.currentEvent.getEventLength() + "s" + " - " + this.currentEvent.getEventDescription())
+                                                )))
                         );
                     }
                 }
@@ -120,11 +121,11 @@ public class GlobalEventManager {
         return Component.text("Started event.").color(NamedTextColor.GREEN);
     }
 
-    public Component stopEvent(){
-        if (this.currentEvent == null){
+    public Component stopEvent() {
+        if (this.currentEvent == null) {
             return Component.text("No event is running.").color(NamedTextColor.RED);
         }
-        if (!this.currentEvent.running){
+        if (!this.currentEvent.running) {
             return Component.text("No event is running.").color(NamedTextColor.RED);
         }
         AbstractEvent currentEvent = this.currentEvent;
@@ -137,8 +138,8 @@ public class GlobalEventManager {
         return Component.text("Stopping current event and continuing the global event loop...").color(NamedTextColor.GREEN);
     }
 
-    public Component pauseResumeTimer(){
-        if (paused){
+    public Component pauseResumeTimer() {
+        if (paused) {
             currentEvent.pauseResumePasser(true);
             paused = false;
             // Global timer (1 second increments)

@@ -110,8 +110,6 @@ public final class PureKitPvP extends JavaPlugin {
         PerkFireHandler.plugin = this; //idk? fixes npe?
         PluginGetter.plugin = this; //this is dumb but used in >= 2 instances
 
-
-
         getLogger().info("Enabled PureKitPvP");
         getLogger().warning("Plugin active in world " + getConfig().getString("world")  + ". To change this, see the config.");
     }

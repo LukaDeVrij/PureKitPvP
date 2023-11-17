@@ -6,6 +6,7 @@ import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.MobRemover;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillEffect;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillMessage;
 import me.lifelessnerd.purekitpvp.globalevents.EventDataClass;
+import me.lifelessnerd.purekitpvp.globalevents.events.JuggernautListeners;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkFireHandler;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
@@ -14,6 +15,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bukkit.*;
@@ -115,8 +117,7 @@ public class DeathHandler implements Listener {
         //Get all damage info and print to killed player
         NamespacedKey key = new NamespacedKey(plugin, "damageDistributionInfo");
         PlayerDamageDistribution damageData = player.getPersistentDataContainer().get(key, new PlayerDamageDistributionDataType());
-        String message = "&c&lYou died!";
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
+        player.sendMessage(Component.text("You died!").color(NamedTextColor.RED).decoration(TextDecoration.BOLD, true));
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Death Recap:"));
         // Printing process and formatting
         int totalDamageDone = 0;
@@ -162,11 +163,6 @@ public class DeathHandler implements Listener {
             //This means player got damage from both
 
             credit = damageData.lastPlayerDamager;
-//            deathMessage += " was killed by ";
-//            System.out.println(damageData.lastOtherDamager);
-//            if (damageData.lastOtherDamager.equalsIgnoreCase("VOID")){
-//                System.out.println("thrown in void");
-//            }
             if (e.getEntity().getLastDamageCause().getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)){
 
                 deathMessage = KillMessage.create.byPlayer(player.getName(), damageData.lastPlayerDamager);
@@ -367,6 +363,9 @@ public class DeathHandler implements Listener {
 
                 //PerkHandler
                 PerkFireHandler.fireKillPerks(creditPlayer);
+
+                //Juggernaut Event check
+                JuggernautListeners.onDeath(player, creditPlayer);
 
                 //The killcosmetic that the creditPlayer has fires
                 KillEffect.fireKillCosmetic(player, creditPlayer);
