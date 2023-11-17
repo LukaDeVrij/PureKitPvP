@@ -126,5 +126,5 @@ https://youtu.be/tLelKptr6wA - Custom Mobs and how to use them
 ## Known issues
 I am sure there will be issues, but finding all of them takes a lot of testing time. Please submit any problems!
 
-If there are any problems, create a message on [Spigot](https://bit.ly/PureKitPvPSpigotMC), add them on GitHub, [here](https://github.com/LifelessNerd/PureKitPvP), or DM me on [Twitter](https://twitter.com/nerdlifeless).
+If there are any problems, create a message on [Spigot](https://bit.ly/PureKitPvPSpigotMC), add them on GitHub, [here](https://github.com/LifelessNerd/PureKitPvP), or DM me on [Twitter](https://twitter.com/lukadevrij).
 
