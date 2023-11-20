@@ -84,3 +84,9 @@ telemadness-length: 10
 pickup-frenzy-length: 10
 juggernaut-length: 10
 
+# Tablist stats
+tab-enabled: true
+
+# Tablist refresh period (in ticks)
+tab-refresh-period: 100
+

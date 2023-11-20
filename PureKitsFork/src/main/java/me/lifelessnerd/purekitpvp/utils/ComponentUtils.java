@@ -5,8 +5,10 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,5 +112,13 @@ public class ComponentUtils {
         textComponent = textComponent.append(Component.text(
                 toBeAdded.toString()).color(lastColor)).decoration(TextDecoration.ITALIC, false);
         return textComponent;
+    }
+
+    public static net.minecraft.network.chat.Component toMojangComponent(@Nullable Component inputComponent){
+        if (inputComponent == null){
+            return net.minecraft.network.chat.Component.literal("");
+        }
+        String json = GsonComponentSerializer.gson().serialize(inputComponent);
+        return net.minecraft.network.chat.Component.Serializer.fromJson(json);
     }
 }

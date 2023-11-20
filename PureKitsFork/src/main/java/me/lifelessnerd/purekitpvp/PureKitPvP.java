@@ -4,6 +4,7 @@ import me.lifelessnerd.purekitpvp.combathandlers.leveling.PlayerLevelChat;
 import me.lifelessnerd.purekitpvp.combathandlers.libs.commands.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
+import me.lifelessnerd.purekitpvp.combathandlers.scoreboards.TabManager;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsGUIListener;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.inventories.KillEffectInventory;
@@ -25,6 +26,8 @@ import me.lifelessnerd.purekitpvp.kitCommand.KitsGUI;
 import me.lifelessnerd.purekitpvp.noncombatstats.commands.GetStats;
 import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ArrowsShotStat;
 import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ProjectilesThrownStat;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PureKitPvP extends JavaPlugin {
@@ -74,6 +77,11 @@ public final class PureKitPvP extends JavaPlugin {
         EventData.setup();
         EventData.get().options().copyDefaults(true);
         EventData.save();
+
+        TabManager tabManager = new TabManager(this);
+        tabManager.addHeader(Component.text("Hello there!").color(NamedTextColor.RED));
+        tabManager.showTab();
+        tabManager.addHeader(Component.text("Hello ther2e!").color(NamedTextColor.RED));
 
         getCommand("getkit").setExecutor(new GetKit(this));
         getCommand("kit").setExecutor(new KitsGUI(this));
