@@ -108,7 +108,7 @@ public class DeathHandler implements Listener {
             player.setHealth(20);
 
             player.chat("/kit");
-        }, 2L);
+        }, 20L);
 
 
 
@@ -178,8 +178,6 @@ public class DeathHandler implements Listener {
             deathMessage = KillMessage.create.byPlayer(player.getName(), damageData.lastPlayerDamager);
 
         }
-        // Went all the way through? Some weird situation, this may fix
-        playerInvolved = false;
 
 //        deathMessage = deathMessage + credit;
         // Death message shows who got credit, broadcast to every player in pvp world
@@ -240,8 +238,9 @@ public class DeathHandler implements Listener {
 
         //Set stats of player
         //Check if player has an entry in config
+        FileConfiguration playerStats = PlayerStatsConfig.get();
         if (PlayerStatsConfig.get().isSet(player.getName())){
-            FileConfiguration playerStats = PlayerStatsConfig.get();
+
             playerStats.set(player.getName() + ".deaths", playerStats.getInt(player.getName() + ".deaths") + 1);
 
             //Ratio update
@@ -253,26 +252,6 @@ public class DeathHandler implements Listener {
             playerStats.set(player.getName() + ".killstreak", 0);
 
             PlayerStatsConfig.save();
-
-            TextComponent actionBarText = Component.text("Deaths: ", NamedTextColor.GREEN)
-                    .append(Component.text(playerStats.getInt(player.getName() + ".deaths"), NamedTextColor.LIGHT_PURPLE))
-                    .append(Component.text("    K/D: ", NamedTextColor.GREEN));
-
-            try {
-                actionBarText = actionBarText.append(Component.text((DoubleUtils.round(playerStats.getDouble(player.getName() + ".kdratio"), 2)), NamedTextColor.LIGHT_PURPLE));
-            } catch (Exception exception){
-                actionBarText = actionBarText.append(Component.text("Infinity", NamedTextColor.LIGHT_PURPLE));
-            }
-
-            //update level
-            PlayerLeveling.createLevelXPPath(player.getName());
-//            PlayerLeveling.addExperience(player, 1, "Death"); // 1 for DEATH// Ah no: can be exploited
-//            PlayerLeveling.updateLevels();
-
-            //remove any mobs player spawned
-            MobRemover.removeMobs(player);
-
-            player.sendActionBar(actionBarText);
 
         } else {
             //Player does not have an entry; creating one with new data
@@ -286,13 +265,33 @@ public class DeathHandler implements Listener {
 
         }
 
+        TextComponent actionBarText = Component.text("Deaths: ", NamedTextColor.GREEN)
+                .append(Component.text(playerStats.getInt(player.getName() + ".deaths"), NamedTextColor.LIGHT_PURPLE))
+                .append(Component.text("    K/D: ", NamedTextColor.GREEN));
+
+        try {
+            actionBarText = actionBarText.append(Component.text((DoubleUtils.round(playerStats.getDouble(player.getName() + ".kdratio"), 2)), NamedTextColor.LIGHT_PURPLE));
+        } catch (Exception exception){
+            actionBarText = actionBarText.append(Component.text("Infinity", NamedTextColor.LIGHT_PURPLE));
+        }
+
+        //update level
+        PlayerLeveling.createLevelXPPath(player.getName());
+//            PlayerLeveling.addExperience(player, 1, "Death"); // 1 for DEATH// Ah no: can be exploited
+//            PlayerLeveling.updateLevels();
+
+        //remove any mobs player spawned
+        MobRemover.removeMobs(player);
+
+        player.sendActionBar(actionBarText);
+
         //Only give credit if there is a player involved,
         if (playerInvolved){
             Player creditPlayer = Bukkit.getPlayerExact(credit);
             creditPlayer.playSound(creditPlayer.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_HIT,1, 1);
             //Check if player has an entry in config
-            if (PlayerStatsConfig.get().isSet(creditPlayer.getName())){
-                FileConfiguration creditStats = PlayerStatsConfig.get();
+            FileConfiguration creditStats = PlayerStatsConfig.get();
+            if (creditStats.isSet(creditPlayer.getName())) {
                 creditStats.set(creditPlayer.getName() + ".kills", creditStats.getInt(creditPlayer.getName() + ".kills") + 1);
 
                 //Ratio update
@@ -303,10 +302,10 @@ public class DeathHandler implements Listener {
                 //Killstreak update
                 creditStats.set(creditPlayer.getName() + ".killstreak", creditStats.getInt(creditPlayer.getName() + ".killstreak") + 1);
                 //Killstreak checker
-                if (creditStats.getInt(creditPlayer.getName() + ".killstreak") % 5 == 0){
+                if (creditStats.getInt(creditPlayer.getName() + ".killstreak") % 5 == 0) {
                     creditPlayer.playSound(creditPlayer.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 0.3f, 1);
-                    for (Player pvpPlayer : Bukkit.getOnlinePlayers()){
-                        if (pvpPlayer.getWorld() == player.getWorld()){
+                    for (Player pvpPlayer : Bukkit.getOnlinePlayers()) {
+                        if (pvpPlayer.getWorld() == player.getWorld()) {
 
                             pvpPlayer.sendMessage(ChatColor.RED + credit + ChatColor.YELLOW + " is on a KILLING STREAK of " + ChatColor.RED + creditStats.getInt(creditPlayer.getName() + ".killstreak"));
 
@@ -315,7 +314,7 @@ public class DeathHandler implements Listener {
                     }
                     PlayerLeveling.addExperience(creditPlayer, creditStats.getInt(creditPlayer.getName() + ".killstreak"), "Killstreak Bonus");
                 }
-                if(plugin.getConfig().getBoolean("killstreak-glowing")) {
+                if (plugin.getConfig().getBoolean("killstreak-glowing")) {
 
                     if (creditStats.getInt(creditPlayer.getName() + ".killstreak") >= 5) {
                         int duration = plugin.getConfig().getInt("killstreak-glowing-duration");
@@ -324,55 +323,8 @@ public class DeathHandler implements Listener {
                 }
 
                 PlayerStatsConfig.save();
-
-                // Actionbar thingies
-                TextComponent actionBarText = Component.text("Kills: ", NamedTextColor.GREEN)
-                        .append(Component.text(creditStats.getInt(creditPlayer.getName() + ".kills"), NamedTextColor.LIGHT_PURPLE))
-                        .append(Component.text("    K/D: ", NamedTextColor.GREEN));
-
-                try {
-                    actionBarText = actionBarText.append(Component.text((DoubleUtils.round(creditStats.getDouble(creditPlayer.getName() + ".kdratio"), 2)), NamedTextColor.LIGHT_PURPLE));
-                } catch (Exception exception){
-                    actionBarText = actionBarText.append(Component.text("Infinity", NamedTextColor.LIGHT_PURPLE));
-                }
-
-                //update level
-                PlayerLeveling.createLevelXPPath(creditPlayer.getName());
-                if (!(creditPlayer == player)){
-                    PlayerLeveling.addExperience(creditPlayer, 5, "Kill"); // 5 for KILL
-                }
-                PlayerLeveling.updateLevels();
-
-                creditPlayer.sendActionBar(actionBarText);
-
-                //Give killItem based on kit
-                try {
-                    ItemStack killItem = new ItemStack(Material.AIR);
-                    String kitName = PlayerStatsConfig.get().getString(credit + ".current_kit");
-                    if (!(KitConfig.get().getString("kits." + kitName + ".killitem") == null)) {
-                        ItemStack fromFile = (ItemStack) KitConfig.get().get("kits." + kitName + ".killitem");
-                        killItem.setType(fromFile.getType());
-                        killItem.setAmount(fromFile.getAmount());
-                        killItem.setItemMeta(fromFile.getItemMeta());
-
-                        creditPlayer.getInventory().addItem(killItem);
-                    }
-                } catch (Exception exception){
-                    plugin.getLogger().log(Level.SEVERE, exception.toString()); //TODO throws here. think i fixed it but not sure
-                }
-
-                //PerkHandler
-                PerkFireHandler.fireKillPerks(creditPlayer);
-
-                //Juggernaut Event check
-                JuggernautListeners.onDeath(player, creditPlayer);
-
-                //The killcosmetic that the creditPlayer has fires
-                KillEffect.fireKillCosmetic(player, creditPlayer);
-
-
             } else {
-                //Player does not have an entry; creating one with new data
+                    //Player does not have an entry; creating one with new data
                 PlayerStatsConfig.get().set(creditPlayer.getName(), "");
                 PlayerStatsConfig.get().set(creditPlayer.getName() + ".kills", 1);
                 PlayerStatsConfig.get().set(creditPlayer.getName() + ".deaths", 0);
@@ -383,29 +335,60 @@ public class DeathHandler implements Listener {
 
             }
 
+            // Actionbar thingies
+            actionBarText = Component.text("Kills: ", NamedTextColor.GREEN)
+                    .append(Component.text(creditStats.getInt(creditPlayer.getName() + ".kills"), NamedTextColor.LIGHT_PURPLE))
+                    .append(Component.text("    K/D: ", NamedTextColor.GREEN));
+
+            try {
+                actionBarText = actionBarText.append(Component.text((DoubleUtils.round(creditStats.getDouble(creditPlayer.getName() + ".kdratio"), 2)), NamedTextColor.LIGHT_PURPLE));
+            } catch (Exception exception){
+                actionBarText = actionBarText.append(Component.text("Infinity", NamedTextColor.LIGHT_PURPLE));
+            }
+
+            //update level
+            PlayerLeveling.createLevelXPPath(creditPlayer.getName());
+            if (!(creditPlayer == player)){
+                PlayerLeveling.addExperience(creditPlayer, 5, "Kill"); // 5 for KILL
+            }
+            PlayerLeveling.updateLevels();
+
+            creditPlayer.sendActionBar(actionBarText);
+
+            //Give killItem based on kit
+            try {
+                ItemStack killItem = new ItemStack(Material.AIR);
+                String kitName = PlayerStatsConfig.get().getString(credit + ".current_kit");
+                if (!(KitConfig.get().getString("kits." + kitName + ".killitem") == null)) {
+                    ItemStack fromFile = (ItemStack) KitConfig.get().get("kits." + kitName + ".killitem");
+                    killItem.setType(fromFile.getType());
+                    killItem.setAmount(fromFile.getAmount());
+                    killItem.setItemMeta(fromFile.getItemMeta());
+
+                    creditPlayer.getInventory().addItem(killItem);
+                }
+            } catch (Exception exception){
+                plugin.getLogger().log(Level.SEVERE, exception.toString()); // throws here. think i fixed it but not sure - i dont see anything
+            }
+
+            //PerkHandler
+            PerkFireHandler.fireKillPerks(creditPlayer);
+
+            //Juggernaut Event check
+            JuggernautListeners.onDeath(player, creditPlayer);
+
+            //The killcosmetic that the creditPlayer has fires
+            KillEffect.fireKillCosmetic(player, creditPlayer);
+
+
         }
 
         if (assistor != null){
-            if (PlayerStatsConfig.get().isSet(assistor.getName())){
-                FileConfiguration assistorStats = PlayerStatsConfig.get();
+            FileConfiguration assistorStats = PlayerStatsConfig.get();
+            if (assistorStats.isSet(assistor.getName())){
                 assistorStats.set(assistor.getName() + ".assists", assistorStats.getInt(assistor.getName() + ".assists") + 1);
 
                 PlayerStatsConfig.save();
-
-
-
-                TextComponent actionBarText = Component.text("Assists: ", NamedTextColor.GREEN)
-                        .append(Component.text(assistorStats.getInt(assistor.getName() + ".assists"), NamedTextColor.LIGHT_PURPLE))
-                        .append(Component.text("    K/D: ", NamedTextColor.GREEN))
-                        .append(Component.text((assistorStats.getDouble(assistor.getName() + ".kdratio")), NamedTextColor.LIGHT_PURPLE));
-
-                assistor.sendActionBar(actionBarText);
-
-                //update level TODO: check this: I think this is in the wrong spot since it doesn't seem to work?
-                // Need a 3rd player or alt to test
-                PlayerLeveling.createLevelXPPath(assistor.getName());
-                PlayerLeveling.addExperience(assistor, 3, "Assist"); // 3 for assists
-                PlayerLeveling.updateLevels();
 
             } else {
                 //Player does not have an entry; creating one with new data
@@ -418,9 +401,20 @@ public class DeathHandler implements Listener {
                 PlayerStatsConfig.save();
 
             }
+            actionBarText = Component.text("Assists: ", NamedTextColor.GREEN)
+                    .append(Component.text(assistorStats.getInt(assistor.getName() + ".assists"), NamedTextColor.LIGHT_PURPLE))
+                    .append(Component.text("    K/D: ", NamedTextColor.GREEN))
+                    .append(Component.text((assistorStats.getDouble(assistor.getName() + ".kdratio")), NamedTextColor.LIGHT_PURPLE));
+
+            assistor.sendActionBar(actionBarText);
+
+            //update level TODO: check this: I think this is in the wrong spot since it doesn't seem to work?
+            // Need a 3rd player or alt to test
+            PlayerLeveling.createLevelXPPath(assistor.getName());
+            PlayerLeveling.addExperience(assistor, 3, "Assist"); // 3 for assists
+            PlayerLeveling.updateLevels();
         }
     }
-
 
     @EventHandler
     public void onPlayerCombatHit(EntityDamageByEntityEvent event){

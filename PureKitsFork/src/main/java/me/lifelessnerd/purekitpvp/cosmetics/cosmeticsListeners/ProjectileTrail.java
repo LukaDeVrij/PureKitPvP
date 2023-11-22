@@ -109,7 +109,7 @@ public class ProjectileTrail implements Listener {
         String trail = CosmeticsConfig.get().getString("projectile_trail." + player.getName());
 
         if(trail == null){
-            CosmeticsConfig.get().set("projectile_trail." + player, "none");
+            CosmeticsConfig.get().set("projectile_trail." + player.getName(), "none");
             CosmeticsConfig.save();
             CosmeticsConfig.reload();
             trail = CosmeticsConfig.get().getString("projectile_trail." + player.getName());
