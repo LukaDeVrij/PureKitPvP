@@ -28,6 +28,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+
 public final class PureKitPvP extends JavaPlugin {
 
     @Override
@@ -75,6 +77,15 @@ public final class PureKitPvP extends JavaPlugin {
         EventData.setup();
         EventData.get().options().copyDefaults(true);
         EventData.save();
+
+        File lang = new File(getDataFolder(), "lang");
+        if(!lang.exists()) {
+            lang.mkdirs();
+        }
+        //TODO Check what language is selected in config
+        //Based on that load map from en_US.yml into a translation Map
+        // Use this map everywhere to query text
+
 
         TabManager tabManager = new TabManager(this);
         tabManager.addHeader(Component.text("Hello there!").color(NamedTextColor.RED));

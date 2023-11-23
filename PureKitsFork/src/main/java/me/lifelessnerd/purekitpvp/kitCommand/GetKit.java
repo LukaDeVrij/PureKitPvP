@@ -3,6 +3,8 @@ package me.lifelessnerd.purekitpvp.kitCommand;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.KitStatsConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -53,22 +55,24 @@ public class GetKit implements TabExecutor, Listener {
         String kitNameArg = args[0].substring(0, 1).toUpperCase() + args[0].substring(1);
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-            player.sendMessage("You cannot use that command in this world!");
+            player.sendMessage(
+                    Component.text("You can only use this menu in ", NamedTextColor.RED).append(
+                    Component.text(plugin.getConfig().getString("world"), NamedTextColor.GRAY)));
             return true;
         }
 
         if (hasKit.contains(player.getName())){
-            player.sendMessage(ChatColor.GRAY + "You already have a kit!");
+            player.sendMessage(Component.text("You already have a kit!", NamedTextColor.RED));
             return true;
         }
 
         if (args.length != 1) {
-            player.sendMessage(ChatColor.RED + "Incorrect arguments!");
+            player.sendMessage(Component.text("Incorrect arguments!", NamedTextColor.RED));
             return false;
         }
 
         if (!(KitConfig.get().isSet("kits." + kitNameArg))){
-            player.sendMessage(ChatColor.GRAY + "That kit does not exist.");
+            player.sendMessage(Component.text("That kit does not exist!", NamedTextColor.RED));
             return true;
         }
 
@@ -88,7 +92,7 @@ public class GetKit implements TabExecutor, Listener {
         FileConfiguration fileConfiguration = KitConfig.get();
         List<ItemStack> kitItems = (List<ItemStack>) fileConfiguration.get("kits." + kitNameArg + ".contents");
 
-        //Remove any potion effects that make PvP unfair
+        //Remove any active potion effects that make PvP unfair
         for (PotionEffect effect : player.getActivePotionEffects())
             player.removePotionEffect(effect.getType());
 
@@ -98,17 +102,9 @@ public class GetKit implements TabExecutor, Listener {
             if (item == null) {
                 item = new ItemStack(Material.AIR);
             }
-            // This code is from PureKits, idk why it works (.setHelmet is called for every armor piece?)
             player.getInventory().setItem(index, item);
-            ItemStack helmet = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
-            player.getInventory().setHelmet(helmet);
-            ItemStack chestplate = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
-            player.getInventory().setHelmet(chestplate);
-            ItemStack leggings = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
-            player.getInventory().setHelmet(leggings);
-            ItemStack boots = fileConfiguration.getItemStack("kits." + kitNameArg + ".helmet");
-            player.getInventory().setHelmet(boots);
         }
+
 
         hasKit.add(player.getName());
 

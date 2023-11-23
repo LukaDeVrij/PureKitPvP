@@ -47,12 +47,14 @@ public class KitsGUI implements TabExecutor {
         }
 
         if (!KitConfig.get().isSet("kits.")) {
-            player.sendMessage(ChatColor.GRAY + "There aren't any kits yet!");
+            player.sendMessage(Component.text("There are no kits!", NamedTextColor.RED));
             return true;
         }
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-            player.sendMessage(ChatColor.RED + "You can only use this menu in " + ChatColor.GRAY + plugin.getConfig().getString("world"));
+            player.sendMessage(
+                    Component.text("You can only use this menu in ", NamedTextColor.RED).append(
+                    Component.text(plugin.getConfig().getString("world"), NamedTextColor.GRAY)));
             return true;
         }
 
@@ -228,7 +230,6 @@ public class KitsGUI implements TabExecutor {
                 itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', kitDisplayColor + key)); //For legacy kits
             } else {
                 itemMeta.displayName(Component.text(key, NamedTextColor.NAMES.value(kitDisplayColor)));
-                System.out.println(NamedTextColor.NAMES.value(kitDisplayColor));
             }
             itemStack.setItemMeta(itemMeta);
 

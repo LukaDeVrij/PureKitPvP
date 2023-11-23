@@ -8,6 +8,7 @@ import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -46,7 +47,9 @@ public class PerkCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-            player.sendMessage(ChatColor.RED + "You can only use this menu in " + ChatColor.GRAY + plugin.getConfig().getString("world"));
+            player.sendMessage(
+                    Component.text("You can only use this menu in ", NamedTextColor.RED).append(
+                    Component.text(plugin.getConfig().getString("world"), NamedTextColor.GRAY)));
             return true;
         }
         if (GetKit.hasKit.contains(player.getName())){

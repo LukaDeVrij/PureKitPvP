@@ -75,7 +75,7 @@ public class GUIListener implements Listener {
                         player.chat("/perks");
 
                     } else if (e.getRawSlot() == 48){ // Prev page button
-                        if (e.getCurrentItem().equals(new ItemStack(Material.AIR))){
+                        if (e.getCurrentItem() == null){
                             return;
                         }
                         e.setCancelled(true);
@@ -84,7 +84,7 @@ public class GUIListener implements Listener {
                         player.chat("/kit " + prevPage);
 
                     } else if (e.getRawSlot() == 50){ // Next page button
-                        if (e.getCurrentItem().equals(new ItemStack(Material.AIR))){
+                        if (e.getCurrentItem() == null){
                             return;
                         }
                         e.setCancelled(true);

@@ -62,6 +62,9 @@ public class CreateKit extends Subcommand {
         try {
             displayColor = NamedTextColor.NAMES.value(args[2]);
 //            System.out.println(displayColor);
+            if (displayColor == null){
+                throw new NullPointerException();
+            }
         } catch(Exception e) {
             player.sendMessage(Component.text("Color is not valid!", NamedTextColor.RED));
             return false;
@@ -93,12 +96,6 @@ public class CreateKit extends Subcommand {
             killItem = "AIR";
         }
 
-        //Storing all contents
-        ItemStack helmet = player.getInventory().getHelmet();
-        ItemStack chestplate = player.getInventory().getChestplate();
-        ItemStack leggings = player.getInventory().getLeggings();
-        ItemStack boots = player.getInventory().getBoots();
-
         ItemStack[] kitContents = player.getInventory().getContents();
 
         //Create kit in config
@@ -107,16 +104,12 @@ public class CreateKit extends Subcommand {
         KitConfig.get().set("kits." + kitName + ".displayname", displayColor.toString());
         KitConfig.get().set("kits." + kitName + ".guiitem", kitIcon);
         KitConfig.get().set("kits." + kitName + ".guilore", "");
-        KitConfig.get().set("kits." + kitName + ".helmet", helmet);
-        KitConfig.get().set("kits." + kitName + ".chestplate", chestplate);
-        KitConfig.get().set("kits." + kitName + ".leggings", leggings);
-        KitConfig.get().set("kits." + kitName + ".boots", boots);
         KitConfig.get().set("kits." + kitName + ".contents", kitContents);
 
         //Killitem
         Material killItemMat = Material.getMaterial(killItem);
         ItemStack killItemStack = new ItemStack(killItemMat); // Forced by contains in MatList above
-        KitConfig.get().addDefault("kits." + kitName + ".killitem", "GOLDEN_APPLE");
+//        KitConfig.get().addDefault("kits." + kitName + ".killitem", "GOLDEN_APPLE"); //what does addDefault even do? not this at least
         KitConfig.get().set("kits." + kitName + ".killitem", killItemStack);
 
         KitConfig.get().options().copyDefaults(true);

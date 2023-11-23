@@ -34,6 +34,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -425,6 +426,7 @@ public class DeathHandler implements Listener {
     public void onPlayerCombatHit(EntityDamageByEntityEvent event){
         Player player = null;
         Player damager = null;
+        boolean rangedCombat = true; //  whether a chat message should be sent; if ranged; yes
         // HAND-TO-HAND COMBAT
         if (!(event.getEntity().getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
             // If the entity that is damaged is in this world, the entire event should be in this world
@@ -440,12 +442,12 @@ public class DeathHandler implements Listener {
             if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
                 return;
             }
-
+            rangedCombat = false;
             PerkFireHandler.fireCombatPerks(player, damager);
             PerkFireHandler.fireVampirePerk(event);
 
         } else if ((event.getDamager() instanceof Arrow || event.getDamager() instanceof SpectralArrow) && event.getEntity() instanceof Player) {
-            //This branch is a fuckin nightmare: too many hacked in exceptions because fucking spectral arrows and fucking skeletons
+            //This branch is a fuckin nightmare: too many hacked in exceptions because spectral arrows and skeletons
             //Projectile combat
 
             if(((AbstractArrow) event.getDamager()).getShooter() instanceof Player){
@@ -460,13 +462,7 @@ public class DeathHandler implements Listener {
 
                 PerkFireHandler.fireRangedPerks(event, damager);
 
-                double damage = event.getDamage();
-                double playerHP = player.getHealth() - damage;
-                if (playerHP < 0) {
-                    playerHP = 0;
-                }
-                damager.sendMessage(ChatColor.translateAlternateColorCodes(
-                        '&', "&a" + player.getName() + " &cis on &a" + (int) playerHP + " &cHP."));
+
             } else if(((AbstractArrow) event.getDamager()).getShooter() instanceof Monster){
                 // Shooter is a skeleton probably
                 player = (Player) event.getEntity();
@@ -483,13 +479,7 @@ public class DeathHandler implements Listener {
             ThrownPotion potion = (ThrownPotion) event.getDamager();
 
             damager = (Player) potion.getShooter(); //works
-            double damage = event.getDamage();
-            double playerHP = player.getHealth() - damage;
-            if (playerHP < 0){
-                playerHP = 0;
-            }
-            damager.sendMessage(ChatColor.translateAlternateColorCodes(
-                    '&', "&a" + player.getName() + " &cis on &a" + (int) playerHP + " &cHP."));
+
 
         } else if (event.getDamager() instanceof Trident && event.getEntity() instanceof Player){
 
@@ -498,13 +488,7 @@ public class DeathHandler implements Listener {
             Trident trident = (Trident) event.getDamager();
 
             damager = (Player) trident.getShooter(); //works
-            double damage = event.getDamage();
-            double playerHP = player.getHealth() - damage;
-            if (playerHP < 0){
-                playerHP = 0;
-            }
-            damager.sendMessage(ChatColor.translateAlternateColorCodes(
-                    '&', "&a" + player.getName() + " &cis on &a" + (int) playerHP + " &cHP."));
+
 
         } else if (event.getDamager() instanceof Monster && event.getEntity() instanceof Player) {
 
@@ -515,19 +499,37 @@ public class DeathHandler implements Listener {
         } else if (event.getDamager() instanceof EnderPearl && event.getEntity() instanceof Player) {
 
             PerkFireHandler.fireEnderpearlDamagePerks((Player) event.getEntity(), event);
-            return;
-        }
-        else if (event.getDamager() instanceof Firework && event.getEntity() instanceof Player){
+        } else if (event.getDamager() instanceof Firework && event.getEntity() instanceof Player){
             Firework fw = (Firework) event.getDamager();
             if (fw.getShooter() instanceof Player){
                 player = (Player) event.getEntity();
                 damager = (Player) fw.getShooter();
-            } else {return;}
+            }
         }
         else {
             //If we end up here idk what happened but nothing relevant (probably a zombie hitting a pig or something)
-
             return;
+        }
+        // HP Message
+        if (rangedCombat){
+            double damage = event.getDamage();
+            double playerHP = player.getHealth() - damage;
+            if (playerHP < 0){
+                playerHP = 0;
+            }
+            DecimalFormat decimalFormat = new DecimalFormat("#.#");
+            String formattedDamage = decimalFormat.format(damage);
+            String formattedHP = decimalFormat.format(playerHP);
+            damager.sendMessage(
+                    Component.text(player.getName(), NamedTextColor.GREEN).append(
+                    Component.text(" is on ", NamedTextColor.RED).append(
+                    Component.text(formattedHP, NamedTextColor.GREEN).append(
+                    Component.text(" HP!", NamedTextColor.RED)
+                    ))));
+            damager.sendMessage(
+                    Component.text("  You dealt ", NamedTextColor.GRAY).append(
+                    Component.text(formattedDamage, NamedTextColor.GREEN).append(
+                    Component.text(" damage!", NamedTextColor.GRAY))));
         }
 
         int damageAmount = (int) event.getDamage();

@@ -3,6 +3,7 @@ package me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand;
 import me.lifelessnerd.purekitpvp.kitCommand.GetKit;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -25,7 +26,7 @@ import java.util.List;
 public class CosmeticsCommand implements CommandExecutor {
     Plugin plugin;
 
-    public CosmeticsCommand(Plugin plugin) {
+public CosmeticsCommand(Plugin plugin) {
         this.plugin = plugin;
     }
 
@@ -38,7 +39,9 @@ public class CosmeticsCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-            player.sendMessage(ChatColor.RED + "You can only use this menu in " + ChatColor.GRAY + plugin.getConfig().getString("world"));
+            player.sendMessage(
+                    Component.text("You can only use this menu in ", NamedTextColor.RED).append(
+                    Component.text(plugin.getConfig().getString("world"), NamedTextColor.GRAY)));
             return true;
         }
         //Create inventory GUI

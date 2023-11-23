@@ -1,10 +1,8 @@
 package me.lifelessnerd.purekitpvp.globalevents;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
-import me.lifelessnerd.purekitpvp.globalevents.events.AbstractEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

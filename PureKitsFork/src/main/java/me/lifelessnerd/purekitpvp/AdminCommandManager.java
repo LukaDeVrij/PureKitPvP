@@ -173,16 +173,22 @@ public class AdminCommandManager implements TabExecutor {
             }
             if (args.length == 3) {
                 List<String> arguments = new ArrayList<>();
-                arguments.add("&1");
-                arguments.add("&2");
-                arguments.add("&3");
-                arguments.add("&4");
-                arguments.add("&5");
-                arguments.add("&6");
-                arguments.add("&7");
-                arguments.add("&8");
-                arguments.add("&9");
-                arguments.add("&0");
+                arguments.add("black");
+                arguments.add("dark_blue");
+                arguments.add("dark_green");
+                arguments.add("dark_aqua");
+                arguments.add("dark_red");
+                arguments.add("dark_purple");
+                arguments.add("gold");
+                arguments.add("gray");
+                arguments.add("dark_gray");
+                arguments.add("blue");
+                arguments.add("green");
+                arguments.add("aqua");
+                arguments.add("red");
+                arguments.add("light_purple");
+                arguments.add("yellow");
+                arguments.add("white");
 
                 return arguments;
             }
@@ -265,7 +271,7 @@ public class AdminCommandManager implements TabExecutor {
                 autoComplete.add("pause");
                 return autoComplete;
             }
-            if (args[1].equalsIgnoreCase("start")){
+            if (args[1].equalsIgnoreCase("start") || args[1].equalsIgnoreCase("stop") ){
                 if (args.length == 3) {
                     List<String> autoComplete = new ArrayList<>();
                     for (AbstractEvent event : globalEventManager.enabledByConfig) {
