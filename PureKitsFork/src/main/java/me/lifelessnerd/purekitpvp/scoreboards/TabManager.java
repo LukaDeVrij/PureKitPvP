@@ -1,4 +1,4 @@
-package me.lifelessnerd.purekitpvp.combathandlers.scoreboards;
+package me.lifelessnerd.purekitpvp.scoreboards;
 
 
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;

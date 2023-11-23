@@ -179,6 +179,11 @@ public class DeathHandler implements Listener {
 
         }
 
+        if (damageData.lastPlayerDamager.equalsIgnoreCase(player.getName())){ // own kill check
+            deathMessage = KillMessage.create.byPlayer(player.getName(), damageData.lastPlayerDamager);
+            playerInvolved = false;
+        }
+
 //        deathMessage = deathMessage + credit;
         // Death message shows who got credit, broadcast to every player in pvp world
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {

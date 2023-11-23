@@ -2,6 +2,8 @@ package me.lifelessnerd.purekitpvp.createKit;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -68,7 +70,7 @@ public class DeleteKit extends Subcommand {
         KitConfig.get().getConfigurationSection("kits").set(kitName, null);
         KitConfig.save();
         KitConfig.reload();
-        player.sendMessage("You removed kit " + ChatColor.BLUE + kitName);
+        player.sendMessage(Component.text("You removed kit ", NamedTextColor.GREEN).append(Component.text(kitName, NamedTextColor.WHITE)));
 
 
         return true;

@@ -5,6 +5,7 @@ import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -41,10 +42,9 @@ public class KitsGUI implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!(sender instanceof Player)){
+        if (!(sender instanceof Player player)){
             return false;
         }
-        Player player = (Player) sender;
 
         if (!KitConfig.get().isSet("kits.")) {
             player.sendMessage(ChatColor.GRAY + "There aren't any kits yet!");
@@ -118,7 +118,6 @@ public class KitsGUI implements TabExecutor {
 
             //Set gui item
             itemStack.setType(Material.getMaterial(KitConfig.get().getString("kits." + key + ".guiitem")));
-
 
             //Set lore
             String loreText = KitConfig.get().getString("kits." + key + ".guilore");
@@ -225,8 +224,12 @@ public class KitsGUI implements TabExecutor {
 
             //Set meta
             String kitDisplayColor = KitConfig.get().getString("kits." + key + ".displayname");
-            kitDisplayColor = ChatColor.translateAlternateColorCodes('&', kitDisplayColor);
-            itemMeta.setDisplayName(kitDisplayColor + key); //Heck you Component
+            if (kitDisplayColor.startsWith("&")){
+                itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', kitDisplayColor + key)); //For legacy kits
+            } else {
+                itemMeta.displayName(Component.text(key, NamedTextColor.NAMES.value(kitDisplayColor)));
+                System.out.println(NamedTextColor.NAMES.value(kitDisplayColor));
+            }
             itemStack.setItemMeta(itemMeta);
 
             //Add items to inventory

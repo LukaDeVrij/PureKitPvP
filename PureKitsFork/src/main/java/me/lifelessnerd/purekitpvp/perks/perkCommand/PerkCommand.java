@@ -26,7 +26,9 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PerkCommand implements CommandExecutor {
     Plugin plugin;
@@ -121,6 +123,15 @@ public class PerkCommand implements CommandExecutor {
         }
 
         player.openInventory(perksInventory);
+        System.out.println(PerkData.get().getString(player.getName()));
+        // Create perks config values if not present
+        if (PerkData.get().getString(player.getName()) == null){
+            Set<String> empty = new HashSet<>();
+            PerkData.get().set(player.getName(), empty);
+
+            PerkData.save();
+            PerkData.reload();
+        }
         return true;
     }
 }

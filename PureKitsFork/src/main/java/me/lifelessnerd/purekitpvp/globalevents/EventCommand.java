@@ -44,6 +44,10 @@ public class EventCommand extends Subcommand {
             player.sendMessage(Component.text("Please provide arguments!").color(NamedTextColor.RED));
             return false;
         }
+        if (!(plugin.getConfig().getBoolean("global-event-loop"))){
+            player.sendMessage(Component.text("Global event loop is disabled in config.").color(NamedTextColor.RED));
+            return false;
+        }
 
         if (args[1].equalsIgnoreCase("start")) {
             if (!(args.length >= 3)) {

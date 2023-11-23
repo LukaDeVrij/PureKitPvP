@@ -262,6 +262,7 @@ public class AdminCommandManager implements TabExecutor {
                 List<String> autoComplete = new ArrayList<>();
                 autoComplete.add("start");
                 autoComplete.add("stop");
+                autoComplete.add("pause");
                 return autoComplete;
             }
             if (args[1].equalsIgnoreCase("start")){

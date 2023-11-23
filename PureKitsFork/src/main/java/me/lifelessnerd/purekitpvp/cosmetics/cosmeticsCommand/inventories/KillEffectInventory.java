@@ -50,7 +50,7 @@ public class KillEffectInventory implements Listener {
             String configValue = CosmeticsConfig.get().getString("kill_effect." + player.getName());
             // if player is not present in file; add it to config and try again
             if (configValue == null){
-                CosmeticsConfig.get().set(player.getName(), plugin.getConfig().getString("default-kill-effect"));
+                CosmeticsConfig.get().set("kill_effect." + player.getName(), plugin.getConfig().getString("default-kill-effect"));
                 CosmeticsConfig.save();
                 CosmeticsConfig.reload();
                 configValue = CosmeticsConfig.get().getString("kill_effect." + player.getName());

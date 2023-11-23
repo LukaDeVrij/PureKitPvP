@@ -77,7 +77,7 @@ public class PerkGUIListener implements Listener {
                         if (perk.equals(selectedPerk)){
                             itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
                             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                            itemMeta.displayName(Component.text(perk).color(TextColor.color(50, 200, 0)).decoration(TextDecoration.BOLD, true));
+                            itemMeta.displayName(Component.text(perk).color(TextColor.color(50, 200, 0)).decoration(TextDecoration.BOLD, true).decoration(TextDecoration.ITALIC, false));
                         }
                     }
 

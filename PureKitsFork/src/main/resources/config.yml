@@ -58,6 +58,9 @@ default-kill-effect: "firework"
 #Default projectile trail
 default-projectile-trail: "none"
 
+# If projectile trails should be present on fishing rods (players can be hooked; with trails this is very annoying)
+fishing-rod-trail: true
+
 # Projectile trail period delay
 # The amount of time between each particle, in ticks (20 ticks = 1 particle per second)
 projectile-trail-period: 1
