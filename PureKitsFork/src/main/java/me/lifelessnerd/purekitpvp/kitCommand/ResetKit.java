@@ -1,6 +1,8 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -37,8 +39,9 @@ public class ResetKit extends Subcommand {
     @Override
     public boolean perform(Player player, String[] args) {
 
+
         if(!(player.hasPermission("purekitpvp.admin.resetkit"))){
-            player.sendMessage(ChatColor.RED + "You do not have permission!");
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_NO_PERMISSION"));
             return false;
         }
 

@@ -1,12 +1,13 @@
 package me.lifelessnerd.purekitpvp.utils;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
+import me.lifelessnerd.purekitpvp.PluginGetter;
+import net.kyori.adventure.text.*;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.w3c.dom.Text;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -121,4 +122,40 @@ public class ComponentUtils {
         String json = GsonComponentSerializer.gson().serialize(inputComponent);
         return net.minecraft.network.chat.Component.Serializer.fromJson(json);
     }
+
+    public static TextReplacementConfig replaceConfig(String find, String replace){
+        return replaceConfig(find, replace, 1);
+    }
+    public static TextReplacementConfig replaceConfig(String find, String replace, int times){
+        return TextReplacementConfig.builder().matchLiteral(find).replacement(replace).times(times).build();
+    }
+    public static ArrayList<Component> splitComponent(Component massiveComponent){
+        ArrayList<Component> output = new ArrayList<>();
+//        if (!(massiveComponent instanceof TextComponent)){
+//            PluginGetter.Plugin().getLogger().warning("Cannot convert multiline Component!");
+//            return output;
+//        }
+        Component prevChild = Component.text("");
+        for (Component child : massiveComponent.iterable(ComponentIteratorType.DEPTH_FIRST, ComponentIteratorFlag.INCLUDE_HOVER_SHOW_ENTITY_NAME)){
+            //TODO make better condition -> /n is not .newline ? not with equals anyways
+            TextComponent tc = (TextComponent) child;
+            System.out.println(child);
+            if (child.equals(massiveComponent)){
+                continue;
+            }
+            if (tc.content().endsWith("\n")){
+                // TODO Trim \n
+                prevChild = prevChild.append(child).decoration(TextDecoration.ITALIC, false);
+                output.add(prevChild);
+                prevChild = Component.text("");
+            } else {
+                prevChild = prevChild.append(child);
+            }
+
+        }
+
+        return output;
+    }
+
+
 }

@@ -26,6 +26,7 @@ import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ArrowsShotStat;
 import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ProjectilesThrownStat;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.apache.commons.codec.language.bm.Lang;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -74,18 +75,10 @@ public final class PureKitPvP extends JavaPlugin {
         CosmeticsConfig.get().options().copyDefaults(true);
         CosmeticsConfig.save();
 
-        EventData.setup();
-        EventData.get().options().copyDefaults(true);
-        EventData.save();
-
-        File lang = new File(getDataFolder(), "lang");
-        if(!lang.exists()) {
-            lang.mkdirs();
-        }
-        //TODO Check what language is selected in config
-        //Based on that load map from en_US.yml into a translation Map
-        // Use this map everywhere to query text
-
+        LanguageConfig.setup();
+        LanguageConfig.get().options().copyDefaults(true);
+        LanguageConfig.save();
+        LanguageConfig.loadLanguage();
 
         TabManager tabManager = new TabManager(this);
         tabManager.addHeader(Component.text("Hello there!").color(NamedTextColor.RED));

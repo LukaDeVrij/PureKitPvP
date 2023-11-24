@@ -61,7 +61,7 @@ public class GlobalEventManager {
                     }
                     if (amount >= 1) {
                         globalTimer++;
-                        System.out.println(1 + " - " + globalTimer);
+//                        System.out.println(1 + " - " + globalTimer);
                     }
                 }
 
@@ -153,7 +153,7 @@ public class GlobalEventManager {
                         }
                         if (amount >= 1) {
                             globalTimer++;
-                            System.out.println(2 + " - " + globalTimer);
+//                            System.out.println(2 + " - " + globalTimer);
                         }
                     }
 

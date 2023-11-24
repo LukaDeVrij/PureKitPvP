@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp;
 
 import me.lifelessnerd.purekitpvp.custommobs.CustomMobCommand;
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
 import me.lifelessnerd.purekitpvp.createKit.*;
 import me.lifelessnerd.purekitpvp.customitems.GetCustomItem;
@@ -12,8 +13,9 @@ import me.lifelessnerd.purekitpvp.globalevents.GlobalEventManager;
 import me.lifelessnerd.purekitpvp.globalevents.events.AbstractEvent;
 import me.lifelessnerd.purekitpvp.kitCommand.ResetKit;
 import me.lifelessnerd.purekitpvp.noncombatstats.commands.GetKitStats;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -57,17 +59,17 @@ public class AdminCommandManager implements TabExecutor {
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(Component.text("The console cannot perform these commands."));
-            return false;
+            return false; // TODO make this subcommand specific
         }
         Player player = (Player) sender;
 
         if (!(player.hasPermission("purekitpvp.admin.*"))) {
-            player.sendMessage(Component.text("You do not have permission!").color(NamedTextColor.RED));
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_NO_PERMISSION"));
             return true;
         }
 
         if (args.length < 1) {
-            player.sendMessage(Component.text("Please specify what function to use."));
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_LACK_OF_ARGS"));
             return false;
         }
 
@@ -79,8 +81,8 @@ public class AdminCommandManager implements TabExecutor {
             }
         }
 
-
-        player.sendMessage(args[0] + " is not a valid sub-command.");
+        TextReplacementConfig config = ComponentUtils.replaceConfig("%ARG%", args[0]);
+        player.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_ARGS").replaceText(config));
         return false;
 
     }
@@ -160,7 +162,7 @@ public class AdminCommandManager implements TabExecutor {
                     key = key.toLowerCase();
                     autoComplete.add(key);
                 }
-                ;
+
                 return autoComplete;
             }
         }

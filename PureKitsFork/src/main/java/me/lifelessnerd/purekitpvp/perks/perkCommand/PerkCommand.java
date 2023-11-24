@@ -1,6 +1,6 @@
 package me.lifelessnerd.purekitpvp.perks.perkCommand;
 
-import me.lifelessnerd.purekitpvp.files.KitConfig;
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.PerkData;
 import me.lifelessnerd.purekitpvp.kitCommand.GetKit;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
@@ -8,7 +8,6 @@ import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -17,7 +16,6 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -28,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class PerkCommand implements CommandExecutor {
@@ -47,29 +44,27 @@ public class PerkCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-            player.sendMessage(
-                    Component.text("You can only use this menu in ", NamedTextColor.RED).append(
-                    Component.text(plugin.getConfig().getString("world"), NamedTextColor.GRAY)));
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_WORLD").
+                    replaceText(ComponentUtils.replaceConfig("%WORLD%",plugin.getConfig().getString("world"))));
             return true;
         }
         if (GetKit.hasKit.contains(player.getName())){
-            player.sendMessage(ChatColor.RED + "You can only change perks when you have no kit selected!");
+            player.sendMessage(LanguageConfig.lang.get("PERKS_ALREADY_SELECTED"));
             return true;
         }
         //Create inventory GUI
-        TextComponent invTitle = Component.text("Perks Menu").color(TextColor.color(255, 150, 20));
+        Component invTitle = LanguageConfig.lang.get("PERKS_GUI_TITLE");
         Inventory perksInventory = Bukkit.createInventory(null, 54, invTitle);
 
         //Info item
         ItemStack infoItem = new ItemStack(Material.BOOK);
-        TextComponent infoItemName = Component.text("Perks Info").color(TextColor.color(233, 67, 47)).decoration(TextDecoration.ITALIC, false);
+        Component infoItemName = LanguageConfig.lang.get("PERKS_GUI_INFO_TITLE");
         ItemMeta infoMeta = infoItem.getItemMeta();
         infoMeta.displayName(infoItemName);
-        infoMeta = ComponentUtils.setLore(infoMeta, "&aYou can equip a total of &e5 &aperks total.", 0);
-        infoMeta = ComponentUtils.setLore(infoMeta, "&7Click on a perk slot to choose a perk for that slot.", 1);
-        infoMeta = ComponentUtils.setLore(infoMeta, "&7It will replace any perk currently in that slot.", 2);
-        infoMeta = ComponentUtils.setLore(infoMeta, "&7Perks are abilities that are always active.", 3);
-        infoMeta = ComponentUtils.setLore(infoMeta, "&7Duplicate perks do not stack.", 4);
+
+        ArrayList<Component> infoLore = ComponentUtils.splitComponent(LanguageConfig.lang.get("PERKS_GUI_INFO_LORE"));
+
+        infoMeta.lore(infoLore);
         infoItem.setItemMeta(infoMeta);
         perksInventory.setItem(13, infoItem);
 
@@ -126,7 +121,7 @@ public class PerkCommand implements CommandExecutor {
         }
 
         player.openInventory(perksInventory);
-        System.out.println(PerkData.get().getString(player.getName()));
+//        System.out.println(PerkData.get().getString(player.getName()));
         // Create perks config values if not present
         if (PerkData.get().getString(player.getName()) == null){
             Set<String> empty = new HashSet<>();

@@ -3,12 +3,9 @@ package me.lifelessnerd.purekitpvp;
 import me.lifelessnerd.purekitpvp.files.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
 
 public class ReloadPlugin extends Subcommand {
     Plugin plugin;
@@ -59,6 +56,10 @@ public class ReloadPlugin extends Subcommand {
 
         CosmeticsConfig.reload();
         CosmeticsConfig.save();
+
+        LanguageConfig.reload();
+        LanguageConfig.loadLanguage();
+        LanguageConfig.save();
 
         plugin.reloadConfig();
         plugin.getConfig();
