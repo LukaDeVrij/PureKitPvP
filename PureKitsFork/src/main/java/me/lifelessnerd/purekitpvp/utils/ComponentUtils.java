@@ -131,28 +131,37 @@ public class ComponentUtils {
     }
     public static ArrayList<Component> splitComponent(Component massiveComponent){
         ArrayList<Component> output = new ArrayList<>();
-//        if (!(massiveComponent instanceof TextComponent)){
-//            PluginGetter.Plugin().getLogger().warning("Cannot convert multiline Component!");
-//            return output;
-//        }
+//        System.out.println(massiveComponent);
         Component prevChild = Component.text("");
+        int children = 0;
         for (Component child : massiveComponent.iterable(ComponentIteratorType.DEPTH_FIRST, ComponentIteratorFlag.INCLUDE_HOVER_SHOW_ENTITY_NAME)){
-            //TODO make better condition -> /n is not .newline ? not with equals anyways
-            TextComponent tc = (TextComponent) child;
-            System.out.println(child);
-            if (child.equals(massiveComponent)){
-                continue;
+            try {
+                TextComponent textChild = (TextComponent) child;
+                if (child.equals(massiveComponent)) { // DFS through Component will also return itself; now its just its children
+                    continue;
+                }
+                if (textChild.content().endsWith("\n")) {
+
+                    TextComponent replaced = (TextComponent) textChild.replaceText(ComponentUtils.replaceConfig("\n", ""));
+                    prevChild = prevChild.append(replaced).decoration(TextDecoration.ITALIC, false);
+                    output.add(prevChild);
+                    prevChild = Component.text("");
+                } else {
+                    prevChild = prevChild.append(child);
+                }
+            } catch(Exception e){
+                PluginGetter.Plugin().getLogger().severe(e.toString());
             }
-            if (tc.content().endsWith("\n")){
-                // TODO Trim \n
-                prevChild = prevChild.append(child).decoration(TextDecoration.ITALIC, false);
-                output.add(prevChild);
-                prevChild = Component.text("");
-            } else {
-                prevChild = prevChild.append(child);
-            }
+            children++;
 
         }
+
+        if (children == 0){ // Edge case i hate myself
+            ArrayList<Component> edgeOutput = new ArrayList<>();
+            edgeOutput.add(massiveComponent.replaceText(ComponentUtils.replaceConfig("\n", "")));
+            return edgeOutput;
+        }
+
 
         return output;
     }

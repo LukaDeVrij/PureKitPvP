@@ -84,7 +84,7 @@ public class SetPerk extends Subcommand {
                 player.sendMessage(ChatColor.GRAY + "That perk does not exist. Choose from the following:");
                 for (String key : perkLib.perks.keySet()){
                     player.sendMessage(ChatColor.GREEN + key);
-                    player.sendMessage(ChatColor.GRAY + perkLib.perks.get(key));
+                    player.sendMessage(perkLib.perks.get(key));
 
                 }
                 return true;

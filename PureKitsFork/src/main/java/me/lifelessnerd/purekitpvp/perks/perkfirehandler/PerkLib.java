@@ -1,30 +1,35 @@
 package me.lifelessnerd.purekitpvp.perks.perkfirehandler;
 
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 
 import java.util.HashMap;
 
 public class PerkLib {
 
-    public HashMap<String, String> perks = new HashMap<>();
+    public HashMap<String, Component> perks = new HashMap<>();
 
     public HashMap<String, Material> perkIcons = new HashMap<>();
 
     public PerkLib(){
-        perks.put("JUGGERNAUT", "Gain regeneration 1 (5s) after every kill");
-        perks.put("BULLDOZER", "Gain strength 2 (3s) after every kill");
-        perks.put("KNOWLEDGE", "Gain 1 XP level on kill");
-        perks.put("NOTORIETY","15% chance of gaining a sharpness level on each kill\nSharpness will be added to the item held");
-        perks.put("ENDERMAGIC", "30% chance of gaining an ender pearl on kill");
-        perks.put("SPEEDSTER","Gain 10 seconds of speed 2 after every kill");
-        perks.put("ROBBERY","30% chance of disarming someone if hit with your fist\nThe weapon will be swapped with a slot in the inventory");
-        perks.put("SNOWMAN","Give slowness 1 (3s) when you hit someone with a snowball");
-        perks.put("DISRUPTOR","Give poison 1 (5s) when you hit someone with an egg");
-        perks.put("ENDERMAN", "You can now ride ender pearls; they do no damage");
-        perks.put("VAMPIRE", "On critical hits, gain 50% of the damage\nyou dealt, as instant health");
-        perks.put("MARKSMAN", "50% chance of gaining a power level on each bow kill\nPower is added to the item held, if it's a bow");
-        perks.put("APOLLO", "You get each arrow you hit on a player back\nA kill nets one extra arrow of that type");
-        perks.put("ADRENALINE", "When below 6 HP (3 hearts), you get a speed boost");
+
+        perks.put("JUGGERNAUT", LanguageConfig.lang.get("PERKS_GUI_JUGGERNAUT"));
+        perks.put("BULLDOZER", LanguageConfig.lang.get("PERKS_GUI_BULLDOZER"));
+        perks.put("KNOWLEDGE", LanguageConfig.lang.get("PERKS_GUI_KNOWLEDGE"));
+        perks.put("NOTORIETY", LanguageConfig.lang.get("PERKS_GUI_NOTORIETY"));
+        perks.put("ENDERMAGIC", LanguageConfig.lang.get("PERKS_GUI_ENDERMAGIC"));
+        perks.put("SPEEDSTER",LanguageConfig.lang.get("PERKS_GUI_SPEEDSTER"));
+        perks.put("ROBBERY",LanguageConfig.lang.get("PERKS_GUI_ROBBERY"));
+        perks.put("SNOWMAN",LanguageConfig.lang.get("PERKS_GUI_SNOWMAN"));
+        perks.put("DISRUPTOR",LanguageConfig.lang.get("PERKS_GUI_DISRUPTOR"));
+        perks.put("ENDERMAN", LanguageConfig.lang.get("PERKS_GUI_ENDERMAN"));
+        perks.put("VAMPIRE", LanguageConfig.lang.get("PERKS_GUI_VAMPIRE"));
+        perks.put("MARKSMAN", LanguageConfig.lang.get("PERKS_GUI_MARKSMAN"));
+        perks.put("APOLLO", LanguageConfig.lang.get("PERKS_GUI_APOLLO"));
+        perks.put("ADRENALINE", LanguageConfig.lang.get("PERKS_GUI_ADRENALINE"));
+
+
 
         perkIcons.put("JUGGERNAUT" , Material.DIAMOND_CHESTPLATE);
         perkIcons.put("BULLDOZER" , Material.ANVIL);

@@ -2,6 +2,7 @@ package me.lifelessnerd.purekitpvp.perks.perkCommand;
 
 import me.lifelessnerd.purekitpvp.files.PerkData;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -85,14 +86,8 @@ public class PerkGUIListener implements Listener {
 
                     ArrayList<Component> loreTBA = new ArrayList<>();
 
-                    if (perkLib.perks.get(perk).contains("\n")) {
-                        String[] decodedLore = MyStringUtils.perkLoreDecoder(perkLib.perks.get(perk));
-                        for (String line : decodedLore) {
-                            loreTBA.add(Component.text(line).color(TextColor.color(150, 150, 150)).decoration(TextDecoration.ITALIC, false));
-                        }
-                    } else {
-                        loreTBA.add(Component.text(perkLib.perks.get(perk)).color(TextColor.color(150, 150, 150)).decoration(TextDecoration.ITALIC, false));
-                    }
+                    Component perkLore = perkLib.perks.get(perk);
+                    loreTBA.addAll(ComponentUtils.splitComponent(perkLore));
 
                     icon.lore(loreTBA);
                     perkSlotInventory.addItem(icon);
