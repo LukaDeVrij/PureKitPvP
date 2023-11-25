@@ -2,12 +2,15 @@ package me.lifelessnerd.purekitpvp.kitCommand;
 
 
 import me.lifelessnerd.purekitpvp.files.KitConfig;
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -25,6 +28,7 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,14 +51,13 @@ public class KitsGUI implements TabExecutor {
         }
 
         if (!KitConfig.get().isSet("kits.")) {
-            player.sendMessage(Component.text("There are no kits!", NamedTextColor.RED));
+            player.sendMessage(LanguageConfig.lang.get("KITS_NO_KITS"));
             return true;
         }
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-            player.sendMessage(
-                    Component.text("You can only use this menu in ", NamedTextColor.RED).append(
-                    Component.text(plugin.getConfig().getString("world"), NamedTextColor.GRAY)));
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_WORLD").
+                    replaceText(ComponentUtils.replaceConfig("%WORLD%",plugin.getConfig().getString("world"))));
             return true;
         }
 
@@ -64,9 +67,7 @@ public class KitsGUI implements TabExecutor {
             currentPage = Integer.parseInt(args[0]);
         }
         //Create inventory GUI
-        TextComponent inventoryTitle = Component.text("Kits - ").
-                color(TextColor.color(255, 150, 20)).
-                append(Component.text(currentPage));
+        Component inventoryTitle = LanguageConfig.lang.get("KITS_GUI_TITLE").appendSpace().append(Component.text(currentPage));
         Inventory kits = Bukkit.createInventory(null, 54, inventoryTitle);
         int amountOfKits = KitConfig.get().getConfigurationSection("kits").getKeys(false).size();
         int lastPage = floor(((double) amountOfKits / 46)) + 1;
@@ -75,32 +76,18 @@ public class KitsGUI implements TabExecutor {
             // Create next page item
             ItemStack nextPageButton = new ItemStack(Material.ARROW);
             ItemMeta nextPageButtonMeta = nextPageButton.getItemMeta();
-            nextPageButtonMeta.displayName(Component.text("Next").decoration(TextDecoration.ITALIC, false));
-            List<Component> loreList = new ArrayList<>();
-            TextComponent txt = Component.text("Go to the next kit selection page.").
-                    decoration(TextDecoration.ITALIC, false).
-                    color(TextColor.color(100,100,100));
-            loreList.add(txt);
-            nextPageButtonMeta.lore(loreList);
+            nextPageButtonMeta.displayName(LanguageConfig.lang.get("KITS_GUI_NEXT"));
             nextPageButton.setItemMeta(nextPageButtonMeta);
             kits.setItem(50, nextPageButton);
-            loreList.clear();
 
         }
         if (currentPage > 1){
             // If this, we need a prev button too
             ItemStack prevPageButton = new ItemStack(Material.ARROW);
             ItemMeta prevPageButtonMeta = prevPageButton.getItemMeta();
-            prevPageButtonMeta.displayName(Component.text("Previous").decoration(TextDecoration.ITALIC, false));
-            List<Component> loreList = new ArrayList<>();
-            TextComponent txt = Component.text("Go to the previous kit selection page.").
-                    decoration(TextDecoration.ITALIC, false).
-                    color(TextColor.color(100,100,100));
-            loreList.add(txt);
-            prevPageButtonMeta.lore(loreList);
+            prevPageButtonMeta.displayName(LanguageConfig.lang.get("KITS_GUI_PREV"));
             prevPageButton.setItemMeta(prevPageButtonMeta);
             kits.setItem(48, prevPageButton);
-            loreList.clear();
         }
 
         int kitNumber = 1;
@@ -121,38 +108,41 @@ public class KitsGUI implements TabExecutor {
             //Set gui item
             itemStack.setType(Material.getMaterial(KitConfig.get().getString("kits." + key + ".guiitem")));
 
+            LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
+
             //Set lore
-            String loreText = KitConfig.get().getString("kits." + key + ".guilore");
-            loreText = ChatColor.translateAlternateColorCodes('&', loreText);
-            ArrayList<String> lore = new ArrayList<>();
+            ArrayList<Component> lore = new ArrayList<>();
+
+            // Quip lore at the top
+            Component loreText = serializer.deserialize(KitConfig.get().getString("kits." + key + ".guilore"));
             lore.add(loreText);
 
             // If no permission: set gui item to red stained glass pane and a bit of lore is added to explain the situation
             if (!(player.hasPermission(KitConfig.get().getString("kits." + key + ".permission")))){
                 itemStack.setType(Material.RED_STAINED_GLASS_PANE);
-                lore.add(ChatColor.translateAlternateColorCodes('&', "&4&lNo permission for this kit!"));
+                lore.add(LanguageConfig.lang.get("KITS_GUI_NO_PERMISSION"));
             }
 
             // Item lore that consists of contents of kit
             FileConfiguration fileConfiguration = KitConfig.get();
             List<ItemStack> kitContent = (List<ItemStack>) fileConfiguration.get("kits." + key + ".contents");
-            lore.add(ChatColor.BLUE + "Weapons:");
+            lore.add(LanguageConfig.lang.get("KITS_GUI_WEAPONS"));
             for (int index = 0; index < kitContent.size(); index++) {
 
                 ItemStack item = kitContent.get(index);
 
                 switch (index) {
-                    case 3 -> lore.add(ChatColor.BLUE + "Items:");
+                    case 3 -> lore.add(LanguageConfig.lang.get("KITS_GUI_ITEMS")); //TODO change 3 value to user-config?
                     case 36 -> {
                         if(kitContent.get(36) != null | kitContent.get(37) != null | kitContent.get(38) != null | kitContent.get(39) != null) {
-                            lore.add(ChatColor.BLUE + "Armor:");
+                            lore.add(LanguageConfig.lang.get("KITS_GUI_ARMOR"));
                         } else {
-                            lore.add(ChatColor.BLUE + "No Armor");
+                            lore.add(LanguageConfig.lang.get("KITS_GUI_NO_ARMOR"));
                         }
                     }
                     case 40 -> {
                         if (item != null){
-                            lore.add(ChatColor.BLUE + "Offhand:");
+                            lore.add(LanguageConfig.lang.get("KITS_GUI_OFFHAND"));
                         }
                     }
                 }
@@ -168,32 +158,38 @@ public class KitsGUI implements TabExecutor {
                 } else if (item.getType().toString().equalsIgnoreCase("SPLASH_POTION")){
                     //Do stuff with potions
                     String amount = String.valueOf(item.getAmount());
-                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(item.getType().toString()));
-                    lore.add("    " + ChatColor.GRAY + MyStringUtils.itemMetaToEffects(item.getItemMeta().toString()));
+                    lore.add(Component.text(amount + "x ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false).append(
+                            Component.text(MyStringUtils.itemCamelCase(item.getType().toString()), NamedTextColor.YELLOW)));
+                    lore.add(Component.text("    " + MyStringUtils.itemMetaToEffects(item.getItemMeta().toString()), NamedTextColor.GRAY));
 
                 } else if (item.getType().toString().equalsIgnoreCase("POTION")){
                     //Do stuff with potions
                     String amount = String.valueOf(item.getAmount());
-                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(item.getType().toString()));
-                    lore.add("    " + ChatColor.GRAY + MyStringUtils.itemMetaToEffects(item.getItemMeta().toString()));
+                    lore.add(Component.text(amount + "x ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false).append(
+                            Component.text(MyStringUtils.itemCamelCase(item.getType().toString()), NamedTextColor.YELLOW)));
+                    lore.add(Component.text("    " + MyStringUtils.itemMetaToEffects(item.getItemMeta().toString()), NamedTextColor.GRAY));
 
                 } else if (item.getType().toString().equalsIgnoreCase("PLAYER_HEAD")){
 
                     String amount = String.valueOf(item.getAmount());
-                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase("golden_head"));
-                    lore.add(ChatColor.GRAY + "    " + item.getItemMeta().getLore().get(0));
+                    lore.add(Component.text(amount + "x ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false).append(
+                            Component.text("Golden Head", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)));
+                    lore.add(Component.text("    ", NamedTextColor.GRAY).append(item.getItemMeta().lore().get(0).color(NamedTextColor.GRAY)));
+
                 } else if (item.getType().toString().equalsIgnoreCase("CHEST")){
 
                     String amount = String.valueOf(item.getAmount());
-                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase("random_loot_chest"));
-                    lore.add(ChatColor.GRAY + "    " + item.getItemMeta().getLore().get(0));
+                    lore.add(Component.text(amount + "x ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false).append(
+                            Component.text("Random Loot Chest", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)));
+                    lore.add(Component.text("    ", NamedTextColor.GRAY).append(item.getItemMeta().lore().get(0).color(NamedTextColor.GRAY)));
 
                 } else {
                     String amount = String.valueOf(item.getAmount());
-                    lore.add(ChatColor.GRAY + amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(item.getType().toString()));
+                    lore.add(Component.text(amount + "x ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false).append(
+                            Component.text(MyStringUtils.itemCamelCase(item.getType().toString()), NamedTextColor.YELLOW)));
                     //If it has enchants, view them
                     if (!(item.getEnchantments().isEmpty())){
-                        lore.add("    " + ChatColor.GRAY + MyStringUtils.mapStringToEnchantment(item.getEnchantments().toString()));
+                        lore.add(Component.text("    " + MyStringUtils.mapStringToEnchantment(item.getEnchantments().toString()), NamedTextColor.GRAY));
                     }
 
                 }
@@ -202,27 +198,30 @@ public class KitsGUI implements TabExecutor {
             ItemStack killItem = (ItemStack) KitConfig.get().get("kits." + key + ".killitem");
 
             if (killItem.getType().toString().equalsIgnoreCase("PLAYER_HEAD")) {
-                lore.add(ChatColor.WHITE + "Item on Kill:");
-                lore.add(ChatColor.GRAY + "1x " + ChatColor.YELLOW + "Golden Head"); //fixedI would just get the displayname to make this more dynamic but I cant because of fecking component
-                lore.add(ChatColor.GRAY + "    " + killItem.getItemMeta().getLore().get(0));
+                lore.add(LanguageConfig.lang.get("KITS_GUI_KILL_ITEM"));
+                lore.add(Component.text("1x ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false).append(
+                        Component.text("Golden Head", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)));
+                lore.add(Component.text("    ", NamedTextColor.GRAY).append(Component.text("Healing Item")).color(NamedTextColor.GRAY));
 
             } else if (killItem.getType().toString().equalsIgnoreCase("CHEST")){
-                lore.add(ChatColor.WHITE + "Item on Kill:");
+                lore.add(LanguageConfig.lang.get("KITS_GUI_KILL_ITEM"));
                 int amount = killItem.getAmount();
-                lore.add(ChatColor.GRAY + "" +  amount + "x " + ChatColor.YELLOW + "Random Loot Chest");
-                lore.add(ChatColor.GRAY + "    " + killItem.getItemMeta().getLore().get(0));
+                lore.add(Component.text("1x ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false).
+                        append(Component.text("Random Loot Chest", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)));
+                lore.add(Component.text("    " + killItem.getItemMeta().lore().get(0), NamedTextColor.GRAY)); //might not be needed
                 //System.out.println(killItem.getItemMeta().getLore().get(0));
 
             } else if (killItem.getType().toString().equalsIgnoreCase("AIR")){
-                lore.add(ChatColor.WHITE + "No Item on Kill");
+                lore.add(LanguageConfig.lang.get("KITS_GUI_NO_KILL_ITEM"));
             } else {
-                lore.add(ChatColor.WHITE + "Item on Kill:");
+                lore.add(LanguageConfig.lang.get("KITS_GUI_KILL_ITEM"));
                 int amount = killItem.getAmount();
-                lore.add(ChatColor.GRAY + "" +  amount + "x " + ChatColor.YELLOW + MyStringUtils.itemCamelCase(killItem.getType().toString()));
+                lore.add(Component.text(amount + "x ", NamedTextColor.GRAY).
+                        append(Component.text(MyStringUtils.itemCamelCase(killItem.getType().toString()), NamedTextColor.YELLOW)));
 
             }
 
-            itemMeta.setLore(lore); //Heck you Component
+            itemMeta.lore(lore);
 
             //Set meta
             String kitDisplayColor = KitConfig.get().getString("kits." + key + ".displayname");
@@ -239,12 +238,9 @@ public class KitsGUI implements TabExecutor {
             //Reset button
             ItemStack resetButton = new ItemStack(Material.BARRIER);
             ItemMeta resetButtonMeta = resetButton.getItemMeta();
-            resetButtonMeta.displayName(Component.text("Reset kit").decoration(TextDecoration.ITALIC, false));
+            resetButtonMeta.displayName(LanguageConfig.lang.get("KITS_GUI_RESET"));
             List<Component> loreList = new ArrayList<>();
-            TextComponent txt = Component.text("If you do not have permission to reset your kit,").decoration(TextDecoration.ITALIC, false).color(TextColor.color(100,100,100));
-            TextComponent txt2 = Component.text("this will run /suicide on your behalf.").decoration(TextDecoration.ITALIC, false).color(TextColor.color(100,100,100));
-            loreList.add(txt);
-            loreList.add(txt2);
+            loreList.addAll(ComponentUtils.splitComponent(LanguageConfig.lang.get("KITS_GUI_RESET_LORE")));
             resetButtonMeta.lore(loreList);
             resetButton.setItemMeta(resetButtonMeta);
             kits.setItem(53, resetButton);
@@ -252,21 +248,15 @@ public class KitsGUI implements TabExecutor {
 //            Perk Redirect Button
             ItemStack perkHelpButton = new ItemStack(Material.BOOK);
             ItemMeta perkHelpButtonMeta = perkHelpButton.getItemMeta();
-            perkHelpButtonMeta.displayName(Component.text("Perk Info").decoration(TextDecoration.ITALIC, false));
-            List<Component> loreList2 = new ArrayList<>();
-            TextComponent txt21 = Component.text("Click here to change your perks!").decoration(TextDecoration.ITALIC, false).color(TextColor.color(100,100,100));
-            loreList2.add(txt21);
-            perkHelpButtonMeta.lore(loreList2);
+            perkHelpButtonMeta.displayName(LanguageConfig.lang.get("KITS_GUI_PERKS"));
+            perkHelpButtonMeta.lore(ComponentUtils.splitComponent(LanguageConfig.lang.get("KITS_GUI_PERKS_LORE")));
             perkHelpButton.setItemMeta(perkHelpButtonMeta);
             kits.setItem(49, perkHelpButton);
 
 
             player.openInventory(kits);
 
-
         }
-
-
         return true;
     }
 

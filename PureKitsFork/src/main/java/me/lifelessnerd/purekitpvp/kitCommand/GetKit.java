@@ -2,7 +2,9 @@ package me.lifelessnerd.purekitpvp.kitCommand;
 
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.KitStatsConfig;
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
@@ -55,39 +57,38 @@ public class GetKit implements TabExecutor, Listener {
         String kitNameArg = args[0].substring(0, 1).toUpperCase() + args[0].substring(1);
 
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
-            player.sendMessage(
-                    Component.text("You can only use this menu in ", NamedTextColor.RED).append(
-                    Component.text(plugin.getConfig().getString("world"), NamedTextColor.GRAY)));
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_WORLD").
+                    replaceText(ComponentUtils.replaceConfig("%WORLD%",plugin.getConfig().getString("world"))));
             return true;
         }
 
         if (hasKit.contains(player.getName())){
-            player.sendMessage(Component.text("You already have a kit!", NamedTextColor.RED));
+            player.sendMessage(LanguageConfig.lang.get("KITS_ALREADY_SELECTED"));
             return true;
         }
 
         if (args.length != 1) {
-            player.sendMessage(Component.text("Incorrect arguments!", NamedTextColor.RED));
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_ARGS"));
             return false;
         }
 
         if (!(KitConfig.get().isSet("kits." + kitNameArg))){
-            player.sendMessage(Component.text("That kit does not exist!", NamedTextColor.RED));
+            player.sendMessage(LanguageConfig.lang.get("KITS_DOES_NOT_EXIST"));
             return true;
         }
 
         if(!KitConfig.get().isSet("kits." + kitNameArg + ".permission")){
-            player.sendMessage(ChatColor.GRAY + "That kit does not have a permission associated. Please report this to your administrator.");
+            player.sendMessage(LanguageConfig.lang.get("KITS_PERMISSION_NOT_DEFINED"));
             return true;
         }
 
         if (!(player.hasPermission(KitConfig.get().getString("kits." + kitNameArg + ".permission")))){ //IDEA lies
-            player.sendMessage(ChatColor.GRAY + "You do not have permission!");
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_NO_PERMISSION"));
             return true;
         }
 
         //Okay, if all checks are passed, player may get the kit
-        player.sendMessage(ChatColor.GRAY + "Kit " + ChatColor.BLUE + kitNameArg + ChatColor.GRAY + " given.");
+        player.sendMessage(LanguageConfig.lang.get("KITS_KIT_GIVEN").replaceText(ComponentUtils.replaceConfig("%KIT%", kitNameArg)));
 
         FileConfiguration fileConfiguration = KitConfig.get();
         List<ItemStack> kitItems = (List<ItemStack>) fileConfiguration.get("kits." + kitNameArg + ".contents");

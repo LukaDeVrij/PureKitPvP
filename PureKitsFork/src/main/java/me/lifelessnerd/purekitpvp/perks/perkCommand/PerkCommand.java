@@ -14,6 +14,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,6 +23,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,6 +75,7 @@ public class PerkCommand implements CommandExecutor {
         ItemStack kitItem = new ItemStack(Material.ARROW);
         Component kitItemName = LanguageConfig.lang.get("PERKS_GUI_BACK_KITS");
         ItemMeta kitItemMeta = kitItem.getItemMeta();
+        kitItemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "PERKS_GUI_BACK_KITS"), PersistentDataType.BOOLEAN, true);
         kitItemMeta.displayName(kitItemName);
         kitItem.setItemMeta(kitItemMeta);
         perksInventory.setItem(49, kitItem);
@@ -89,19 +92,22 @@ public class PerkCommand implements CommandExecutor {
                 Component perkSlotName = LanguageConfig.lang.get("PERKS_GUI_SLOT_TITLE").
                         replaceText(ComponentUtils.replaceConfig("%SLOT%", String.valueOf(slot)));
                 ItemMeta perkSlotMeta = perkSlot.getItemMeta();
+                perkSlotMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "PERKS_GUI_SLOT_TITLE"), PersistentDataType.INTEGER, slot);
                 perkSlotMeta.displayName(perkSlotName);
                 perkSlotMeta.lore(ComponentUtils.splitComponent(LanguageConfig.lang.get("PERKS_GUI_SLOT_LORE")));
                 perkSlot.setItemMeta(perkSlotMeta);
+                perkSlot.setAmount(slot);
                 perksInventory.setItem(index, perkSlot);
+
             } else {
                 PerkLib perkLib = new PerkLib();
                 ItemStack perkSlot = new ItemStack(perkLib.perkIcons.get(fileContent));
                 Component perkSlotName = LanguageConfig.lang.get("PERKS_GUI_SLOT_TITLE").
                         replaceText(ComponentUtils.replaceConfig("%SLOT%", String.valueOf(slot)));
                 ItemMeta perkSlotMeta = perkSlot.getItemMeta();
+                perkSlotMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "PERKS_GUI_SLOT_TITLE"), PersistentDataType.INTEGER, slot);
                 perkSlotMeta.displayName(perkSlotName);
 
-                //Component style - not my own class util (okay, only the decoder)
                 ArrayList<Component> loreTBA = new ArrayList<>();
                 Component loreTitle = Component.text(fileContent).color(TextColor.color(0, 230, 0)).decoration(TextDecoration.ITALIC, false);
                 loreTBA.add(loreTitle);
@@ -111,7 +117,9 @@ public class PerkCommand implements CommandExecutor {
 
                 perkSlotMeta.lore(loreTBA);
                 perkSlotMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
                 perkSlot.setItemMeta(perkSlotMeta);
+                perkSlot.setAmount(slot);
                 perksInventory.setItem(index, perkSlot);
 
 

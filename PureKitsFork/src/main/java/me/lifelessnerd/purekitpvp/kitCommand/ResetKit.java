@@ -53,7 +53,7 @@ public class ResetKit extends Subcommand {
         player.setLevel(0);
         player.getInventory().clear();
         GetKit.hasKit.remove(player.getName());
-        player.sendMessage(ChatColor.GRAY + "You have reset your kit.");
+        player.sendMessage(LanguageConfig.lang.get("KITS_RESET_KIT"));
 
 
         return true;

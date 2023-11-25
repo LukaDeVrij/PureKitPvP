@@ -14,20 +14,20 @@ public class PerkLib {
 
     public PerkLib(){
 
-        perks.put("JUGGERNAUT", LanguageConfig.lang.get("PERKS_GUI_JUGGERNAUT"));
-        perks.put("BULLDOZER", LanguageConfig.lang.get("PERKS_GUI_BULLDOZER"));
-        perks.put("KNOWLEDGE", LanguageConfig.lang.get("PERKS_GUI_KNOWLEDGE"));
-        perks.put("NOTORIETY", LanguageConfig.lang.get("PERKS_GUI_NOTORIETY"));
-        perks.put("ENDERMAGIC", LanguageConfig.lang.get("PERKS_GUI_ENDERMAGIC"));
-        perks.put("SPEEDSTER",LanguageConfig.lang.get("PERKS_GUI_SPEEDSTER"));
-        perks.put("ROBBERY",LanguageConfig.lang.get("PERKS_GUI_ROBBERY"));
-        perks.put("SNOWMAN",LanguageConfig.lang.get("PERKS_GUI_SNOWMAN"));
-        perks.put("DISRUPTOR",LanguageConfig.lang.get("PERKS_GUI_DISRUPTOR"));
-        perks.put("ENDERMAN", LanguageConfig.lang.get("PERKS_GUI_ENDERMAN"));
-        perks.put("VAMPIRE", LanguageConfig.lang.get("PERKS_GUI_VAMPIRE"));
-        perks.put("MARKSMAN", LanguageConfig.lang.get("PERKS_GUI_MARKSMAN"));
-        perks.put("APOLLO", LanguageConfig.lang.get("PERKS_GUI_APOLLO"));
-        perks.put("ADRENALINE", LanguageConfig.lang.get("PERKS_GUI_ADRENALINE"));
+        perks.put("JUGGERNAUT", LanguageConfig.lang.get("PERKS_PERK_JUGGERNAUT"));
+        perks.put("BULLDOZER", LanguageConfig.lang.get("PERKS_PERK_BULLDOZER"));
+        perks.put("KNOWLEDGE", LanguageConfig.lang.get("PERKS_PERK_KNOWLEDGE"));
+        perks.put("NOTORIETY", LanguageConfig.lang.get("PERKS_PERK_NOTORIETY"));
+        perks.put("ENDERMAGIC", LanguageConfig.lang.get("PERKS_PERK_ENDERMAGIC"));
+        perks.put("SPEEDSTER",LanguageConfig.lang.get("PERKS_PERK_SPEEDSTER"));
+        perks.put("ROBBERY",LanguageConfig.lang.get("PERKS_PERK_ROBBERY"));
+        perks.put("SNOWMAN",LanguageConfig.lang.get("PERKS_PERK_SNOWMAN"));
+        perks.put("DISRUPTOR",LanguageConfig.lang.get("PERKS_PERK_DISRUPTOR"));
+        perks.put("ENDERMAN", LanguageConfig.lang.get("PERKS_PERK_ENDERMAN"));
+        perks.put("VAMPIRE", LanguageConfig.lang.get("PERKS_PERK_VAMPIRE"));
+        perks.put("MARKSMAN", LanguageConfig.lang.get("PERKS_PERK_MARKSMAN"));
+        perks.put("APOLLO", LanguageConfig.lang.get("PERKS_PERK_APOLLO"));
+        perks.put("ADRENALINE", LanguageConfig.lang.get("PERKS_PERK_ADRENALINE"));
 
 
 

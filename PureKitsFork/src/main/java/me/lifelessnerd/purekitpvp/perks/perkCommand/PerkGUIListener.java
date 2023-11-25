@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.perks.perkCommand;
 
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.PerkData;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
@@ -9,8 +10,10 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.apache.commons.codec.language.bm.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -23,6 +26,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -47,19 +51,24 @@ public class PerkGUIListener implements Listener {
         if (e.getCurrentItem() == null || e.getRawSlot() >= 53) {
             return;
         }
-
+        // For later (for the else if)
+        TextComponent desiredInvTitle = (TextComponent) LanguageConfig.lang.get("PERKS_GUI_SLOT_TITLE").
+                replaceText(ComponentUtils.replaceConfig("%SLOT%", ""));
+        PlainTextComponentSerializer ptcs = PlainTextComponentSerializer.plainText();
+        //
         ItemStack clickedItem = e.getCurrentItem();
         InventoryView inv = e.getView();
-        if (inv.title().toString().contains("Perks Menu")) { //I hate component
+        if (inv.title().equals(LanguageConfig.lang.get("PERKS_GUI_TITLE"))) {
             e.setCancelled(true);
+
             Component itemDisplayName = clickedItem.displayName();
-            PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
-            String itemName = serializer.serialize(itemDisplayName);
+
             // This is when you click on a perk slot to modify it
-            if (itemName.contains("Perk Slot")) {
-                int slot = Integer.parseInt(String.valueOf(itemName.charAt(itemName.length() - 2)));
+            if (clickedItem.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "PERKS_GUI_SLOT_TITLE"), PersistentDataType.INTEGER)) {
+                int slot = clickedItem.getAmount();
                 //Create inventory GUI
-                TextComponent invTitle = Component.text("Perk Slot " + slot).color(TextColor.color(255, 150, 20));
+                Component invTitle = LanguageConfig.lang.get("PERKS_GUI_SLOT_TITLE").
+                        replaceText(ComponentUtils.replaceConfig("%SLOT%", String.valueOf(slot)));
                 Inventory perkSlotInventory = Bukkit.createInventory(null, 54, invTitle);
 
                 //Fill inventory with interactive perk items
@@ -95,7 +104,8 @@ public class PerkGUIListener implements Listener {
 
                 ItemStack backButton = new ItemStack(Material.ARROW);
                 ItemMeta backButtonMeta = backButton.getItemMeta();
-                backButtonMeta.displayName(Component.text("Go Back").color(TextColor.color(0, 250, 0)).decoration(TextDecoration.ITALIC, false));
+                backButtonMeta.displayName(LanguageConfig.lang.get("PERKS_GUI_BACK"));
+                backButtonMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "PERKS_GUI_BACK"), PersistentDataType.BOOLEAN, true);
                 backButtonMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 backButton.setItemMeta(backButtonMeta);
                 perkSlotInventory.setItem(49,backButton);
@@ -103,20 +113,17 @@ public class PerkGUIListener implements Listener {
 
                 player.openInventory(perkSlotInventory);
             }
-            else if (itemName.contains("Back to Kits")){
-                inv.close();
+            else if (clickedItem.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "PERKS_GUI_BACK_KITS"), PersistentDataType.BOOLEAN)){
                 player.chat("/kit");
-
             }
         }
-        else if (inv.title().toString().contains("Perk Slot")){
+        else if (ptcs.serialize(inv.title()).contains(desiredInvTitle.content())){
             e.setCancelled(true);
             Component title = inv.title();
             PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
             String itemName = serializer.serialize(title);
-            String clickedItemName = serializer.serialize(e.getCurrentItem().displayName());
-            if (clickedItemName.contains("Go Back")){
-                inv.close();
+//            String clickedItemName = serializer.serialize(e.getCurrentItem().displayName());
+            if (e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "PERKS_GUI_BACK"))){
                 player.chat("/perks");
             } else {
 
@@ -129,7 +136,6 @@ public class PerkGUIListener implements Listener {
                 PerkData.save();
                 PerkData.reload();
 
-                inv.close();
                 player.chat("/perks");
             }
 

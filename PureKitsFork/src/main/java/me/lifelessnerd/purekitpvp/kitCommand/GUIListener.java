@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
@@ -46,16 +47,15 @@ public class GUIListener implements Listener {
                 InventoryView inv = e.getView();
 
                 PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
-
-                if (inv.title().toString().contains("Kits")) { //I hate component
+                TextComponent desiredInvTitle = (TextComponent) LanguageConfig.lang.get("KITS_GUI_TITLE");
+                if (inv.title().toString().contains((desiredInvTitle.content()))) { //I hate component
 
                     if (e.getRawSlot() < 45){
                         e.setCancelled(true);
                         if(clickedItem == null){
                             return;
                         }
-                        String displayName = clickedItem.getItemMeta().getDisplayName();
-                        displayName = ChatColor.stripColor(displayName);
+                        String displayName = serializer.serialize(clickedItem.getItemMeta().displayName());
                         player.chat("/getkit " + displayName);
                         player.closeInventory();
                     }
