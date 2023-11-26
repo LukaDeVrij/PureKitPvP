@@ -1,5 +1,7 @@
 package me.lifelessnerd.purekitpvp.globalevents.events;
 
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -32,8 +34,8 @@ public class TeleMadnessEvent extends AbstractEvent {
     }
 
     @Override
-    public String getEventDescription() {
-        return "Everyone gets Ender Pearls, all the time!";
+    public Component getEventDescription() {
+        return LanguageConfig.lang.get("EVENTS_TELEMADNESS_DESC");
     }
 
     @Override
@@ -69,13 +71,7 @@ public class TeleMadnessEvent extends AbstractEvent {
         ItemStack pearl = new ItemStack(Material.ENDER_PEARL);
         ItemMeta pearlMeta = pearl.getItemMeta();
         pearlMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "telemadness"), PersistentDataType.BOOLEAN, true);
-        ArrayList<Component> lore = new ArrayList<>() {
-            {
-                add(Component.text("This is an event specific item, which").color(NamedTextColor.GRAY));
-                add(Component.text("will be removed as soon as the event ends.").color(NamedTextColor.GRAY));
-            }
-        };
-        pearlMeta.lore(lore);
+        pearlMeta.lore(ComponentUtils.splitComponent(LanguageConfig.lang.get("EVENTS_TELEMADNESS_ITEM_LORE")));
         pearlMeta.displayName(Component.text("TeleMadness Pearl").color(NamedTextColor.LIGHT_PURPLE));
         pearl.setItemMeta(pearlMeta);
         pearl.setAmount(99999999); // will do
@@ -94,13 +90,7 @@ public class TeleMadnessEvent extends AbstractEvent {
             ItemStack pearl = new ItemStack(Material.ENDER_PEARL);
             ItemMeta pearlMeta = pearl.getItemMeta();
             pearlMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "telemadness"), PersistentDataType.BOOLEAN, true);
-            ArrayList<Component> lore = new ArrayList<>() {
-                {
-                    add(Component.text("This is an event specific item, which").color(NamedTextColor.GRAY));
-                    add(Component.text("will be removed as soon as the event ends.").color(NamedTextColor.GRAY));
-                }
-            };
-            pearlMeta.lore(lore);
+            pearlMeta.lore(ComponentUtils.splitComponent(LanguageConfig.lang.get("EVENTS_TELEMADNESS_ITEM_LORE")));
             pearlMeta.displayName(Component.text("TeleMadness Pearl").color(NamedTextColor.LIGHT_PURPLE));
             pearl.setItemMeta(pearlMeta);
             pearl.setAmount(1);

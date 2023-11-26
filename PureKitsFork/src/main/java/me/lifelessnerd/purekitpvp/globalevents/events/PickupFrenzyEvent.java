@@ -1,6 +1,8 @@
 package me.lifelessnerd.purekitpvp.globalevents.events;
 
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.globalevents.EventDataClass;
+import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.Plugin;
 
 public class PickupFrenzyEvent extends AbstractEvent {
@@ -15,8 +17,8 @@ public class PickupFrenzyEvent extends AbstractEvent {
     }
 
     @Override
-    public String getEventDescription() {
-        return "Killed players drop their stuff!";
+    public Component getEventDescription() {
+        return LanguageConfig.lang.get("EVENTS_PICKUP_DESC");
     }
 
     @Override

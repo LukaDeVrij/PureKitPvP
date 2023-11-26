@@ -1,6 +1,8 @@
 package me.lifelessnerd.purekitpvp.globalevents;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -63,7 +65,7 @@ public class EventCommand extends Subcommand {
             player.sendMessage(gem.pauseResumeTimer());
 
         } else {
-            player.sendMessage(Component.text(args[0] + " is not a valid subcommand."));
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_ARGS").replaceText(ComponentUtils.replaceConfig("%ARG%", args[0])));
         }
 
 

@@ -2,8 +2,11 @@ package me.lifelessnerd.purekitpvp.perks.perkfirehandler;
 
 import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.PerkData;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
+import net.minecraft.locale.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -74,13 +77,13 @@ public class PerkFireHandler {
                     if(Math.random() <= 0.15) {
                         ItemStack weapon = player.getInventory().getItemInMainHand();
                         ItemMeta weaponMeta = weapon.getItemMeta();
-                        if (weaponMeta == null){continue;} // If weapon is hand
+                        if (weaponMeta == null){continue;} // If weapon is hand TODO maybe - check if it is a weapon?
                         int sharpnessLevel = weaponMeta.getEnchantLevel(Enchantment.DAMAGE_ALL);
 
                         if (plugin.getConfig().getInt("notoriety-maximum") != -1){
                             // So if the boundary is set to SOME value
                             if (sharpnessLevel >= plugin.getConfig().getInt("notoriety-maximum")){
-                                player.sendMessage(ChatColor.YELLOW + "You have reached the maximum Notoriety!");
+                                player.sendMessage(LanguageConfig.lang.get("PERKS_PERK_NOTORIETY_MAX"));
                                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_FALL, 1,0);
                                 continue;
                             }
@@ -88,7 +91,7 @@ public class PerkFireHandler {
                         weaponMeta.removeEnchant(Enchantment.DAMAGE_ALL);
                         weaponMeta.addEnchant(Enchantment.DAMAGE_ALL, sharpnessLevel + 1, true);
                         weapon.setItemMeta(weaponMeta);
-                        player.sendMessage(ChatColor.YELLOW + "Your sharpness level has increased!");
+                        player.sendMessage(LanguageConfig.lang.get("PERKS_PERK_NOTORIETY_UPGRADE"));
                     }
                     break;
                 case "ENDERMAGIC":
@@ -96,7 +99,7 @@ public class PerkFireHandler {
                     if(Math.random() <= 0.3) {
                         ItemStack pearl = new ItemStack(Material.ENDER_PEARL, 1);
                         player.getInventory().addItem(pearl);
-                        player.sendMessage(ChatColor.YELLOW + "You gained an ender pearl!");
+                        player.sendMessage(LanguageConfig.lang.get("PERKS_PERK_ENDERMAGIC_OCCUR"));
                     }
                     break;
                 case "SPEEDSTER":
@@ -114,7 +117,7 @@ public class PerkFireHandler {
                         if (plugin.getConfig().getInt("marksman-maximum") != -1){
                             // So if the boundary is set to SOME value
                             if (powerLevel >= plugin.getConfig().getInt("marksman-maximum")){
-                                player.sendMessage(ChatColor.YELLOW + "You have reached the maximum power level!");
+                                player.sendMessage(LanguageConfig.lang.get("PERKS_PERK_MARKSMAN_MAX"));
                                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_FALL, 1,0);
                                 continue;
                             }
@@ -122,7 +125,7 @@ public class PerkFireHandler {
                         weaponMeta.removeEnchant(Enchantment.ARROW_DAMAGE);
                         weaponMeta.addEnchant(Enchantment.ARROW_DAMAGE, powerLevel + 1, true);
                         weapon.setItemMeta(weaponMeta);
-                        player.sendMessage(ChatColor.YELLOW + "Your power level has increased!");
+                        player.sendMessage(LanguageConfig.lang.get("PERKS_PERK_MARKSMAN_UPGRADE"));
                     }
                     break;
 
@@ -189,7 +192,10 @@ public class PerkFireHandler {
                         }
                         // I could have just always swapped, sometimes swap with air
                         // oh well shite
-                        damaged.sendMessage(ChatColor.YELLOW + "You were disarmed!");
+                        damaged.sendMessage(LanguageConfig.lang.get("PERKS_PERK_ROBBERY_DISARMED").
+                                replaceText(ComponentUtils.replaceConfig("%PLAYER%", damager.getName())));
+                        damager.sendMessage(LanguageConfig.lang.get("PERKS_PERK_ROBBERY_DISARMER").
+                                replaceText(ComponentUtils.replaceConfig("%PLAYER%", damaged.getName())));
                     }
                     break;
             }

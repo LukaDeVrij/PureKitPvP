@@ -45,6 +45,15 @@ public class LanguageConfig {
         defaults.put("GENERIC_LACK_OF_ARGS", "&cNot enough arguments!");
         defaults.put("GENERIC_WRONG_ARGS", "%ARG% &cis not a valid argument!");
         defaults.put("GENERIC_WRONG_WORLD", "&cYou can only use this menu in &7%WORLD%");
+        defaults.put("GENERIC_PLAYER_HELP", """
+                &bPureKitPvP - Help Menu
+                &a/kit &r- &eOpen up the kit menu
+                &a/getkit <kit> &r- &eGet a kit directly
+                &a/suicide &r- &eCommit suicide (if enabled)
+                &a/stats <player> &r- &eGet PVP stats of a player
+                &a/perks &r- &eSelect perks
+                &bFor admin commands, see &a/pkpvp help 2&b!
+                """);
         defaults.put("PERKS_ALREADY_SELECTED", "&cYou can only change perks when you have no kit selected!");
         defaults.put("PERKS_GUI_TITLE", "&6Perks Menu");
         defaults.put("PERKS_GUI_INFO_TITLE", "&cPerks Info");
@@ -72,9 +81,12 @@ public class LanguageConfig {
                 &r15% chance of gaining a sharpness level on each kill
                 &rwill be added to the item held
                 """);
+        defaults.put("PERKS_PERK_NOTORIETY_MAX", "&eYou have reached the maximum Notoriety!");
+        defaults.put("PERKS_PERK_NOTORIETY_UPGRADE", "&eYour sharpness level has increased!");
         defaults.put("PERKS_PERK_ENDERMAGIC", """
                 &r30% chance of gaining an ender pearl on kill
                 """);
+        defaults.put("PERKS_PERK_ENDERMAGIC_OCCUR", "&eYou gained an ender pearl!");
         defaults.put("PERKS_PERK_SPEEDSTER", """
                 &rGain 10 seconds of speed 2 after every kill
                 """);
@@ -82,6 +94,9 @@ public class LanguageConfig {
                 &r30% chance of disarming someone if hit with your fist
                 &rThe weapon will be swapped with a slot in the inventory
                 """);
+        defaults.put("PERKS_PERK_ROBBERY_DISARMED","&eYou were disarmed by %PLAYER%'s Robbery perk!");
+        defaults.put("PERKS_PERK_ROBBERY_DISARMER","&eYou disarmed %PLAYER% with your Robbery perk!");
+
         defaults.put("PERKS_PERK_SNOWMAN", """
                 &rGive slowness 1 (3s) when you hit someone with a snowball
                 """);
@@ -99,6 +114,8 @@ public class LanguageConfig {
                 &r50% chance of gaining a power level on each bow kill
                 &rPower is added to the item held, if it's a bow
                 """);
+        defaults.put("PERKS_PERK_MARKSMAN_UPGRADE","&eYour power level has increased!");
+        defaults.put("PERKS_PERK_MARKSMAN_MAX","&eYou have reached the maximum power level!");
         defaults.put("PERKS_PERK_APOLLO", """
                 &rYou get each arrow you hit on a player back
                 &rA kill nets one extra arrow of that type
@@ -133,6 +150,26 @@ public class LanguageConfig {
                 &9Click here to change your perks!
                 """);
         defaults.put("KITS_RESET_KIT", "&aKit has been reset.");
+        defaults.put("LOOT_LUCKY", "&bLUCKY! &a%ITEM%had a chance of &a%CHANCE%%!");
+
+        defaults.put("EVENTS_END", "&7The event has ended.");
+        defaults.put("EVENTS_START", "&bRANDOM EVENT! &d%EVENT% &bhas been selected!");
+        defaults.put("EVENTS_TELEMADNESS_DESC", "Everyone gets Ender Pearls, all the time!");
+        defaults.put("EVENTS_TELEMADNESS_ITEM_LORE", """
+                &7This is an event specific item, which
+                &7will be removed as soon as the event ends.
+                """);
+        defaults.put("EVENTS_PICKUP_DESC", "Killed players drop their stuff!");
+        defaults.put("EVENTS_JUGGERNAUT_DESC", "Team up to kill the Juggernaut!");
+
+        defaults.put("SCOREBOARD_PERSONAL_TITLE", "&6Personal Stats");
+        defaults.put("SCOREBOARD_PERSONAL_KILLSTREAK", "  &7Killstreak: &b%VALUE%");
+        defaults.put("SCOREBOARD_PERSONAL_KILLS", "  &7Kills: &b%VALUE%");
+        defaults.put("SCOREBOARD_PERSONAL_DEATHS", "  &7Deaths: &b%VALUE%");
+        defaults.put("SCOREBOARD_PERSONAL_KD", "  &7K/D Ratio: &b%VALUE%");
+        defaults.put("SCOREBOARD_PERSONAL_LEVEL", "  &7Level: &b%VALUE%");
+
+
 
 
         customFile.addDefaults(defaults);

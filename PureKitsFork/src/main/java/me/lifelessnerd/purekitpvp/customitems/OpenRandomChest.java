@@ -1,7 +1,9 @@
 package me.lifelessnerd.purekitpvp.customitems;
 
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
@@ -87,10 +89,9 @@ public class OpenRandomChest implements Listener {
                     player.getInventory().addItem(itemToGive);
                     itemsFilled++;
                     if (LootTablesConfig.get().getDouble(currentLootTable + ".content." + contentKeys.get(0) + ".chance") <= (double) plugin.getConfig().getInt("loottable-message-percentage") / 100){
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                                "&bLUCKY! &a" + MyStringUtils.itemCamelCase(itemToGive.getType().toString()) + "&bhad a chance of &a" +
-                                        LootTablesConfig.get().getDouble(currentLootTable + ".content." + contentKeys.get(0) + ".chance") * 100
-                                        + "%!")); //TODO component this
+                        player.sendMessage(LanguageConfig.lang.get("LOOT_LUCKY").replaceText(
+                                ComponentUtils.replaceConfig("%ITEM%",MyStringUtils.itemCamelCase(itemToGive.getType().toString()))).replaceText(
+                                ComponentUtils.replaceConfig("%CHANCE%", String.valueOf(LootTablesConfig.get().getDouble(currentLootTable + ".content." + contentKeys.get(0) + ".chance") * 100))));
                     }
                 }
             }
@@ -106,9 +107,9 @@ public class OpenRandomChest implements Listener {
                     ItemStack itemToGive = (ItemStack) LootTablesConfig.get().get(currentLootTable + ".content." + key + ".item");
                     player.getInventory().addItem(itemToGive);
                     if (LootTablesConfig.get().getDouble(currentLootTable + ".content." + key + ".chance") <= (double) plugin.getConfig().getInt("loottable-message-percentage") / 100){
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                                "&bLUCKY! &a" + MyStringUtils.itemCamelCase(itemToGive.getType().toString()) + "&bhad a chance of&a " +
-                                LootTablesConfig.get().getDouble(currentLootTable + ".content." + key + ".chance") * 100 + "%!"));//TODO component this
+                        player.sendMessage(LanguageConfig.lang.get("LOOT_LUCKY").replaceText(
+                                ComponentUtils.replaceConfig("%ITEM%",MyStringUtils.itemCamelCase(itemToGive.getType().toString()))).replaceText(
+                                ComponentUtils.replaceConfig("%CHANCE%", String.valueOf(LootTablesConfig.get().getDouble(currentLootTable + ".content." + contentKeys.get(0) + ".chance") * 100))));
                     }
                 }
             }

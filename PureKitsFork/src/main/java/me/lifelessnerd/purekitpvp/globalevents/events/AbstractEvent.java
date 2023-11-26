@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.globalevents.events;
 
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -26,7 +27,7 @@ public abstract class AbstractEvent {
 
     public abstract String getEventName();
 
-    public abstract String getEventDescription();
+    public abstract Component getEventDescription();
 
     public int getEventLength() {
         return this.eventLength;
@@ -49,7 +50,7 @@ public abstract class AbstractEvent {
                     timer = 0;
                     for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                         if (onlinePlayer.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world"))) {
-                            onlinePlayer.sendMessage(Component.text("The event has ended.").color(NamedTextColor.GRAY));
+                            onlinePlayer.sendMessage(LanguageConfig.lang.get("EVENTS_END"));
                         }
                     }
                     onEnd();
@@ -75,7 +76,7 @@ public abstract class AbstractEvent {
                         timer = 0;
                         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                             if (onlinePlayer.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world"))) {
-                                onlinePlayer.sendMessage(Component.text("The event has ended.").color(NamedTextColor.GRAY));
+                                onlinePlayer.sendMessage(LanguageConfig.lang.get("EVENTS_END"));
                             }
                         }
                         onEnd();

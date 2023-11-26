@@ -108,8 +108,11 @@ public class DeathHandler implements Listener {
             player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10 , 1));
             player.setHealth(20);
 
-            player.chat("/kit");
-        }, 20L);
+        }, 2L);
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+                    player.chat("/kit");
+        }, plugin.getConfig().getLong("auto-kit-delay"));
+
 
 
 
@@ -179,11 +182,13 @@ public class DeathHandler implements Listener {
             deathMessage = KillMessage.create.byPlayer(player.getName(), damageData.lastPlayerDamager);
 
         }
-
-        if (damageData.lastPlayerDamager.equalsIgnoreCase(player.getName())){ // own kill check
-            deathMessage = KillMessage.create.byPlayer(player.getName(), damageData.lastPlayerDamager);
-            playerInvolved = false;
+        if (damageData.lastPlayerDamager != null){
+            if (damageData.lastPlayerDamager.equalsIgnoreCase(player.getName())){ // own kill check
+                deathMessage = KillMessage.create.byPlayer(player.getName(), damageData.lastPlayerDamager);
+                playerInvolved = false;
+            }
         }
+
 
 //        deathMessage = deathMessage + credit;
         // Death message shows who got credit, broadcast to every player in pvp world
@@ -497,8 +502,10 @@ public class DeathHandler implements Listener {
             player = ((Player) event.getEntity()).getPlayer();
 
         } else if (event.getDamager() instanceof EnderPearl && event.getEntity() instanceof Player) {
-
+            player = ((Player) event.getEntity()).getPlayer();
+            rangedCombat = false;
             PerkFireHandler.fireEnderpearlDamagePerks((Player) event.getEntity(), event);
+            return; // Prevents NPE's
         } else if (event.getDamager() instanceof Firework && event.getEntity() instanceof Player){
             Firework fw = (Firework) event.getDamager();
             if (fw.getShooter() instanceof Player){
@@ -626,7 +633,8 @@ public class DeathHandler implements Listener {
                 }
             }
         }
-        // This branch negates any firework damage if it is of killeffect origin -> fireworks from a crossbow still count
+        // This branch negates any firework damage if
+        // it is of killeffect origin -> fireworks from a crossbow still count
         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
             EntityDamageByEntityEvent newEvent = (EntityDamageByEntityEvent) event;
             if (newEvent.getDamager() instanceof Firework fw) {

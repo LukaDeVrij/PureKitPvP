@@ -8,6 +8,9 @@ world: pvp
 # Clear inventory after player is killed (EXPERIMENTAL when setting this to false, not sure what consequences it has!)
 inventory-clear: true
 
+# After you are killed, with what delay /kit should automatically be ran (-1 to disable this feature entirely)
+auto-kit-delay: 20
+
 #Quick kill when falling in void, only works when suicide-command is enabled
 quick-voidkill: true
 
@@ -77,19 +80,44 @@ chicken-prevention: true
 global-event-loop: true
 
 # Seconds between global combat events - events themselves have different times (see below)
-global-event-period: 10
+global-event-period: 300
 
 # Events that occur in global combat event loop
 global-events-enabled: ["TeleMadness","Pickup Frenzy"]
 
 # Event lengths in seconds
-telemadness-length: 10
-pickup-frenzy-length: 10
-juggernaut-length: 10
+telemadness-length: 30
+pickup-frenzy-length: 60
+juggernaut-length: 60
 
-# Tablist stats
-tab-enabled: true
+# Scoreboard Sidebar - enabled?
+scoreboard-enabled: true
+scoreboard-title: "&6&lPureKitPvP"
 
-# Tablist refresh period (in ticks)
-tab-refresh-period: 100
+# Time between slides in seconds
+scoreboard-period: 10
+
+# Slides of the sidebar scoreboard
+enabled-slides:
+  - GlobalStats
+  - PersonalStats
+
+# What components of the global stats should be displayed
+global-stats-components:
+  - Killstreak
+  - Level
+  - Kills
+  - KD
+
+# Amount of places for players per component: if all components are enabled 2 is max here
+global-stats-place-amount: 2
+
+
+personal-stats-components:
+  - Killstreak
+  - Kills
+  - Deaths
+  - KD
+  - Level
+
 

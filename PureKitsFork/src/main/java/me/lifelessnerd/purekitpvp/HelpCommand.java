@@ -1,5 +1,7 @@
 package me.lifelessnerd.purekitpvp;
 
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,16 +17,8 @@ public class HelpCommand implements CommandExecutor {
             return false;
         }
 
-        String message = """
-                    &bPureKitPvP - Help Menu
-                    &a/kit &r- &eOpen up the kit menu
-                    &a/getkit <kit> &r- &eGet a kit directly
-                    &a/suicide &r- &eCommit suicide (if enabled)
-                    &a/stats <player> &r- &eGet PVP stats of a player
-                    &a/perks &r- &eSelect perks
-                    &bFor admin commands, see &a/pkpvp help 2&b!
-                    """;
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        Component message = LanguageConfig.lang.get("GENERIC_PLAYER_HELP");
+        player.sendMessage(message);
         return true;
     }
 }

@@ -47,6 +47,7 @@ public class AdminHelpCommand extends Subcommand {
                     &a/getkit <kit> &r- &eGet a kit directly
                     &a/suicide &r- &eCommit suicide (if enabled)
                     &a/stats <player> &r- &eGet PVP stats of a player
+                    &a/perks &r- &eSelect perks
                     &a/purekitpvphelp &r- &eShow this menu for non-admins
                     &bFor admin commands, see &a/pkpvp help 2&b!
                     """;

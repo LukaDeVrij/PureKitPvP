@@ -1,8 +1,10 @@
 package me.lifelessnerd.purekitpvp.globalevents;
 
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.globalevents.events.AbstractEvent;
 import me.lifelessnerd.purekitpvp.globalevents.events.PickupFrenzyEvent;
 import me.lifelessnerd.purekitpvp.globalevents.events.TeleMadnessEvent;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -104,13 +106,12 @@ public class GlobalEventManager {
                 this.currentEvent = event;
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                     if (onlinePlayer.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world"))) {
-                        onlinePlayer.sendMessage(
-                                Component.text("RANDOM EVENT! ").color(NamedTextColor.AQUA).append(
-                                        Component.text(this.currentEvent.getEventName()).color(NamedTextColor.LIGHT_PURPLE).append(
-                                                Component.text(" has been selected!").color(NamedTextColor.GRAY).appendNewline().append(
-                                                        Component.text(this.currentEvent.getEventLength() + "s" + " - " + this.currentEvent.getEventDescription())
-                                                )))
-                        );
+
+                        onlinePlayer.sendMessage(LanguageConfig.lang.get("EVENTS_START").
+                                replaceText(ComponentUtils.replaceConfig("%EVENT%", this.currentEvent.getEventName())).
+                                appendNewline().append(Component.text(this.currentEvent.getEventLength() + "s" + " - ").
+                                append(this.currentEvent.getEventDescription())
+                                ));
                     }
                 }
                 this.nextEventTime = this.globalTimer + this.currentEvent.getEventLength() + this.period;

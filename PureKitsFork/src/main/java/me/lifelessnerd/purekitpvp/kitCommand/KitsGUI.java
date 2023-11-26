@@ -228,7 +228,7 @@ public class KitsGUI implements TabExecutor {
             if (kitDisplayColor.startsWith("&")){
                 itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', kitDisplayColor + key)); //For legacy kits
             } else {
-                itemMeta.displayName(Component.text(key, NamedTextColor.NAMES.value(kitDisplayColor)));
+                itemMeta.displayName(Component.text(key, NamedTextColor.NAMES.value(kitDisplayColor)).decoration(TextDecoration.ITALIC, false));
             }
             itemStack.setItemMeta(itemMeta);
 

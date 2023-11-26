@@ -1,8 +1,10 @@
 package me.lifelessnerd.purekitpvp.globalevents.events;
 
 import me.lifelessnerd.purekitpvp.PluginGetter;
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.globalevents.EventDataClass;
 import me.lifelessnerd.purekitpvp.utils.PlayerUtils;
+import net.kyori.adventure.text.Component;
 import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -26,8 +28,8 @@ public class JuggernautEvent extends AbstractEvent {
     }
 
     @Override
-    public String getEventDescription() {
-        return "Team up to kill the Juggernaut!";
+    public Component getEventDescription() {
+        return LanguageConfig.lang.get("EVENTS_JUGGERNAUT_DESC");
     }
 
     @Override

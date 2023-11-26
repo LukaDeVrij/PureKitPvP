@@ -24,6 +24,10 @@ public class Suicide implements CommandExecutor {
             return true;
         }
 
+        if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))){
+            return true;
+        }
+
         if (!(plugin.getConfig().getBoolean("suicide-command"))){
             player.sendMessage("This is disabled.");
             return true;

@@ -4,6 +4,7 @@ import me.lifelessnerd.purekitpvp.combathandlers.leveling.PlayerLevelChat;
 import me.lifelessnerd.purekitpvp.combathandlers.commands.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
+import me.lifelessnerd.purekitpvp.scoreboards.SidebarScoreboard;
 import me.lifelessnerd.purekitpvp.scoreboards.TabManager;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsGUIListener;
@@ -80,10 +81,8 @@ public final class PureKitPvP extends JavaPlugin {
         LanguageConfig.save();
         LanguageConfig.loadLanguage();
 
-        TabManager tabManager = new TabManager(this);
-        tabManager.addHeader(Component.text("Hello there!").color(NamedTextColor.RED));
-        tabManager.showTab();
-        tabManager.addHeader(Component.text("Hello ther2e!").color(NamedTextColor.RED));
+        SidebarScoreboard sidebar = new SidebarScoreboard(this);
+        sidebar.enableSidebar();
 
         getCommand("getkit").setExecutor(new GetKit(this));
         getCommand("kit").setExecutor(new KitsGUI(this));
