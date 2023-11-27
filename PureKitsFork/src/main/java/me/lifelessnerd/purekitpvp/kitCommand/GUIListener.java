@@ -14,6 +14,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -55,7 +56,15 @@ public class GUIListener implements Listener {
                         if(clickedItem == null){
                             return;
                         }
+
                         String displayName = serializer.serialize(clickedItem.getItemMeta().displayName());
+
+                        // Preview kit button
+                        if (e.getClick() == ClickType.RIGHT){
+                            KitPreview kitPreview = new KitPreview(plugin, displayName, player);
+                            return;
+                        }
+
                         player.chat("/getkit " + displayName);
                         player.closeInventory();
                     }
