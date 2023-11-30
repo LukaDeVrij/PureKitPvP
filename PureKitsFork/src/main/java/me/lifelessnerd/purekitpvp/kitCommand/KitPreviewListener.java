@@ -33,9 +33,6 @@ public class KitPreviewListener implements Listener {
         if (e.getCurrentItem() == null){
             return;
         }
-        if (e.getRawSlot() >= 53){
-            return;
-        }
 
         ItemStack clickedItem = e.getCurrentItem();
         InventoryView inv = e.getView();
@@ -43,6 +40,10 @@ public class KitPreviewListener implements Listener {
         TextComponent desiredInvTitle = (TextComponent) LanguageConfig.lang.get("KITS_GUI_PREVIEW_TITLE");
 
         if (inv.title().toString().contains((desiredInvTitle.content()))) { //I sometimes hate component - gotta do this with UUID in the future
+
+            if (e.getRawSlot() >= 53){
+                return;
+            }
             e.setCancelled(true);
             if (clickedItem.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "KITS_PREVIEW_GUI_ITEM"))){
                 String pdcValue = clickedItem.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "KITS_PREVIEW_GUI_ITEM"), PersistentDataType.STRING);
