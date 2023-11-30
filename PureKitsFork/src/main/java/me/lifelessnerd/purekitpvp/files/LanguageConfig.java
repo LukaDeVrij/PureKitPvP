@@ -64,7 +64,7 @@ public class LanguageConfig {
                 &7Perks are abilities that are always active.
                 &7Duplicate perks do not stack.
                 """);
-        defaults.put("PERKS_GUI_BACK_KITS", "&aBack to kits");
+        defaults.put("PERKS_GUI_BACK_KITS", "&aBack to Kits");
         defaults.put("PERKS_GUI_SLOT_TITLE", "&cPerk Slot %SLOT%");
         defaults.put("PERKS_GUI_SLOT_LORE", "&aClick to select a perk for this slot!");
         defaults.put("PERKS_GUI_BACK", "&aGo Back");
@@ -132,7 +132,8 @@ public class LanguageConfig {
         defaults.put("KITS_PERMISSION_NOT_DEFINED", "&cThat kit does not have a permission associated. Please report this to your administrator.");
         defaults.put("KITS_KIT_GIVEN", "&aKit &6%KIT% &agiven.");
         defaults.put("KITS_NO_KITS", "&cThere are no kits... yet. Create some with /pkpvp createkit");
-        defaults.put("KITS_GUI_NO_PERMISSION", "&cThere are no kits... yet. Create some with /pkpvp createkit");
+        defaults.put("KITS_GUI_NO_PERMISSION", "&cYou don't have permission!");
+        defaults.put("KITS_GUI_PREVIEW", "&bRIGHT CLICK to preview!");
         defaults.put("KITS_GUI_WEAPONS", "&3Weapons:");
         defaults.put("KITS_GUI_ITEMS", "&3Items:");
         defaults.put("KITS_GUI_ARMOR", "&3Armor:");
@@ -150,6 +151,11 @@ public class LanguageConfig {
                 &9Click here to change your perks!
                 """);
         defaults.put("KITS_RESET_KIT", "&aKit has been reset.");
+        defaults.put("KITS_GUI_PREVIEW_TITLE", "&aKit Preview > &b%KIT%");
+        defaults.put("KITS_GUI_PREVIEW_TEXT", "&aRight click to preview.");
+        defaults.put("KITS_GUI_PREVIEW_STATS", "&6Global Stats");
+        defaults.put("KITS_GUI_PREVIEW_SELECT", "&aSelect Kit");
+        defaults.put("KITS_GUI_PREVIEW_BACK", "&aBack to Kits");
         defaults.put("LOOT_LUCKY", "&bLUCKY! &a%ITEM%had a chance of &a%CHANCE%%!");
 
         defaults.put("EVENTS_END", "&7The event has ended.");

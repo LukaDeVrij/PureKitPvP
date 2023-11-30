@@ -63,9 +63,14 @@ public class KitsGUI implements TabExecutor {
 
         // Only argument is used for page, the plugin will run /kits 2 at some point for the second page of kits
         int currentPage = 1;
-        if (args.length >= 1) {
-            currentPage = Integer.parseInt(args[0]);
+        try {
+            if (args.length >= 1) {
+                currentPage = Integer.parseInt(args[0]);
+            }
+        } catch (Exception e){
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_ARGS").replaceText(ComponentUtils.replaceConfig("%ARG%", args[0])));
         }
+
         //Create inventory GUI
         Component inventoryTitle = LanguageConfig.lang.get("KITS_GUI_TITLE").appendSpace().append(Component.text(currentPage));
         Inventory kits = Bukkit.createInventory(null, 54, inventoryTitle);
@@ -105,12 +110,12 @@ public class KitsGUI implements TabExecutor {
             itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
-            //Set gui item
+            // Set gui item
             itemStack.setType(Material.getMaterial(KitConfig.get().getString("kits." + key + ".guiitem")));
 
             LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
 
-            //Set lore
+            // Set lore
             ArrayList<Component> lore = new ArrayList<>();
 
             // Quip lore at the top
@@ -220,6 +225,10 @@ public class KitsGUI implements TabExecutor {
                         append(Component.text(MyStringUtils.itemCamelCase(killItem.getType().toString()), NamedTextColor.YELLOW)));
 
             }
+
+            // Preview kit lore
+            lore.add(Component.text(""));
+            lore.add(LanguageConfig.lang.get("KITS_GUI_PREVIEW"));
 
             itemMeta.lore(lore);
 

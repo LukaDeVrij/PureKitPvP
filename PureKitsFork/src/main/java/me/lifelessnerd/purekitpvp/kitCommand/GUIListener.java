@@ -1,31 +1,16 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
 import me.lifelessnerd.purekitpvp.files.LanguageConfig;
-import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkLib;
-import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 
 public class GUIListener implements Listener {
@@ -58,10 +43,10 @@ public class GUIListener implements Listener {
                         }
 
                         String displayName = serializer.serialize(clickedItem.getItemMeta().displayName());
-
                         // Preview kit button
                         if (e.getClick() == ClickType.RIGHT){
                             KitPreview kitPreview = new KitPreview(plugin, displayName, player);
+                            kitPreview.openPreviewInventory();
                             return;
                         }
 
