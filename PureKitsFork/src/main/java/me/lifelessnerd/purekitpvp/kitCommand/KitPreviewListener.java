@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
 import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -37,13 +38,18 @@ public class KitPreviewListener implements Listener {
         ItemStack clickedItem = e.getCurrentItem();
         InventoryView inv = e.getView();
 
-        TextComponent desiredInvTitle = (TextComponent) LanguageConfig.lang.get("KITS_GUI_PREVIEW_TITLE");
+        PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
+        TextComponent desiredInvTitle = (TextComponent) LanguageConfig.lang.get("KITS_GUI_PREVIEW_TITLE").replaceText(ComponentUtils.replaceConfig("%KIT%", ""));
+        String desiredInvTitleString = serializer.serialize(desiredInvTitle); // I hate this
 
-        if (inv.title().toString().contains((desiredInvTitle.content()))) { //I sometimes hate component - gotta do this with UUID in the future
+        if (inv.title().toString().contains(desiredInvTitleString)) {
+            //I sometimes hate component - gotta do this with UUID in the future
+            // Not components fault - my system is just shitty, heck me
 
             if (e.getRawSlot() >= 53){
                 return;
             }
+
             e.setCancelled(true);
             if (clickedItem.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "KITS_PREVIEW_GUI_ITEM"))){
                 String pdcValue = clickedItem.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "KITS_PREVIEW_GUI_ITEM"), PersistentDataType.STRING);
