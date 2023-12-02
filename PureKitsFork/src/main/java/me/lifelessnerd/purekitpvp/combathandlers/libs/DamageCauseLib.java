@@ -50,7 +50,7 @@ public class DamageCauseLib {
                 damageCauseTranslations.put("ENTITY_EXPLOSION"," Explosion");
                 damageCauseTranslations.put("VOID"," Void");
                 damageCauseTranslations.put("LIGHTNING"," Lightning");
-                damageCauseTranslations.put("SUICIDE"," Yourself");
+                damageCauseTranslations.put("SUICIDE"," You");
                 damageCauseTranslations.put("STARVATION"," Hunger");
                 damageCauseTranslations.put("POISON"," Poison");
                 damageCauseTranslations.put("MAGIC"," Harming Effect");

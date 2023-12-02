@@ -1,12 +1,11 @@
 package me.lifelessnerd.purekitpvp;
 import me.lifelessnerd.purekitpvp.combathandlers.*;
 import me.lifelessnerd.purekitpvp.combathandlers.leveling.PlayerLevelChat;
-import me.lifelessnerd.purekitpvp.combathandlers.commands.Suicide;
+import me.lifelessnerd.purekitpvp.combathandlers.killhandler.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
 import me.lifelessnerd.purekitpvp.kitCommand.KitPreviewListener;
 import me.lifelessnerd.purekitpvp.scoreboards.SidebarScoreboard;
-import me.lifelessnerd.purekitpvp.scoreboards.TabManager;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsGUIListener;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.inventories.KillEffectInventory;
@@ -26,12 +25,7 @@ import me.lifelessnerd.purekitpvp.kitCommand.KitsGUI;
 import me.lifelessnerd.purekitpvp.noncombatstats.commands.GetStats;
 import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ArrowsShotStat;
 import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ProjectilesThrownStat;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.apache.commons.codec.language.bm.Lang;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
 
 public final class PureKitPvP extends JavaPlugin {
 
@@ -110,6 +104,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PickupListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockRemover(this), this);
         getServer().getPluginManager().registerEvents(new KitPreviewListener(this), this);
+        getServer().getPluginManager().registerEvents(new ProjectileRemover(this), this);
 
         getServer().getPluginManager().registerEvents(new CosmeticsGUIListener(this), this);
         getServer().getPluginManager().registerEvents(new KillEffect(this), this);

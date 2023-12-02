@@ -56,6 +56,8 @@ public class GoldenHeadEat implements Listener {
             return;
         }
 
+        e.setCancelled(true);
+
         heldItem.setAmount(heldItem.getAmount() - 1);
         int slot = player.getInventory().getHeldItemSlot();
         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 2));

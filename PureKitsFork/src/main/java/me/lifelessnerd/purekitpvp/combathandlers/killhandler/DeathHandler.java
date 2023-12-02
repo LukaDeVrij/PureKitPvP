@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.combathandlers.killhandler;
 
+import me.lifelessnerd.purekitpvp.combathandlers.ProjectileRemover;
 import me.lifelessnerd.purekitpvp.combathandlers.leveling.PlayerLeveling;
 import me.lifelessnerd.purekitpvp.combathandlers.libs.DamageCauseLib;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.MobRemover;
@@ -73,6 +74,7 @@ public class DeathHandler implements Listener {
 
         Bukkit.getScheduler().runTaskLater(this.plugin, () ->
                 player.teleport(new Location(player.getWorld(), x, y, z, 0, 0)), 1L);
+
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
 
             if (EventDataClass.dropInventoryOnDeath){
@@ -109,16 +111,21 @@ public class DeathHandler implements Listener {
             player.setHealth(20);
 
         }, 2L);
-        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-                    player.chat("/kit");
-        }, plugin.getConfig().getLong("auto-kit-delay"));
 
 
+        long kitDelay = plugin.getConfig().getLong("auto-kit-delay");
+        if (kitDelay != -1L) {
+            Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+                player.chat("/kit");
+            }, kitDelay);
+        }
 
+        // Delete alive projectiles of that player
+        ProjectileRemover.removeExistingProjectiles(player);
 
         DamageCauseLib damageCauseLib = new DamageCauseLib();
 
-        //Get all damage info and print to killed player
+        // Get all damage info and print to killed player
         NamespacedKey key = new NamespacedKey(plugin, "damageDistributionInfo");
         PlayerDamageDistribution damageData = player.getPersistentDataContainer().get(key, new PlayerDamageDistributionDataType());
         player.sendMessage(Component.text("You died!").color(NamedTextColor.RED).decoration(TextDecoration.BOLD, true));
@@ -153,6 +160,9 @@ public class DeathHandler implements Listener {
         boolean playerInvolved = true;
 
         //Check who should get credit
+        System.out.println(damageData.lastPlayerDamager);
+        System.out.println(damageData.lastOtherDamager);
+        System.out.println(1);
         if (damageData.lastPlayerDamager == null && damageData.lastOtherDamager != null){
             //This means the player was completely killed by environment, no player killer
             // Except when the killer is a zombie of a player -> handled down below
@@ -429,6 +439,7 @@ public class DeathHandler implements Listener {
 
     @EventHandler
     public void onPlayerCombatHit(EntityDamageByEntityEvent event){
+
         Player player = null;
         Player damager = null;
         boolean rangedCombat = true; //  whether a chat message should be sent; if ranged; yes
@@ -587,7 +598,6 @@ public class DeathHandler implements Listener {
 
     @EventHandler
     public void onPlayerTakeDamage(EntityDamageEvent event){
-
         //EVERYTHING WHERE A PLAYER IS NOT INVOLVED
         if (!(event.getEntity() instanceof Player)){
             return;
@@ -615,7 +625,7 @@ public class DeathHandler implements Listener {
         EntityDamageEvent.DamageCause cause = event.getCause();
 
         // This branch prevents fall damage from happening in the spawn area; it also returns so that it does not get added to damageDistribution
-        if (event.getCause() == EntityDamageEvent.DamageCause.FALL){
+        if (cause == EntityDamageEvent.DamageCause.FALL){
             Location fallLocation = player.getLocation();
 
             // - 0.5 because block and player location are off by 0.5 because Minecraft
