@@ -31,7 +31,9 @@ public final class PureKitPvP extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
+        PerkFireHandler.plugin = this; //idk? fixes npe?
+        PluginGetter.plugin = this; //this is dumb but used in >= 2 instances
+        // Has to be at the start because other class constructors use it
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
@@ -76,9 +78,6 @@ public final class PureKitPvP extends JavaPlugin {
         LanguageConfig.save();
         LanguageConfig.loadLanguage();
 
-        SidebarScoreboard sidebar = new SidebarScoreboard(this);
-//        sidebar.enableSidebar();
-
         getCommand("getkit").setExecutor(new GetKit(this));
         getCommand("kit").setExecutor(new KitsGUI(this));
         getCommand("perk").setExecutor(new PerkCommand(this));
@@ -105,6 +104,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockRemover(this), this);
         getServer().getPluginManager().registerEvents(new KitPreviewListener(this), this);
         getServer().getPluginManager().registerEvents(new ProjectileRemover(this), this);
+        getServer().getPluginManager().registerEvents(new SidebarScoreboard(this), this);
 
         getServer().getPluginManager().registerEvents(new CosmeticsGUIListener(this), this);
         getServer().getPluginManager().registerEvents(new KillEffect(this), this);
@@ -112,8 +112,9 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ProjectileTrail(this), this);
         getServer().getPluginManager().registerEvents(new ProjectileTrailInventory(this), this);
         getServer().getPluginManager().registerEvents(new KillMessageInventory(this), this);
-        PerkFireHandler.plugin = this; //idk? fixes npe?
-        PluginGetter.plugin = this; //this is dumb but used in >= 2 instances
+
+
+
 
         getLogger().info("Enabled PureKitPvP");
         getLogger().warning("Plugin active in world " + getConfig().getString("world")  + ". To change this, see the config.");

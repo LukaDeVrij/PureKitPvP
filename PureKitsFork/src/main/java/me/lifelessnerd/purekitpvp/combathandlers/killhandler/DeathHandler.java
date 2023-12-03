@@ -159,10 +159,7 @@ public class DeathHandler implements Listener {
         String credit = ""; // Needed for later
         boolean playerInvolved = true;
 
-        //Check who should get credit
-        System.out.println(damageData.lastPlayerDamager);
-        System.out.println(damageData.lastOtherDamager);
-        System.out.println(1);
+
         if (damageData.lastPlayerDamager == null && damageData.lastOtherDamager != null){
             //This means the player was completely killed by environment, no player killer
             // Except when the killer is a zombie of a player -> handled down below

@@ -168,6 +168,7 @@ public class LanguageConfig {
         defaults.put("EVENTS_PICKUP_DESC", "Killed players drop their stuff!");
         defaults.put("EVENTS_JUGGERNAUT_DESC", "Team up to kill the Juggernaut!");
 
+        defaults.put("SCOREBOARD_MAIN_TITLE", "&6PureKitPvP");
         defaults.put("SCOREBOARD_PERSONAL_TITLE", "&6Personal Stats");
         defaults.put("SCOREBOARD_PERSONAL_KILLSTREAK", "  &7Killstreak: &b%VALUE%");
         defaults.put("SCOREBOARD_PERSONAL_KILLS", "  &7Kills: &b%VALUE%");

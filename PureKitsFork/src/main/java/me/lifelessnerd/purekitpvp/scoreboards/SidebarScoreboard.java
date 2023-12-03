@@ -1,91 +1,119 @@
 package me.lifelessnerd.purekitpvp.scoreboards;
-
+import me.catcoder.sidebar.ProtocolSidebar;
+import me.catcoder.sidebar.Sidebar;
+import me.catcoder.sidebar.pager.SidebarPager;
 import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
+import me.lifelessnerd.purekitpvp.utils.DoubleUtils;
 import me.lifelessnerd.purekitpvp.utils.PlayerUtils;
+
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-public class SidebarScoreboard {
+public class SidebarScoreboard implements Listener {
     Plugin plugin;
-    Scoreboard scoreboard;
-    int currentPage;
-    List<String> enabled;
+
     public SidebarScoreboard(Plugin plugin) {
         this.plugin = plugin;
-        this.currentPage = 1;
-        this.enabled = plugin.getConfig().getStringList("enabled-slides");
-
-
-    }
-
-    public void enableSidebar(){
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
-        Scoreboard scoreboard = manager.getNewScoreboard();
-        this.scoreboard = scoreboard;
-
-
-
-
-        List<AbstractObjective> objectives = new ArrayList<>();
-        objectives.add(new PersonalObjective(plugin));
-        objectives.add(new GlobalObjective(plugin));
-
-
-        // Start task with this
-        BukkitTask runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                swapScoreboard(scoreboard, objectives);
-            }
-        }.runTaskTimer(plugin, 0, plugin.getConfig().getLong("scoreboard-period") * 20);
-
-
-
-    }
-
-    private void swapScoreboard(Scoreboard scoreboard, List<AbstractObjective> objectives){
 
         Set<Player> players = PlayerUtils.getPlayersInWorld(plugin.getConfig().getString("world"));
 
-        LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
-        Component displayName = serializer.deserialize(plugin.getConfig().getString("scoreboard-title"));
+        List<String> enabled = plugin.getConfig().getStringList("enabled-slides");
 
-        try {
-            scoreboard.getObjective("PersonalStats").unregister();
-            scoreboard.getObjective("GlobalStats").unregister();
-        } catch (Exception e){
+        ArrayList<Sidebar<Component>> enabledSidebars = new ArrayList<>();
+
+        Component titleComponent = LanguageConfig.lang.get("SCOREBOARD_MAIN_TITLE");
+
+        for (String panel : enabled) {
+
+            switch(panel){
+                case "GlobalStats":
+                    Sidebar<Component> globalStatsSidebar = ProtocolSidebar.newAdventureSidebar(titleComponent, plugin);
+                    fillGlobalSidebar(globalStatsSidebar);
+                    enabledSidebars.add(globalStatsSidebar);
+                    break;
+                case "PersonalStats":
+                    Sidebar<Component> personalStatsSidebar = ProtocolSidebar.newAdventureSidebar(titleComponent, plugin);
+                    fillPersonalSidebar(personalStatsSidebar);
+                    enabledSidebars.add(personalStatsSidebar);
+                    break;
+            }
         }
 
+        SidebarPager<Component> pager = new SidebarPager<>(
+                enabledSidebars, plugin.getConfig().getInt("scoreboard-period") * 20L, plugin);
 
-        Objective personalStats = scoreboard.registerNewObjective("PersonalStats", Criteria.DUMMY, displayName);
-        Objective globalStats = scoreboard.registerNewObjective("GlobalStats", Criteria.DUMMY, displayName);
+        // add page status line to all sidebars in pager
+        pager.addPageLine((page, maxPage, sidebar) ->
+                sidebar.addLine(Component.text("Page " + page + "/" + maxPage).color(NamedTextColor.GREEN)));
 
-        switch (currentPage % enabled.size()){
-            case 0:
-                for (Player player: players) {
-                    objectives.get(0).show(scoreboard, player);
-                    player.setScoreboard(scoreboard);
-                }
-                break;
-            case 1:
-                objectives.get(1).show(scoreboard, null);
-                break;
+
+        for (Player player : players){
+            pager.show(player);
         }
-
-
-
-        currentPage++;
     }
 
+    private void fillGlobalSidebar(Sidebar<Component> sidebar) {
 
+        int places = plugin.getConfig().getInt("global-stats-place-amount");
+        List<String> enabled = plugin.getConfig().getStringList("global-stats-components");
+
+        sidebar.updateLinesPeriodically(0, 20);
+    }
+
+    private void fillPersonalSidebar(Sidebar<Component> sidebar){
+
+        sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_PERSONAL_TITLE"));
+
+        List<String> enabled = plugin.getConfig().getStringList("personal-stats-components");
+
+        for (String component : enabled){
+            switch(component){
+                case "Killstreak":
+                    sidebar.addUpdatableLine(
+                            (player) -> LanguageConfig.lang.get("SCOREBOARD_PERSONAL_KILLSTREAK").
+                                    replaceText(ComponentUtils.replaceConfig("%VALUE%",
+                                            PlayerStatsConfig.get().getString(player.getName() + ".killstreak")))
+                    );
+                    break;
+                case "Kills":
+                    sidebar.addUpdatableLine(
+                            (player) -> LanguageConfig.lang.get("SCOREBOARD_PERSONAL_KILLS").
+                                    replaceText(ComponentUtils.replaceConfig("%VALUE%",
+                                            PlayerStatsConfig.get().getString(player.getName() + ".kills")))
+                    );
+                    break;
+                case "Deaths":
+                    sidebar.addUpdatableLine(
+                            (player) -> LanguageConfig.lang.get("SCOREBOARD_PERSONAL_DEATHS").
+                                    replaceText(ComponentUtils.replaceConfig("%VALUE%",
+                                            PlayerStatsConfig.get().getString(player.getName() + ".deaths")))
+                    );
+                    break;
+                case "KD":
+                    sidebar.addUpdatableLine(
+                            (player) -> LanguageConfig.lang.get("SCOREBOARD_PERSONAL_KD").
+                                    replaceText(ComponentUtils.replaceConfig("%VALUE%",
+                                            String.valueOf(DoubleUtils.round(
+                                                    PlayerStatsConfig.get().getDouble(player.getName() + ".kdratio"), 2)
+                                            )))
+                    );
+                    break;
+                case "Level":
+                    sidebar.addUpdatableLine(
+                            (player) -> LanguageConfig.lang.get("SCOREBOARD_PERSONAL_LEVEL").
+                                    replaceText(ComponentUtils.replaceConfig("%VALUE%",
+                                            PlayerStatsConfig.get().getString(player.getName() + ".level")))
+                    );
+                    break;
+            }
+        }
+
+        sidebar.updateLinesPeriodically(0, 20);
+    }
 }

@@ -107,6 +107,10 @@
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -115,6 +119,11 @@
             <artifactId>paper-api</artifactId>
             <version>1.20.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.catcoder</groupId>
+            <artifactId>bukkit-sidebar</artifactId>
+            <version>6.2.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>

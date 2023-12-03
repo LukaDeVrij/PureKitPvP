@@ -34,7 +34,7 @@ public class InfoCommand extends Subcommand{
                 &bPureKitPvP - version 1.2
                 &6SpigotMC: &ohttps://bit.ly/PureKitPvPSpigotMC
                 &6Github: &ohttps://github.com/LifelessNerd/PureKitPvP
-                &6Developer: &ohttps://twitter.com/NerdLifeless
+                &6Developer: &ohttps://twitter.com/LukaDeVrij
                 &rIf you have any problems, bugs or glitches, please do reach out to me via any of the links above.
                 """;
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
