@@ -13,6 +13,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+
 import java.util.*;
 
 public class SidebarScoreboard implements Listener {
@@ -63,7 +64,67 @@ public class SidebarScoreboard implements Listener {
         int places = plugin.getConfig().getInt("global-stats-place-amount");
         List<String> enabled = plugin.getConfig().getStringList("global-stats-components");
 
+        sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_GLOBAL_TITLE"));
+
+        for (String component : enabled){
+            ArrayList<Component> createdLeaderboard;
+            switch(component) {
+                case "Killstreak":
+                    sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_GLOBAL_KILLSTREAK"));
+                    createdLeaderboard = createLeaderboard(".killstreak", places);
+                    System.out.println("LIST: " + createdLeaderboard);
+                    sidebar.addUpdatableLine(
+                            (player) -> createdLeaderboard.get(0) // TODO test this when hashmap bug is fix -> use hashmap with string.int and use sort
+                            // https://www.digitalocean.com/community/tutorials/sort-hashmap-by-value-java
+                    );
+
+                    break;
+                case "Level":
+                    sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_GLOBAL_LEVEL"));
+//                    createdLeaderboard = createLeaderboard(".level", places);
+
+                    break;
+                case "Kills":
+                    sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_GLOBAL_KILLS"));
+//                    createdLeaderboard = createLeaderboard(".kills", places);
+
+                    break;
+                case "KD":
+                    sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_GLOBAL_KD"));
+//                    createdLeaderboard = createLeaderboard(".kdratio", places);
+
+                    break;
+            }
+        }
+
         sidebar.updateLinesPeriodically(0, 20);
+    }
+
+    private ArrayList<Component> createLeaderboard(String statKey, int places) {
+        TreeMap<Integer, String> leaderboard = new TreeMap<>();
+
+        Set<String> players = PlayerStatsConfig.get().getKeys(false);
+        System.out.println(players.size() + "," +  places);
+        for (String player : players){
+            int statValue = PlayerStatsConfig.get().getInt(player + statKey);
+            leaderboard.put(statValue, player);
+        }
+        System.out.println(leaderboard.size());
+        ArrayList<Component> toBeReturned = new ArrayList<>();
+
+        int enumerator = 0;
+        for (Integer stat : leaderboard.keySet()) {
+            if (enumerator >= places){
+                break;
+            }
+
+            System.out.println(leaderboard.get(stat) + ": " + stat);
+            toBeReturned.add(Component.text(leaderboard.get(stat) + ": " + stat));
+
+            enumerator++;
+        }
+
+        return toBeReturned;
     }
 
     private void fillPersonalSidebar(Sidebar<Component> sidebar){
