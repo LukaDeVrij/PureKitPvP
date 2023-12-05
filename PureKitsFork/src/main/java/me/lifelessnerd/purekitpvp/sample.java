@@ -9,27 +9,12 @@ import java.util.TreeMap;
 public class sample {
 
     public static void main(String[] args) {
-        Map<Integer, Integer> treeMap = new TreeMap<>();
 
-        // Adding elements to the tree map
-        treeMap.put(1, 0);
-        treeMap.put(2, 0);
-        treeMap.put(3, 0);
+        Double doublet = 0.1;
 
-        ArrayList<String> array = new ArrayList<>();
+        Double inty = 23.0;
+        System.out.println(doublet);
 
-        // Iterating over the elements of the tree map
-        int enumerator = 0;
-        for (Integer key : treeMap.keySet()) {
-            if (enumerator >= 6){
-                break;
-            }
-            array.add("Key: " + key + ", Value: " + treeMap.get(key));
-            enumerator++;
-        }
-
-        var dab = "dab";
-        System.out.println(array);
 
 
     }

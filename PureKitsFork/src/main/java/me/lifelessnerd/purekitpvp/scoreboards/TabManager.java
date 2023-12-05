@@ -23,7 +23,7 @@ public class TabManager {
     public TabManager(Plugin plugin) {
         this.plugin = plugin;
     }
-
+    // CURRENTLY NOT IN USE
     public void showTab(){
         if(header == null && footer == null) return;
 
@@ -33,8 +33,7 @@ public class TabManager {
             @Override
             public void run() {
 
-                // TODO
-                // get stats and such -- let owner choose what info? loop to append certain stats
+                // CURRENTLY NOT IN USE
 
                 net.minecraft.network.chat.Component headerTBS = ComponentUtils.toMojangComponent(header);
                 net.minecraft.network.chat.Component footerTBS = ComponentUtils.toMojangComponent(footer);
@@ -55,7 +54,7 @@ public class TabManager {
         }, 10, plugin.getConfig().getLong("tab-refresh-period"));
 
     }
-
+    // CURRENTLY NOT IN USE
     public void addHeader(Component header){
         this.header = this.header.append(header).appendNewline();
     }

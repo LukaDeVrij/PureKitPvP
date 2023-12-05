@@ -13,16 +13,21 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
 public class SidebarScoreboard implements Listener {
     Plugin plugin;
 
+
     public SidebarScoreboard(Plugin plugin) {
         this.plugin = plugin;
 
-        refreshLeaderboard();
+
+        if (plugin.getConfig().getBoolean("scoreboard-enabled")){
+            refreshLeaderboard();
+        }
 
     }
 
@@ -51,8 +56,9 @@ public class SidebarScoreboard implements Listener {
             }
         }
 
+        long period = plugin.getConfig().getInt("scoreboard-period") * 20L;
         SidebarPager<Component> pager = new SidebarPager<>(
-                enabledSidebars, plugin.getConfig().getInt("scoreboard-period") * 20L, plugin);
+                enabledSidebars, period, plugin);
 
         // add page status line to all sidebars in pager
         pager.addPageLine((page, maxPage, sidebar) ->
@@ -61,7 +67,20 @@ public class SidebarScoreboard implements Listener {
 
         for (Player player : players){
             pager.show(player);
+            if (!(plugin.getConfig().getBoolean("scoreboard-enabled"))){
+                pager.hide(player);
+            }
         }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (plugin.getConfig().getBoolean("scoreboard-enabled")){
+                    refreshLeaderboard();
+                }
+                pager.destroy();
+            }
+        }.runTaskLater(plugin, period * 2);
     }
 
 
@@ -101,15 +120,12 @@ public class SidebarScoreboard implements Listener {
                     createdLeaderboard = new ArrayList<>(); // This is empty; only happens when there are no/faulty values defined
                     break;
             }
-            System.out.println("LIST: " + createdLeaderboard);
+
             for (Component line : createdLeaderboard){
                 sidebar.addUpdatableLine(
                         (player) -> {
-                            System.out.println("testing");
-                            refreshLeaderboard(); // I need to make this function anyway to make it work with /pkpvp reload
                             return line;
                         }
-                        // TODO test this
                 );
             }
         }
@@ -119,21 +135,19 @@ public class SidebarScoreboard implements Listener {
 
 
     private ArrayList<Component> createLeaderboard(String statKey, int places) {
-        HashMap<String, Integer> leaderboard = new HashMap<>();
+        HashMap<String, Double> leaderboard = new HashMap<>();
 
         Set<String> players = PlayerStatsConfig.get().getKeys(false);
-        System.out.println(players.size() + "," +  places);
+
         for (String player : players){
-            int statValue = PlayerStatsConfig.get().getInt(player + statKey);
+            double statValue = PlayerStatsConfig.get().getDouble(player + statKey);
             leaderboard.put(player, statValue);
         }
 
         ArrayList<Component> toBeReturned = new ArrayList<>();
 
         for (int i = 0; i < places; i++) {
-            System.out.println(i);
-            System.out.println(leaderboard);
-            int highestScore = 0;
+            double highestScore = 0;
             String highestPlayer = null;
             for (String player : leaderboard.keySet()) {
                 if (leaderboard.get(player) > highestScore) {
@@ -142,7 +156,13 @@ public class SidebarScoreboard implements Listener {
                 }
             }
             if (highestPlayer != null) {
-                toBeReturned.add(Component.text(highestPlayer + " - " + highestScore, NamedTextColor.GRAY));
+                highestScore = DoubleUtils.round(highestScore, 2);
+                if (highestScore % 1 == 0){
+                    int highestScoreInt = (int) highestScore;
+                    toBeReturned.add(Component.text("    " + highestPlayer + " - ", NamedTextColor.GRAY).append(Component.text(highestScoreInt, NamedTextColor.AQUA)));
+                } else {
+                    toBeReturned.add(Component.text("    " + highestPlayer + " - ", NamedTextColor.GRAY).append(Component.text(highestScore, NamedTextColor.AQUA)));
+                }
                 leaderboard.remove(highestPlayer);
             }
         }

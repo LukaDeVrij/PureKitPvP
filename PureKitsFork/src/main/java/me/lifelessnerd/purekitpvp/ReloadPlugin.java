@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp;
 
 import me.lifelessnerd.purekitpvp.files.*;
+import me.lifelessnerd.purekitpvp.scoreboards.SidebarScoreboard;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -65,6 +66,8 @@ public class ReloadPlugin extends Subcommand {
         plugin.getConfig();
         plugin.saveConfig();
         plugin.saveDefaultConfig();
+
+        SidebarScoreboard scoreboard = new SidebarScoreboard(plugin); // Make new Scoreboard instance
 
         player.sendMessage(Component.text("Plugin configs were reloaded!"));
         player.sendMessage(Component.text("Please note that settings relating to events are not reloaded." +

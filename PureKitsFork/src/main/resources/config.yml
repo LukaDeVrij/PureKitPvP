@@ -83,36 +83,42 @@ global-event-loop: true
 global-event-period: 300
 
 # Events that occur in global combat event loop
-global-events-enabled: ["TeleMadness","Pickup Frenzy"]
+global-events-enabled: ["TeleMadness","Pickup Frenzy", "Double Health"]
 
 # Event lengths in seconds
 telemadness-length: 30
 pickup-frenzy-length: 60
-juggernaut-length: 60
+double-health-length: 60
 
+# Scoreboard is in BETA; reloading the plugin might not fully reload scoreboard or it might introduce bugs
+# When any bugs relating to the scoreboard arise, reloading will most likely solve them.
+# If bugs are persistent; report them please -> /purekitpvp info
 # Scoreboard Sidebar - enabled?
 scoreboard-enabled: true
-scoreboard-title: "&6&lPureKitPvP"
 
 # Time between slides in seconds
 scoreboard-period: 10
 
 # Slides of the sidebar scoreboard
+# Choices: GlobalStats, PersonalStats
 enabled-slides:
   - GlobalStats
   - PersonalStats
 
 # What components of the global stats should be displayed
+# Choices: Killstreak, Level, Kills, KD
 global-stats-components:
   - Killstreak
   - Level
   - Kills
   - KD
 
-# Amount of places for players per component: if all components are enabled 2 is max here
+# Amount of places for players per component:
+# !! If all components above are enabled 2 IS MAX HERE!
 global-stats-place-amount: 2
 
-
+# What components of the personal stats should be displayed
+# Choices: Killstreak, Level, Kills, KD, Deaths
 personal-stats-components:
   - Killstreak
   - Kills

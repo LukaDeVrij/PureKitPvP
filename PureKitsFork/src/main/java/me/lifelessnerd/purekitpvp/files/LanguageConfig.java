@@ -176,12 +176,10 @@ public class LanguageConfig {
         defaults.put("SCOREBOARD_PERSONAL_KD", "  &7K/D Ratio: &b%VALUE%");
         defaults.put("SCOREBOARD_PERSONAL_LEVEL", "  &7Level: &b%VALUE%");
         defaults.put("SCOREBOARD_GLOBAL_TITLE", "&6Global Stats");
-        defaults.put("SCOREBOARD_GLOBAL_KILLSTREAK", "  &7Killstreak");
-        defaults.put("SCOREBOARD_GLOBAL_KILLS", "  &7Kills");
-        defaults.put("SCOREBOARD_GLOBAL_KD", "  &7K/D Ratio");
-        defaults.put("SCOREBOARD_GLOBAL_LEVEL", "  &7Level");
-
-
+        defaults.put("SCOREBOARD_GLOBAL_KILLSTREAK", "  &dKillstreak");
+        defaults.put("SCOREBOARD_GLOBAL_KILLS", "  &dKills");
+        defaults.put("SCOREBOARD_GLOBAL_KD", "  &dK/D Ratio");
+        defaults.put("SCOREBOARD_GLOBAL_LEVEL", "  &dLevel");
 
 
         customFile.addDefaults(defaults);

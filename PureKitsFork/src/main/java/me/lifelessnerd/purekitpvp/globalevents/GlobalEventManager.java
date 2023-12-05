@@ -2,6 +2,7 @@ package me.lifelessnerd.purekitpvp.globalevents;
 
 import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.globalevents.events.AbstractEvent;
+import me.lifelessnerd.purekitpvp.globalevents.events.DoubleHealthEvent;
 import me.lifelessnerd.purekitpvp.globalevents.events.PickupFrenzyEvent;
 import me.lifelessnerd.purekitpvp.globalevents.events.TeleMadnessEvent;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
@@ -37,6 +38,7 @@ public class GlobalEventManager {
         this.allEvents = new ArrayList<>();
         allEvents.add(new PickupFrenzyEvent(plugin));
         allEvents.add(new TeleMadnessEvent(plugin));
+        allEvents.add(new DoubleHealthEvent(plugin));
 
         enabledByConfig = new ArrayList<>();
         for (AbstractEvent event : this.allEvents) {

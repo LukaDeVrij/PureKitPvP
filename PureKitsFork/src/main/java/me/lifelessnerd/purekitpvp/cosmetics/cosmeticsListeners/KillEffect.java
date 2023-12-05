@@ -17,6 +17,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.swing.text.html.HTMLDocument;
+import java.util.Random;
 import java.util.logging.Level;
 
 public class KillEffect implements Listener {
@@ -99,14 +100,16 @@ public class KillEffect implements Listener {
     }
 
     public static void bloodExplosion(Location location) {
-
+        Random rnd = new Random();
         for (float i = 0.5f; i < 1.8f; i += 0.1) {
+            float rndFloat = rnd.nextFloat() / 10;
             location.getWorld().spawnParticle(
                     Particle.BLOCK_CRACK,
-                    location.add(0,i,0),
+                    location.add(rndFloat,i,rndFloat),
                     20,
                     Material.REDSTONE_BLOCK.createBlockData()
             );
+            location.subtract(rndFloat, i, rndFloat);
         }
 
     }

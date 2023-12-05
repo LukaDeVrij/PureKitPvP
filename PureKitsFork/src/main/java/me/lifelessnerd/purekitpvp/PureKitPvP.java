@@ -4,6 +4,7 @@ import me.lifelessnerd.purekitpvp.combathandlers.leveling.PlayerLevelChat;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
+import me.lifelessnerd.purekitpvp.globalevents.events.DoubleHealthListeners;
 import me.lifelessnerd.purekitpvp.kitCommand.KitPreviewListener;
 import me.lifelessnerd.purekitpvp.scoreboards.SidebarScoreboard;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
@@ -78,6 +79,8 @@ public final class PureKitPvP extends JavaPlugin {
         LanguageConfig.save();
         LanguageConfig.loadLanguage();
 
+        SidebarScoreboard scoreboard = new SidebarScoreboard(this);
+
         getCommand("getkit").setExecutor(new GetKit(this));
         getCommand("kit").setExecutor(new KitsGUI(this));
         getCommand("perk").setExecutor(new PerkCommand(this));
@@ -104,7 +107,7 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockRemover(this), this);
         getServer().getPluginManager().registerEvents(new KitPreviewListener(this), this);
         getServer().getPluginManager().registerEvents(new ProjectileRemover(this), this);
-        getServer().getPluginManager().registerEvents(new SidebarScoreboard(this), this);
+        getServer().getPluginManager().registerEvents(new DoubleHealthListeners(this), this);
 
         getServer().getPluginManager().registerEvents(new CosmeticsGUIListener(this), this);
         getServer().getPluginManager().registerEvents(new KillEffect(this), this);
