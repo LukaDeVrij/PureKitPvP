@@ -22,6 +22,11 @@ public class SidebarScoreboard implements Listener {
     public SidebarScoreboard(Plugin plugin) {
         this.plugin = plugin;
 
+        refreshLeaderboard();
+
+    }
+
+    public void refreshLeaderboard() {
         Set<Player> players = PlayerUtils.getPlayersInWorld(plugin.getConfig().getString("world"));
 
         List<String> enabled = plugin.getConfig().getStringList("enabled-slides");
@@ -59,6 +64,7 @@ public class SidebarScoreboard implements Listener {
         }
     }
 
+
     private void fillGlobalSidebar(Sidebar<Component> sidebar) {
 
         int places = plugin.getConfig().getInt("global-stats-place-amount");
@@ -67,61 +73,78 @@ public class SidebarScoreboard implements Listener {
         sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_GLOBAL_TITLE"));
 
         for (String component : enabled){
-            ArrayList<Component> createdLeaderboard;
+            ArrayList<Component> createdLeaderboard = null;
             switch(component) {
                 case "Killstreak":
                     sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_GLOBAL_KILLSTREAK"));
                     createdLeaderboard = createLeaderboard(".killstreak", places);
-                    System.out.println("LIST: " + createdLeaderboard);
-                    sidebar.addUpdatableLine(
-                            (player) -> createdLeaderboard.get(0) // TODO test this when hashmap bug is fix -> use hashmap with string.int and use sort
-                            // https://www.digitalocean.com/community/tutorials/sort-hashmap-by-value-java
-                    );
 
                     break;
                 case "Level":
                     sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_GLOBAL_LEVEL"));
-//                    createdLeaderboard = createLeaderboard(".level", places);
+                    createdLeaderboard = createLeaderboard(".level", places);
 
                     break;
                 case "Kills":
                     sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_GLOBAL_KILLS"));
-//                    createdLeaderboard = createLeaderboard(".kills", places);
+                    createdLeaderboard = createLeaderboard(".kills", places);
 
                     break;
                 case "KD":
                     sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_GLOBAL_KD"));
-//                    createdLeaderboard = createLeaderboard(".kdratio", places);
+                    createdLeaderboard = createLeaderboard(".kdratio", places);
 
                     break;
+                default:
+                    plugin.getLogger().warning("Global leaderboard components are wrongly defined! " +
+                            "If you do not want a global scoreboard, change this in the enabled-slides value.");
+                    createdLeaderboard = new ArrayList<>(); // This is empty; only happens when there are no/faulty values defined
+                    break;
+            }
+            System.out.println("LIST: " + createdLeaderboard);
+            for (Component line : createdLeaderboard){
+                sidebar.addUpdatableLine(
+                        (player) -> {
+                            System.out.println("testing");
+                            refreshLeaderboard(); // I need to make this function anyway to make it work with /pkpvp reload
+                            return line;
+                        }
+                        // TODO test this
+                );
             }
         }
 
         sidebar.updateLinesPeriodically(0, 20);
     }
 
+
     private ArrayList<Component> createLeaderboard(String statKey, int places) {
-        TreeMap<Integer, String> leaderboard = new TreeMap<>();
+        HashMap<String, Integer> leaderboard = new HashMap<>();
 
         Set<String> players = PlayerStatsConfig.get().getKeys(false);
         System.out.println(players.size() + "," +  places);
         for (String player : players){
             int statValue = PlayerStatsConfig.get().getInt(player + statKey);
-            leaderboard.put(statValue, player);
+            leaderboard.put(player, statValue);
         }
-        System.out.println(leaderboard.size());
+
         ArrayList<Component> toBeReturned = new ArrayList<>();
 
-        int enumerator = 0;
-        for (Integer stat : leaderboard.keySet()) {
-            if (enumerator >= places){
-                break;
+        for (int i = 0; i < places; i++) {
+            System.out.println(i);
+            System.out.println(leaderboard);
+            int highestScore = 0;
+            String highestPlayer = null;
+            for (String player : leaderboard.keySet()) {
+                if (leaderboard.get(player) > highestScore) {
+                    highestScore = leaderboard.get(player);
+                    highestPlayer = player;
+                }
             }
-
-            System.out.println(leaderboard.get(stat) + ": " + stat);
-            toBeReturned.add(Component.text(leaderboard.get(stat) + ": " + stat));
-
-            enumerator++;
+            if (highestPlayer != null) {
+                toBeReturned.add(Component.text(highestPlayer + " - " + highestScore, NamedTextColor.GRAY));
+                leaderboard.remove(highestPlayer);
+            }
         }
 
         return toBeReturned;
@@ -176,5 +199,26 @@ public class SidebarScoreboard implements Listener {
         }
 
         sidebar.updateLinesPeriodically(0, 20);
+    }
+
+    private HashMap<String, Integer> orderLeaderboard(HashMap<String, Integer> unordered){
+        HashMap<String, Integer> sortedMap = new HashMap<>();
+        ArrayList<Integer> list = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : unordered.entrySet()) {
+            list.add(entry.getValue());
+        }
+        Collections.sort(list, new Comparator<Integer>() {
+            public int compare(Integer int1, Integer int2) {
+                return (int1).compareTo(int2);
+            }
+        });
+        for (Integer integer : list) {
+            for (Map.Entry<String, Integer> entry : unordered.entrySet()) {
+                if (entry.getValue().equals(integer)) {
+                    sortedMap.put(entry.getKey(), integer);
+                }
+            }
+        }
+        return sortedMap;
     }
 }
