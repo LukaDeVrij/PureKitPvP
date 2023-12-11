@@ -78,11 +78,11 @@ public class LanguageConfig {
                 &rGain 1 XP level on kill
                 """);
         defaults.put("PERKS_PERK_NOTORIETY", """
-                &r15% chance of gaining a sharpness level on each kill
-                &rwill be added to the item held
+                &rChance of gaining a sharpness level on each kill
+                &rChance is 100 - (25 * Sharpness Level) percent
                 """);
         defaults.put("PERKS_PERK_NOTORIETY_MAX", "&eYou have reached the maximum Notoriety!");
-        defaults.put("PERKS_PERK_NOTORIETY_UPGRADE", "&eYour sharpness level has increased!");
+        defaults.put("PERKS_PERK_NOTORIETY_UPGRADE", "&eYour sharpness level has increased (chance of %CHANCE%%)!");
         defaults.put("PERKS_PERK_ENDERMAGIC", """
                 &r30% chance of gaining an ender pearl on kill
                 """);
@@ -111,10 +111,10 @@ public class LanguageConfig {
                 &ryou dealt, as instant health
                 """);
         defaults.put("PERKS_PERK_MARKSMAN", """
-                &r50% chance of gaining a power level on each bow kill
-                &rPower is added to the item held, if it's a bow
+                &rChance of 100 - (25 * Power level) percent to
+                &radd power to the item held, if it's a bow
                 """);
-        defaults.put("PERKS_PERK_MARKSMAN_UPGRADE","&eYour power level has increased!");
+        defaults.put("PERKS_PERK_MARKSMAN_UPGRADE","&eYour power level has increased (chance of %CHANCE%%)!");
         defaults.put("PERKS_PERK_MARKSMAN_MAX","&eYou have reached the maximum power level!");
         defaults.put("PERKS_PERK_APOLLO", """
                 &rYou get each arrow you hit on a player back
@@ -167,6 +167,7 @@ public class LanguageConfig {
                 """);
         defaults.put("EVENTS_PICKUP_DESC", "Killed players drop their stuff!");
         defaults.put("EVENTS_JUGGERNAUT_DESC", "Team up to kill the Juggernaut!");
+        defaults.put("EVENTS_DOUBLE_DESC", "All player health is doubled!");
 
         defaults.put("SCOREBOARD_MAIN_TITLE", "&6PureKitPvP");
         defaults.put("SCOREBOARD_PERSONAL_TITLE", "&6Personal Stats");

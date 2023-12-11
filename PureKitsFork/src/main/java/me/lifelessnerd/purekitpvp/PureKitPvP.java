@@ -37,7 +37,7 @@ public final class PureKitPvP extends JavaPlugin {
         // Has to be at the start because other class constructors use it
 
         getConfig().options().copyDefaults();
-        saveDefaultConfig();
+        saveConfig();
 
         //Kits config
         KitConfig.setup();

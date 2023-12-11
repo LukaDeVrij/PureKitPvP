@@ -115,14 +115,6 @@ public class ComponentUtils {
         return textComponent;
     }
 
-    public static net.minecraft.network.chat.Component toMojangComponent(@Nullable Component inputComponent){
-        if (inputComponent == null){
-            return net.minecraft.network.chat.Component.literal("");
-        }
-        String json = GsonComponentSerializer.gson().serialize(inputComponent);
-        return net.minecraft.network.chat.Component.Serializer.fromJson(json);
-    }
-
     public static TextReplacementConfig replaceConfig(String find, String replace){
         return replaceConfig(find, replace, 1);
     }

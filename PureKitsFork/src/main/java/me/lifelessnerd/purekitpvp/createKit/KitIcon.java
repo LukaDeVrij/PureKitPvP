@@ -163,7 +163,7 @@ public class KitIcon {
             "chiseled_sandstone",
             "cut_sandstone",
             "cobweb",
-            "grass",
+            "short_grass",
             "fern",
             "azalea",
             "flowering_azalea",

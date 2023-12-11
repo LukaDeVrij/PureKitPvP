@@ -108,7 +108,12 @@ public class DeathHandler implements Listener {
             player.setFireTicks(0);
             player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 5, 1));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10 , 1));
-            player.setHealth(20);
+            if (EventDataClass.doubleHealth){
+                player.setHealth(40);
+            } else {
+                player.setHealth(20);
+            }
+
 
         }, 2L);
 

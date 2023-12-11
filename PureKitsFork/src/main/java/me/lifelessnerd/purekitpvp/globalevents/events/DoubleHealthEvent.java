@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.globalevents.events;
 
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.globalevents.EventDataClass;
 import me.lifelessnerd.purekitpvp.utils.PlayerUtils;
 import net.kyori.adventure.text.Component;
@@ -28,7 +29,7 @@ public class DoubleHealthEvent extends AbstractEvent{
 
     @Override
     public Component getEventDescription() {
-        return Component.text(""); // TODO add lang defs
+        return LanguageConfig.lang.get("EVENTS_DOUBLE_DESC"); // TODO add lang defs
     }
 
     @Override
@@ -39,6 +40,7 @@ public class DoubleHealthEvent extends AbstractEvent{
         for (Player player : players){
             AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
             attribute.setBaseValue(40.0D);
+            player.setHealth(40.0D);
         }
         startEndListener(null);
     }
@@ -54,7 +56,8 @@ public class DoubleHealthEvent extends AbstractEvent{
         Set<Player> players = PlayerUtils.getPlayersInWorld(plugin.getConfig().getString("world"));
         for (Player player : players){
             AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-            attribute.setBaseValue(40.0D);
+            attribute.setBaseValue(20.0D);
+            player.setHealth(20.0D);
         }
         this.running = false;
     }

@@ -80,6 +80,8 @@ public class PerkCommand implements CommandExecutor {
         kitItem.setItemMeta(kitItemMeta);
         perksInventory.setItem(49, kitItem);
 
+        // Notoriety and marksman perk lore could be better if we replaceText with the config value; but then there
+        // would need to be edge cases below (if notoriety -> replace lore with value ) - dats ugly tho
 
         //Fill perk slots with either empty or actual perk icon
         for (int index = 20; index <= 24; index++){

@@ -6,7 +6,6 @@ import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.PerkData;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
-import net.minecraft.locale.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -74,12 +73,14 @@ public class PerkFireHandler {
                     break;
                 case "NOTORIETY":
 
-                    if(Math.random() <= 0.15) {
-                        ItemStack weapon = player.getInventory().getItemInMainHand();
-                        ItemMeta weaponMeta = weapon.getItemMeta();
-                        if (weaponMeta == null){continue;} // If weapon is hand TODO maybe - check if it is a weapon?
-                        int sharpnessLevel = weaponMeta.getEnchantLevel(Enchantment.DAMAGE_ALL);
+                    ItemStack weapon = player.getInventory().getItemInMainHand();
+                    ItemMeta weaponMeta = weapon.getItemMeta();
+                    if (weaponMeta == null){continue;} // If weapon is hand TODO maybe - check if it is a weapon?
+                    if (weapon.getType() == Material.BOW){continue;} // meh
+                    int sharpnessLevel = weaponMeta.getEnchantLevel(Enchantment.DAMAGE_ALL);
 
+                    double rnd = Math.random();
+                    if(rnd * 100 <= (100 - plugin.getConfig().getInt("notoriety-chance-decrease") * sharpnessLevel)) {
                         if (plugin.getConfig().getInt("notoriety-maximum") != -1){
                             // So if the boundary is set to SOME value
                             if (sharpnessLevel >= plugin.getConfig().getInt("notoriety-maximum")){
@@ -91,7 +92,9 @@ public class PerkFireHandler {
                         weaponMeta.removeEnchant(Enchantment.DAMAGE_ALL);
                         weaponMeta.addEnchant(Enchantment.DAMAGE_ALL, sharpnessLevel + 1, true);
                         weapon.setItemMeta(weaponMeta);
-                        player.sendMessage(LanguageConfig.lang.get("PERKS_PERK_NOTORIETY_UPGRADE"));
+                        player.sendMessage(LanguageConfig.lang.get("PERKS_PERK_NOTORIETY_UPGRADE").
+                                replaceText(ComponentUtils.replaceConfig("%CHANCE%",
+                                String.valueOf(100 - plugin.getConfig().getInt("notoriety-chance-decrease") * sharpnessLevel))));
                     }
                     break;
                 case "ENDERMAGIC":
@@ -107,12 +110,15 @@ public class PerkFireHandler {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1));
                     break;
                 case "MARKSMAN":
-                    if(Math.random() <= 0.5) {
-                        ItemStack weapon = player.getInventory().getItemInMainHand();
-                        ItemMeta weaponMeta = weapon.getItemMeta();
-                        if (weapon.getType() != Material.BOW){continue;}
-                        if (weaponMeta == null){continue;} // If weapon is hand
-                        int powerLevel = weaponMeta.getEnchantLevel(Enchantment.ARROW_DAMAGE);
+
+                    ItemStack weaponMarksman = player.getInventory().getItemInMainHand();
+                    ItemMeta weaponMarksmanMeta = weaponMarksman.getItemMeta();
+                    if (weaponMarksman.getType() != Material.BOW){continue;}
+                    if (weaponMarksmanMeta == null){continue;} // If weapon is hand
+                    int powerLevel = weaponMarksmanMeta.getEnchantLevel(Enchantment.ARROW_DAMAGE);
+
+                    double rnd2 = Math.random();
+                    if(rnd2 * 100 <= (100 - plugin.getConfig().getInt("notoriety-chance-decrease") * powerLevel)) {
 
                         if (plugin.getConfig().getInt("marksman-maximum") != -1){
                             // So if the boundary is set to SOME value
@@ -122,10 +128,12 @@ public class PerkFireHandler {
                                 continue;
                             }
                         }
-                        weaponMeta.removeEnchant(Enchantment.ARROW_DAMAGE);
-                        weaponMeta.addEnchant(Enchantment.ARROW_DAMAGE, powerLevel + 1, true);
-                        weapon.setItemMeta(weaponMeta);
-                        player.sendMessage(LanguageConfig.lang.get("PERKS_PERK_MARKSMAN_UPGRADE"));
+                        weaponMarksmanMeta.removeEnchant(Enchantment.ARROW_DAMAGE);
+                        weaponMarksmanMeta.addEnchant(Enchantment.ARROW_DAMAGE, powerLevel + 1, true);
+                        weaponMarksman.setItemMeta(weaponMarksmanMeta);
+                        player.sendMessage(LanguageConfig.lang.get("PERKS_PERK_MARKSMAN_UPGRADE").
+                                replaceText(ComponentUtils.replaceConfig("%CHANCE%",
+                                String.valueOf(100 - plugin.getConfig().getInt("notoriety-chance-decrease") * powerLevel))));
                     }
                     break;
 

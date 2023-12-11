@@ -26,13 +26,15 @@ public class MyStringUtils {
     }
 
     public static String mapStringToEnchantment(String string){
+        ///TODO Enchantment has become CraftEnchantment - breaks everything?!
+        //I {Enchantment:[minecraft:fire_protection, PROTECTION_FIRE]=4, Enchantment:[minecraft:infinity, INFINITY]=1}
+        System.out.println(string);
 
-//I {Enchantment:[minecraft:fire_protection, PROTECTION_FIRE]=4, Enchantment:[minecraft:infinity, INFINITY]=1}
-        StringBuilder result = new StringBuilder("");
+        StringBuilder result = new StringBuilder();
 
         StringBuilder builder = new StringBuilder(string);
         builder.deleteCharAt(0);
-        builder.deleteCharAt(string.length() -2);
+        builder.deleteCharAt(string.length() - 2);
         string = builder.toString();
         String[] split = string.split("minecraft:");
         for (int index = 1; index < split.length; index++){
@@ -41,7 +43,7 @@ public class MyStringUtils {
             String[] splitAgain = word.split(",");
             String levelString = splitAgain[1];
             String[] isolateLevel = levelString.split("=");
-            int level = Integer.parseInt(isolateLevel[isolateLevel.length - 1]); //HERE
+            int level = Integer.parseInt(isolateLevel[isolateLevel.length - 1]);
             word = splitAgain[0];
             word = MyStringUtils.itemCamelCase(word);
             result.append(word).append(level).append(" ");

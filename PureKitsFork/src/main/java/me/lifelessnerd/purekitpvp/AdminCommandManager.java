@@ -59,7 +59,7 @@ public class AdminCommandManager implements TabExecutor {
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(Component.text("The console cannot perform these commands."));
-            return false; // TODO make this subcommand specific
+            return false; // TODO make this subcommand specific - quite hard; abstract subcommand has Player in signature
         }
         Player player = (Player) sender;
 
