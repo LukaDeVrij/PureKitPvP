@@ -117,8 +117,6 @@ public final class PureKitPvP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new KillMessageInventory(this), this);
 
 
-
-
         getLogger().info("Enabled PureKitPvP");
         getLogger().warning("Plugin active in world " + getConfig().getString("world")  + ". To change this, see the config.");
     }

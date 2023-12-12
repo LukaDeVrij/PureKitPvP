@@ -26,32 +26,28 @@ public class MyStringUtils {
     }
 
     public static String mapStringToEnchantment(String string){
-        ///TODO Enchantment has become CraftEnchantment - breaks everything?!
-        //I {Enchantment:[minecraft:fire_protection, PROTECTION_FIRE]=4, Enchantment:[minecraft:infinity, INFINITY]=1}
-        System.out.println(string);
 
+        //{CraftEnchantment[minecraft:knockback]=11, CraftEnchantment[minecraft:fire_aspect]=2}
         StringBuilder result = new StringBuilder();
 
         StringBuilder builder = new StringBuilder(string);
         builder.deleteCharAt(0);
         builder.deleteCharAt(string.length() - 2);
         string = builder.toString();
-        String[] split = string.split("minecraft:");
-        for (int index = 1; index < split.length; index++){
-            String word = split[index];
 
-            String[] splitAgain = word.split(",");
-            String levelString = splitAgain[1];
-            String[] isolateLevel = levelString.split("=");
-            int level = Integer.parseInt(isolateLevel[isolateLevel.length - 1]);
-            word = splitAgain[0];
-            word = MyStringUtils.itemCamelCase(word);
-            result.append(word).append(level).append(" ");
+        String[] split = string.split(",");
+        for(String substring : split){
+            substring = substring.trim();
+            substring = substring.substring(16);
+            String level = substring.split("=")[1];
+            String splitEnchantment = substring.split("]")[0];
+            String enchantment = splitEnchantment.split(":")[1];
+
+            result.append(MyStringUtils.itemCamelCase(enchantment)).append(level);
+            result.append(", ");
         }
-
-
-        return result.toString();
-        //Output: Fire Protection 4, Infinity 1
+        return result.substring(0, result.length() - 2);
+        //Output: Knockback 11, Fire Aspect 2
     }
 
     public static String itemMetaToEffects(String string){

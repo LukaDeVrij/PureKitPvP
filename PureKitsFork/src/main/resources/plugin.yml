@@ -4,7 +4,7 @@ main: me.lifelessnerd.purekitpvp.PureKitPvP
 api-version: 1.19
 authors: [ LifelessNerd ]
 description: KitPVP plugin, made to work with PureKits kits (abandoned)
-depend:
+softdepend:
   - WorldGuard
 commands:
   getkit:

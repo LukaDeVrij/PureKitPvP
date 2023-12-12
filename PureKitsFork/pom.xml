@@ -44,45 +44,45 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>net.md-5</groupId>
-                <artifactId>specialsource-maven-plugin</artifactId>
-                <version>1.2.2</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>remap</goal>
-                        </goals>
-                        <id>remap-obf</id>
-                        <configuration>
-                            <srgIn>org.spigotmc:minecraft-server:1.20.2-R0.1-SNAPSHOT:txt:maps-mojang</srgIn>
-                            <reverse>true</reverse>
-                            <remappedDependencies>org.spigotmc:spigot:1.20.2-R0.1-SNAPSHOT:jar:remapped-mojang</remappedDependencies>
-                            <remappedArtifactAttached>true</remappedArtifactAttached>
-                            <remappedClassifierName>remapped-obf</remappedClassifierName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>remap</goal>
-                        </goals>
-                        <id>remap-spigot</id>
-                        <configuration>
-                            <inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
-                            <srgIn>org.spigotmc:minecraft-server:1.20.2-R0.1-SNAPSHOT:csrg:maps-spigot</srgIn>
-                            <remappedDependencies>org.spigotmc:spigot:1.20.2-R0.1-SNAPSHOT:jar:remapped-obf</remappedDependencies>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>net.md-5</groupId>-->
+<!--                <artifactId>specialsource-maven-plugin</artifactId>-->
+<!--                <version>1.2.2</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>remap</goal>-->
+<!--                        </goals>-->
+<!--                        <id>remap-obf</id>-->
+<!--                        <configuration>-->
+<!--                            <srgIn>org.spigotmc:minecraft-server:1.20.2-R0.1-SNAPSHOT:txt:maps-mojang</srgIn>-->
+<!--                            <reverse>true</reverse>-->
+<!--                            <remappedDependencies>org.spigotmc:spigot:1.20.2-R0.1-SNAPSHOT:jar:remapped-mojang</remappedDependencies>-->
+<!--                            <remappedArtifactAttached>true</remappedArtifactAttached>-->
+<!--                            <remappedClassifierName>remapped-obf</remappedClassifierName>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>remap</goal>-->
+<!--                        </goals>-->
+<!--                        <id>remap-spigot</id>-->
+<!--                        <configuration>-->
+<!--                            <inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>-->
+<!--                            <srgIn>org.spigotmc:minecraft-server:1.20.2-R0.1-SNAPSHOT:csrg:maps-spigot</srgIn>-->
+<!--                            <remappedDependencies>org.spigotmc:spigot:1.20.2-R0.1-SNAPSHOT:jar:remapped-obf</remappedDependencies>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <outputDirectory>F:\Minecraft\Servers\MC 1.20 Server\plugins</outputDirectory>
+                    <outputDirectory>F:\Minecraft\Servers\MC 1.20.4 Server\plugins</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
@@ -103,10 +103,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>sk89q-repo</id>
-            <url>https://maven.enginehub.org/repo/</url>
-        </repository>
+<!--        <repository>-->
+<!--            <id>sk89q-repo</id>-->
+<!--            <url>https://maven.enginehub.org/repo/</url>-->
+<!--        </repository>-->
         <repository>
             <id>sonatype-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
@@ -125,11 +125,11 @@
             <artifactId>bukkit-sidebar</artifactId>
             <version>6.2.5-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.sk89q.worldguard</groupId>
-            <artifactId>worldguard-bukkit</artifactId>
-            <version>7.0.9</version>
-            <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.sk89q.worldguard</groupId>-->
+<!--            <artifactId>worldguard-bukkit</artifactId>-->
+<!--            <version>7.0.9</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
     </dependencies>
 </project>
