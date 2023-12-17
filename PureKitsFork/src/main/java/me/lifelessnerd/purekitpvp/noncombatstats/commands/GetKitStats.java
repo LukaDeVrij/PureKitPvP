@@ -40,7 +40,13 @@ public class GetKitStats extends Subcommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
+    public boolean getConsoleExecutable() {
+        return true;
+    }
+
+    @Override
+    public boolean perform(CommandSender sender, String[] args) {
+
         FileConfiguration kitStats = KitStatsConfig.get();
         ArrayList<String> kitStatsKeys = new ArrayList<>(kitStats.getKeys(false));
 
@@ -68,7 +74,7 @@ public class GetKitStats extends Subcommand {
 
         for(String key : sortedMap.keySet()){
 
-            player.sendMessage(key + " - " + kitStats.getInt(key));
+            sender.sendMessage(key + " - " + kitStats.getInt(key));
 
         }
         return true;

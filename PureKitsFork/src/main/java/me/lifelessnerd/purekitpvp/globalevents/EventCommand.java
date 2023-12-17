@@ -5,6 +5,7 @@ import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -38,34 +39,39 @@ public class EventCommand extends Subcommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
+    public boolean getConsoleExecutable() {
+        return true;
+    }
+
+    @Override
+    public boolean perform(CommandSender sender, String[] args) {
 
         if (!(args.length >= 2)) {
-            player.sendMessage(Component.text("Please provide arguments!").color(NamedTextColor.RED));
+            sender.sendMessage(Component.text("Please provide arguments!").color(NamedTextColor.RED));
             return false;
         }
         if (!(plugin.getConfig().getBoolean("global-event-loop"))){
-            player.sendMessage(Component.text("Global event loop is disabled in config.").color(NamedTextColor.RED));
+            sender.sendMessage(Component.text("Global event loop is disabled in config.").color(NamedTextColor.RED));
             return false;
         }
 
         if (args[1].equalsIgnoreCase("start")) {
             if (!(args.length >= 3)) {
-                player.sendMessage(Component.text("Please provide an event to start!").color(NamedTextColor.RED));
+                sender.sendMessage(Component.text("Please provide an event to start!").color(NamedTextColor.RED));
                 return false;
             }
             String eventName = args[2];
             Component success = gem.startEvent(eventName);
-            player.sendMessage(success);
+            sender.sendMessage(success);
         } else if (args[1].equalsIgnoreCase("stop")) {
             // Do stuff
             Component success = gem.stopEvent();
-            player.sendMessage(success);
+            sender.sendMessage(success);
         } else if (args[1].equalsIgnoreCase("pause")) {
-            player.sendMessage(gem.pauseResumeTimer());
+            sender.sendMessage(gem.pauseResumeTimer());
 
         } else {
-            player.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_ARGS").replaceText(ComponentUtils.replaceConfig("%ARG%", args[0])));
+            sender.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_ARGS").replaceText(ComponentUtils.replaceConfig("%ARG%", args[0])));
         }
 
 

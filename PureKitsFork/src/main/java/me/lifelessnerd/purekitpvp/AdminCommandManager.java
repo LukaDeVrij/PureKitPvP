@@ -12,6 +12,7 @@ import me.lifelessnerd.purekitpvp.globalevents.EventCommand;
 import me.lifelessnerd.purekitpvp.globalevents.GlobalEventManager;
 import me.lifelessnerd.purekitpvp.globalevents.events.AbstractEvent;
 import me.lifelessnerd.purekitpvp.kitCommand.ResetKit;
+import me.lifelessnerd.purekitpvp.kitadmin.KitSupercommand;
 import me.lifelessnerd.purekitpvp.noncombatstats.commands.GetKitStats;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
@@ -38,16 +39,18 @@ public class AdminCommandManager implements TabExecutor {
     GlobalEventManager globalEventManager;
 
     public AdminCommandManager(Plugin plugin) {
-        subcommands.add(new CreateKit(plugin));
-        subcommands.add(new DeleteKit(plugin));
+        subcommands.add(new KitSupercommand((PureKitPvP) plugin));
+//        subcommands.add(new CreateKit(plugin));
+//        subcommands.add(new DeleteKit(plugin));
+
         subcommands.add(new ResetKit());
         subcommands.add(new SetKillItem(plugin));
+        subcommands.add(new GetKitStats(plugin));
         this.globalEventManager = new GlobalEventManager(plugin);
         subcommands.add(new EventCommand(plugin, this.globalEventManager));
         subcommands.add(new CreateLootTable(plugin));
         subcommands.add(new GetCustomItem());
         subcommands.add(new CustomMobCommand());
-        subcommands.add(new GetKitStats(plugin));
         subcommands.add(new AdminHelpCommand(subcommands, plugin));
         subcommands.add(new InfoCommand());
         subcommands.add(new ReloadPlugin(plugin));
@@ -57,32 +60,35 @@ public class AdminCommandManager implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(Component.text("The console cannot perform these commands."));
-            return false; // TODO make this subcommand specific - quite hard; abstract subcommand has Player in signature
-        }
-        Player player = (Player) sender;
 
-        if (!(player.hasPermission("purekitpvp.admin.*"))) {
-            player.sendMessage(LanguageConfig.lang.get("GENERIC_NO_PERMISSION"));
+        if (!(sender.hasPermission("purekitpvp.admin.*"))) {
+            sender.sendMessage(LanguageConfig.lang.get("GENERIC_NO_PERMISSION"));
             return true;
         }
 
         if (args.length < 1) {
-            player.sendMessage(LanguageConfig.lang.get("GENERIC_LACK_OF_ARGS"));
+            sender.sendMessage(LanguageConfig.lang.get("GENERIC_LACK_OF_ARGS"));
             return false;
         }
 
         //Check for names of subcommands in arg
         for (int i = 0; i < getSubcommands().size(); i++) {
             if (args[0].equalsIgnoreCase(getSubcommands().get(i).getName())) {
-                boolean result = getSubcommands().get(i).perform(player, args);
+                if (sender instanceof Player) {
+                    getSubcommands().get(i).perform(sender, args);
+                } else {
+                    if (!getSubcommands().get(i).getConsoleExecutable()){
+                        sender.sendMessage(Component.text("The console cannot perform this command!"));
+                    } else {
+                        getSubcommands().get(i).perform(sender, args);
+                    }
+                }
                 return true; // All help dialogs are done in-class with player.sendMessage
             }
         }
 
         TextReplacementConfig config = ComponentUtils.replaceConfig("%ARG%", args[0]);
-        player.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_ARGS").replaceText(config));
+        sender.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_ARGS").replaceText(config));
         return false;
 
     }

@@ -3,44 +3,17 @@ package me.lifelessnerd.purekitpvp;
 
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class sample {
 
     public static void main(String[] args) {
 
-        System.out.println(mapStringToEnchantment("{CraftEnchantment[minecraft:knockback]=11, CraftEnchantment[minecraft:fire_aspect]=2}"));
-
-
+        String[] argsArr = {"1", "2", "3"};
+        argsArr = Arrays.stream(argsArr, 0, argsArr.length - 1).toArray(String[]::new);
+        System.out.println(Arrays.stream(argsArr).toList());
 
     }
 
-    public static String mapStringToEnchantment(String string){
-
-//I {CraftEnchantment[minecraft:knockback]=2, CraftEnchantment[minecraft:fire_aspect]=2}
-        StringBuilder result = new StringBuilder();
-
-        StringBuilder builder = new StringBuilder(string);
-        builder.deleteCharAt(0);
-        builder.deleteCharAt(string.length() - 2);
-        string = builder.toString();
-
-        String[] split = string.split(",");
-        for(String substring : split){
-            substring = substring.trim();
-            substring = substring.substring(16);
-            String level = substring.split("=")[1];
-            String splitEnchantment = substring.split("]")[0];
-            String enchantment = splitEnchantment.split(":")[1];
-
-            result.append(MyStringUtils.itemCamelCase(enchantment)).append(level);
-            result.append(", ");
-        }
-        return result.substring(0, result.length() - 2);
-        //Output: Fire Protection 4, Infinity 1
-    }
 
 }

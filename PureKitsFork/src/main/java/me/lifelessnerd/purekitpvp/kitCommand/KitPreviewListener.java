@@ -46,10 +46,6 @@ public class KitPreviewListener implements Listener {
             //I sometimes hate component - gotta do this with UUID in the future
             // Not components fault - my system is just shitty, heck me
 
-            if (e.getRawSlot() >= 53){
-                return;
-            }
-
             e.setCancelled(true);
             if (clickedItem.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "KITS_PREVIEW_GUI_ITEM"))){
                 String pdcValue = clickedItem.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "KITS_PREVIEW_GUI_ITEM"), PersistentDataType.STRING);

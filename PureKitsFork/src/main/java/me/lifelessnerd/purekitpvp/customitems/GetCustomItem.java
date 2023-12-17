@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -45,7 +46,14 @@ public class GetCustomItem extends Subcommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
+    public boolean getConsoleExecutable() {
+        return false;
+    }
+
+    @Override
+    public boolean perform(CommandSender sender, String[] args) {
+        Player player = (Player) sender;
+
         Plugin plugin = PluginGetter.Plugin();
         if (args[1].equalsIgnoreCase("golden_head")){
 

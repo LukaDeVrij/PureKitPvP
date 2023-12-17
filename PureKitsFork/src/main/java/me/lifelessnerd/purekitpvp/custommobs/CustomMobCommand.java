@@ -1,9 +1,12 @@
 package me.lifelessnerd.purekitpvp.custommobs;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
+import net.kyori.adventure.text.Component;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
@@ -33,14 +36,20 @@ public class CustomMobCommand extends Subcommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
+    public boolean getConsoleExecutable() {
+        return false;
+    }
+
+    @Override
+    public boolean perform(CommandSender sender, String[] args) {
+        Player player = (Player) sender;
         if (args.length <= 1){
-            player.sendMessage("Please provide arguments!");
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_LACK_OF_ARGS"));
             return true;
         }
         if (args[1].equalsIgnoreCase("create")){
             if (args.length <= 3){
-                player.sendMessage("Please provide arguments!");
+                player.sendMessage(LanguageConfig.lang.get("GENERIC_LACK_OF_ARGS"));
                 return true;
             }
             //String customMobName = args[2];
@@ -64,7 +73,7 @@ public class CustomMobCommand extends Subcommand {
         }
         if (args[1].equalsIgnoreCase("set")){
             if (args.length <= 3){
-                player.sendMessage("Please provide arguments!");
+                player.sendMessage(LanguageConfig.lang.get("GENERIC_LACK_OF_ARGS"));
                 player.sendMessage("Usage: /purekitpvp custommob set <helmet/chestplate/leggings/boots/mainhand/offhand>");
                 return true;
             }
@@ -97,7 +106,7 @@ public class CustomMobCommand extends Subcommand {
         if (args[1].equalsIgnoreCase("delete")){
 
             MobSpawnConfig.get().set(args[2], null);
-            player.sendMessage("Custom mob " + args[2] + " deleted.");
+            player.sendMessage(Component.text("Custom mob " + args[2] + " deleted."));
             MobSpawnConfig.save();
             MobSpawnConfig.reload();
             return true;

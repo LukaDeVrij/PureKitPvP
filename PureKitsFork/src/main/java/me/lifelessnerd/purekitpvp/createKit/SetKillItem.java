@@ -45,7 +45,14 @@ public class SetKillItem extends Subcommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
+    public boolean getConsoleExecutable() {
+        return false;
+    }
+
+    @Override
+    public boolean perform(CommandSender sender, String[] args) {
+        Player player = (Player) sender;
+
         if (!player.hasPermission("purekitpvp.admin.createkit")){
             player.sendMessage(ChatColor.RED + "No permission!");
             return true;

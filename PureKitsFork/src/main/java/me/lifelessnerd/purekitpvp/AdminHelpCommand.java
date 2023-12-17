@@ -4,6 +4,7 @@ import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -38,7 +39,12 @@ public class AdminHelpCommand extends Subcommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
+    public boolean getConsoleExecutable() {
+        return true;
+    }
+
+    @Override
+    public boolean perform(CommandSender sender, String[] args) {
 
         if (args.length == 1){
             String message = """
@@ -51,7 +57,7 @@ public class AdminHelpCommand extends Subcommand {
                     &a/purekitpvphelp &r- &eShow this menu for non-admins
                     &bFor admin commands, see &a/pkpvp help 2&b!
                     """;
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
 
 
         }
@@ -59,16 +65,16 @@ public class AdminHelpCommand extends Subcommand {
 
             if (args[1].equalsIgnoreCase("2")){
 
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bPureKitPvP - Admin Commands"));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bPureKitPvP - Admin Commands"));
                 for (Subcommand subcommand : subcommands){
                     String message =
                             "&a" + subcommand.getSyntax() + " &r- &e" + subcommand.getDescription();
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                 }
 
             } else {
                 TextReplacementConfig config = ComponentUtils.replaceConfig("%ARG%", args[1]);
-                player.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_ARGS").replaceText(config));
+                sender.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_ARGS").replaceText(config));
             }
 
         }

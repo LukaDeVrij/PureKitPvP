@@ -37,8 +37,13 @@ public class ResetKit extends Subcommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
+    public boolean getConsoleExecutable() {
+        return false;
+    }
 
+    @Override
+    public boolean perform(CommandSender sender, String[] args) {
+        Player player = (Player) sender;
 
         if(!(player.hasPermission("purekitpvp.admin.resetkit"))){
             player.sendMessage(LanguageConfig.lang.get("GENERIC_NO_PERMISSION"));

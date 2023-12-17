@@ -5,6 +5,7 @@ import me.lifelessnerd.purekitpvp.files.KitConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -39,7 +40,13 @@ public class CreateKit extends Subcommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
+    public boolean getConsoleExecutable() {
+        return false;
+    }
+
+    @Override
+    public boolean perform(CommandSender sender, String[] args) {
+        Player player = (Player) sender;
 
         if (!player.hasPermission("purekitpvp.admin.createkit")){
             player.sendMessage(Component.text("No permission!", NamedTextColor.RED));

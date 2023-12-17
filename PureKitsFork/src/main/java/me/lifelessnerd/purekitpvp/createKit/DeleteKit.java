@@ -46,15 +46,20 @@ public class DeleteKit extends Subcommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
+    public boolean getConsoleExecutable() {
+        return true;
+    }
 
-        if (!player.hasPermission("purekitpvp.admin.deletekit")){
-            player.sendMessage(ChatColor.RED + "No permission!");
+    @Override
+    public boolean perform(CommandSender sender, String[] args) {
+
+        if (!sender.hasPermission("purekitpvp.admin.deletekit")){
+            sender.sendMessage(ChatColor.RED + "No permission!");
             return true;
         }
 
         if (!(args.length >= 2)){
-            player.sendMessage(ChatColor.RED + "Please provide arguments!");
+            sender.sendMessage(ChatColor.RED + "Please provide arguments!");
             return false;
         }
 
@@ -63,14 +68,14 @@ public class DeleteKit extends Subcommand {
 
         if(KitConfig.get().get("kits." + kitName) == null){
 
-            player.sendMessage(ChatColor.GRAY + "That kit does not exist.");
+            sender.sendMessage(ChatColor.GRAY + "That kit does not exist.");
             return true;
         }
 
         KitConfig.get().getConfigurationSection("kits").set(kitName, null);
         KitConfig.save();
         KitConfig.reload();
-        player.sendMessage(Component.text("You removed kit ", NamedTextColor.GREEN).append(Component.text(kitName, NamedTextColor.WHITE)));
+        sender.sendMessage(Component.text("You removed kit ", NamedTextColor.GREEN).append(Component.text(kitName, NamedTextColor.WHITE)));
 
 
         return true;

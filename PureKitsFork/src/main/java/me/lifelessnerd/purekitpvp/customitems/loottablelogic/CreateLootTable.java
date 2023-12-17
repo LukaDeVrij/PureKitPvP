@@ -2,7 +2,9 @@ package me.lifelessnerd.purekitpvp.customitems.loottablelogic;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.createKit.KitIcon;
+import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -23,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class CreateLootTable extends Subcommand {
     Plugin plugin;
@@ -52,32 +55,37 @@ public class CreateLootTable extends Subcommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
+    public boolean getConsoleExecutable() {
+        return false;
+    }
+
+    @Override
+    public boolean perform(CommandSender sender, String[] args) {
+
+        Player player = (Player) sender;
 
         if (!(player.hasPermission("purekitpvp.admin.createloottable"))) {
-            player.sendMessage("No permission!");
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_NO_PERMISSION"));
             return true;
         }
 
         if (!(args.length >= 4)){
-            player.sendMessage("Provide arguments!");
+            player.sendMessage(LanguageConfig.lang.get("GENERIC_LACK_OF_ARGS"));
             return false;
         }
         String name = args[1];
         String desiredLore = args[2];
         String displayName = args[3];
 
-        Block targetBlock = player.getTargetBlock(10);
-        if (targetBlock == null){
-            player.sendMessage("Please look at a chest!");
-        }
+        Block targetBlock = player.getTargetBlock(null, 10);
+
         if(!(targetBlock.getType() == Material.CHEST)){
-            player.sendMessage("Please look at a chest!");
+            player.sendMessage(Component.text("Please look at a chest!"));
             return true;
         }
 
         if (!(targetBlock.getState() instanceof Chest targetChest)){
-            player.sendMessage("Please look at a chest!");
+            player.sendMessage(Component.text("Please look at a chest!"));
             return true;
         }
 
