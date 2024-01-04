@@ -39,8 +39,6 @@ public abstract class AbstractInventory implements Listener {
         Player player = (Player) e.getWhoClicked();
         if (!(player.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) return;
 
-        e.setCancelled(true);
-
         // verify current item is not null
         if (e.getCurrentItem() == null) return;
 

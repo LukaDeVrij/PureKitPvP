@@ -1,11 +1,11 @@
 package me.lifelessnerd.purekitpvp;
 
 import me.lifelessnerd.purekitpvp.files.*;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
 import me.lifelessnerd.purekitpvp.scoreboards.SidebarScoreboard;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 

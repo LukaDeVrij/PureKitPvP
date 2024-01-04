@@ -1,6 +1,6 @@
 package me.lifelessnerd.purekitpvp.perks.perkfirehandler;
 
-import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 

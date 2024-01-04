@@ -2,7 +2,7 @@ package me.lifelessnerd.purekitpvp.scoreboards;
 import me.catcoder.sidebar.ProtocolSidebar;
 import me.catcoder.sidebar.Sidebar;
 import me.catcoder.sidebar.pager.SidebarPager;
-import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import me.lifelessnerd.purekitpvp.utils.DoubleUtils;

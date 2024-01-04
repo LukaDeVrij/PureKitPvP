@@ -1,6 +1,6 @@
 package me.lifelessnerd.purekitpvp.customItems;
 
-import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;

@@ -1,7 +1,7 @@
 package me.lifelessnerd.purekitpvp.customItems.loottable;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
-import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;

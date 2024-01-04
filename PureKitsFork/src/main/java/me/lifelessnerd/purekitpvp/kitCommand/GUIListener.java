@@ -1,7 +1,6 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
-import me.lifelessnerd.purekitpvp.files.LanguageConfig;
-import me.lifelessnerd.purekitpvp.kitCommand.KitPreview;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -49,11 +48,11 @@ public class GUIListener implements Listener {
                         String displayName = serializer.serialize(clickedItem.getItemMeta().displayName());
                         // Preview kit button
                         if (e.getClick() == ClickType.RIGHT){
-                            KitPreview kitPreview = new KitPreview(54,
+                            KitPreviewInventory kitPreviewInventory = new KitPreviewInventory(54,
                                     LanguageConfig.lang.get("KITS_GUI_PREVIEW_TITLE").replaceText(ComponentUtils.replaceConfig("%KIT%", displayName)),
                                     plugin,
                                     displayName);
-                            kitPreview.openInventory(player);
+                            kitPreviewInventory.openInventory(player);
                             return;
                         }
                         player.chat("/getkit " + displayName);

@@ -100,25 +100,25 @@ public class ProjectileTrail implements Listener {
                     case "none":
                         return;
                     case "flame":
-                        location.getWorld().spawnParticle(Particle.FLAME, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001);
+                        location.getWorld().spawnParticle(Particle.FLAME, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, true);
                         break;
                     case "sparkle":
-                        location.getWorld().spawnParticle(Particle.END_ROD, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001);
+                        location.getWorld().spawnParticle(Particle.END_ROD, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, true);
                         break;
                     case "water_drip":
-                        location.getWorld().spawnParticle(Particle.DRIP_WATER, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001);
+                        location.getWorld().spawnParticle(Particle.DRIP_WATER, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, true);
                         break;
                     case "heart":
-                        location.getWorld().spawnParticle(Particle.HEART, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001);
+                        location.getWorld().spawnParticle(Particle.HEART, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, true);
                         break;
                     case "firework":
-                        location.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001);
+                        location.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, true);
                         break;
                     case "totem":
-                        location.getWorld().spawnParticle(Particle.TOTEM, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001);
+                        location.getWorld().spawnParticle(Particle.TOTEM, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, true);
                         break;
                     case "smoke":
-                        location.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001);
+                        location.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, true);
                         break;
                     default:
                         break;

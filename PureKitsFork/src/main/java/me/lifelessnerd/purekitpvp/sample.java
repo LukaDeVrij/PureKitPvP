@@ -1,17 +1,13 @@
 package me.lifelessnerd.purekitpvp;
 
 
-import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
-
-import java.util.*;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
 
 public class sample {
 
     public static void main(String[] args) {
+        System.out.println(String.valueOf(LanguageKey.SCOREBOARD_GLOBAL_LEVEL));
 
-        String[] argsArr = {"1", "2", "3"};
-        argsArr = Arrays.stream(argsArr, 0, argsArr.length - 1).toArray(String[]::new);
-        System.out.println(Arrays.stream(argsArr).toList());
 
     }
 

@@ -1,10 +1,11 @@
 package me.lifelessnerd.purekitpvp;
-import me.lifelessnerd.purekitpvp.combatHandler.*;
-import me.lifelessnerd.purekitpvp.combatHandler.leveling.PlayerLevelChat;
-import me.lifelessnerd.purekitpvp.combatHandler.killHandler.Suicide;
-import me.lifelessnerd.purekitpvp.combatHandler.mobHandler.OnPlayerSpawnMob;
-import me.lifelessnerd.purekitpvp.combatHandler.killHandler.DeathHandler;
-import me.lifelessnerd.purekitpvp.globalEvents.events.DoubleHealthListeners;
+import me.lifelessnerd.purekitpvp.combathandlers.*;
+import me.lifelessnerd.purekitpvp.combathandlers.leveling.PlayerLevelChat;
+import me.lifelessnerd.purekitpvp.combathandlers.killhandler.Suicide;
+import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
+import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
+import me.lifelessnerd.purekitpvp.globalevents.events.DoubleHealthListeners;
 import me.lifelessnerd.purekitpvp.scoreboards.SidebarScoreboard;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsGUIListener;
@@ -22,9 +23,9 @@ import me.lifelessnerd.purekitpvp.files.*;
 import me.lifelessnerd.purekitpvp.kitCommand.GUIListener;
 import me.lifelessnerd.purekitpvp.kitCommand.GetKit;
 import me.lifelessnerd.purekitpvp.kitCommand.KitsGUI;
-import me.lifelessnerd.purekitpvp.nonCombatStats.commands.GetStats;
-import me.lifelessnerd.purekitpvp.nonCombatStats.listeners.ArrowsShotStat;
-import me.lifelessnerd.purekitpvp.nonCombatStats.listeners.ProjectilesThrownStat;
+import me.lifelessnerd.purekitpvp.noncombatstats.commands.GetStats;
+import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ArrowsShotStat;
+import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ProjectilesThrownStat;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PureKitPvP extends JavaPlugin {
