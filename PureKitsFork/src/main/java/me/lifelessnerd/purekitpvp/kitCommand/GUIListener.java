@@ -1,6 +1,8 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
 import me.lifelessnerd.purekitpvp.files.LanguageConfig;
+import me.lifelessnerd.purekitpvp.kitCommand.KitPreview;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
@@ -36,59 +38,58 @@ public class GUIListener implements Listener {
                 TextComponent desiredInvTitle = (TextComponent) LanguageConfig.lang.get("KITS_GUI_TITLE");
                 if (inv.title().toString().contains((desiredInvTitle.content()))) { //I hate component
 
+                    if(clickedItem == null){
+                        return;
+                    }
+                    e.setCancelled(true);
+
+                    // kit icons branch
                     if (e.getRawSlot() < 45){
-                        e.setCancelled(true);
-                        if(clickedItem == null){
-                            return;
-                        }
 
                         String displayName = serializer.serialize(clickedItem.getItemMeta().displayName());
                         // Preview kit button
                         if (e.getClick() == ClickType.RIGHT){
-                            KitPreview kitPreview = new KitPreview(plugin, displayName, player);
-                            kitPreview.openPreviewInventory();
+                            KitPreview kitPreview = new KitPreview(54,
+                                    LanguageConfig.lang.get("KITS_GUI_PREVIEW_TITLE").replaceText(ComponentUtils.replaceConfig("%KIT%", displayName)),
+                                    plugin,
+                                    displayName);
+                            kitPreview.openInventory(player);
                             return;
                         }
-
                         player.chat("/getkit " + displayName);
                         player.closeInventory();
                     }
 
-                    else if (e.getRawSlot() == 53){ // Reset button
-                        e.setCancelled(true);
-                        if (player.hasPermission("purekitpvp.admin.resetkit")){
-                            player.chat("/purekitpvp resetkit");
-                        }
-                        else {
-                            player.chat("/suicide");
-                        }
+                    // options at the bottom branch
+                    int rawSlot = e.getRawSlot();
 
-                    } else if (e.getRawSlot() == 49){ // Perk help button
-                        e.setCancelled(true);
+                    switch(rawSlot){
+                        case 53: // reset button
+                            if (player.hasPermission("purekitpvp.admin.resetkit")){
+                                player.chat("/purekitpvp resetkit");
+                            }
+                            else {
+                                player.chat("/suicide");
+                            }
+                            break;
 
-                        player.chat("/perks");
+                        case 49: // Perk help button
+                            player.chat("/perks");
+                            break;
 
-                    } else if (e.getRawSlot() == 48){ // Prev page button
-                        if (e.getCurrentItem() == null){
-                            return;
-                        }
-                        e.setCancelled(true);
-                        String title = serializer.serialize(e.getView().title());
-                        int prevPage = Integer.parseInt(title.split(" - ")[1]) - 1;
-                        player.chat("/kit " + prevPage);
+                        case 48: // Prev page button
+                            String title = serializer.serialize(e.getView().title());
+                            int prevPage = Integer.parseInt(title.split(" - ")[1]) - 1;
+                            player.chat("/kit " + prevPage);
+                            break;
 
-                    } else if (e.getRawSlot() == 50){ // Next page button
-                        if (e.getCurrentItem() == null){
-                            return;
-                        }
-                        e.setCancelled(true);
-                        String title = serializer.serialize(e.getView().title());
-                        int nextPage = Integer.parseInt(title.split(" - ")[1]) + 1;
-                        player.chat("/kit " + nextPage);
-
+                        case 50: // Next page button
+                            String title2 = serializer.serialize(e.getView().title());
+                            int nextPage = Integer.parseInt(title2.split(" - ")[1]) + 1;
+                            player.chat("/kit " + nextPage);
+                            break;
 
                     }
-
                 }
             }
         }

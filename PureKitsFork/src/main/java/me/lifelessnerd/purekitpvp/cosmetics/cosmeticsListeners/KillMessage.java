@@ -1,13 +1,10 @@
 package me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners;
 
 import me.lifelessnerd.purekitpvp.PluginGetter;
-import me.lifelessnerd.purekitpvp.combathandlers.libs.DamageCauseLib;
-import me.lifelessnerd.purekitpvp.combathandlers.libs.DeathCauseLib;
-import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
+import me.lifelessnerd.purekitpvp.combatHandler.libs.DamageCauseLib;
+import me.lifelessnerd.purekitpvp.combatHandler.libs.DeathCauseLib;
 import me.lifelessnerd.purekitpvp.files.CosmeticsConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Set;
 import java.util.logging.Level;

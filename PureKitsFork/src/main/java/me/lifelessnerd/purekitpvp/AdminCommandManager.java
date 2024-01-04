@@ -1,19 +1,19 @@
 package me.lifelessnerd.purekitpvp;
 
-import me.lifelessnerd.purekitpvp.custommobs.CustomMobCommand;
+import me.lifelessnerd.purekitpvp.customMobs.CustomMobCommand;
 import me.lifelessnerd.purekitpvp.files.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
-import me.lifelessnerd.purekitpvp.createKit.*;
-import me.lifelessnerd.purekitpvp.customitems.GetCustomItem;
-import me.lifelessnerd.purekitpvp.customitems.loottablelogic.CreateLootTable;
+import me.lifelessnerd.purekitpvp.kitAdmin.*;
+import me.lifelessnerd.purekitpvp.customItems.GetCustomItem;
+import me.lifelessnerd.purekitpvp.customItems.loottable.CreateLootTable;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
-import me.lifelessnerd.purekitpvp.globalevents.EventCommand;
-import me.lifelessnerd.purekitpvp.globalevents.GlobalEventManager;
-import me.lifelessnerd.purekitpvp.globalevents.events.AbstractEvent;
-import me.lifelessnerd.purekitpvp.kitCommand.ResetKit;
-import me.lifelessnerd.purekitpvp.kitadmin.KitSupercommand;
-import me.lifelessnerd.purekitpvp.noncombatstats.commands.GetKitStats;
+import me.lifelessnerd.purekitpvp.globalEvents.EventCommand;
+import me.lifelessnerd.purekitpvp.globalEvents.GlobalEventManager;
+import me.lifelessnerd.purekitpvp.globalEvents.events.AbstractEvent;
+import me.lifelessnerd.purekitpvp.kitAdmin.ResetKit;
+import me.lifelessnerd.purekitpvp.kitAdmin.KitSupercommand;
+import me.lifelessnerd.purekitpvp.nonCombatStats.commands.GetKitStats;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -40,9 +40,6 @@ public class AdminCommandManager implements TabExecutor {
 
     public AdminCommandManager(Plugin plugin) {
         subcommands.add(new KitSupercommand((PureKitPvP) plugin));
-//        subcommands.add(new CreateKit(plugin));
-//        subcommands.add(new DeleteKit(plugin));
-
         subcommands.add(new ResetKit());
         subcommands.add(new SetKillItem(plugin));
         subcommands.add(new GetKitStats(plugin));
