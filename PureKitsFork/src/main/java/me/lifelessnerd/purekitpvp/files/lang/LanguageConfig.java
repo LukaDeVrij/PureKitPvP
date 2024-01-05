@@ -154,6 +154,7 @@ public class LanguageConfig {
         defaults.put(LanguageKey.KITS_GUI_PREFS_SAVE, "&6Save custom layout");
         defaults.put(LanguageKey.KITS_GUI_PREFS_SAVED, "&6Custom layout saved!");
         defaults.put(LanguageKey.KITS_GUI_PREFS_BACK, "&6Back to kit preview");
+        defaults.put(LanguageKey.KITS_GUI_PREFS_RESET, "&cReset your layout");
         defaults.put(LanguageKey.KITS_GUI_PREVIEW_SELECT, "&aSelect Kit");
         defaults.put(LanguageKey.KITS_GUI_PREVIEW_BACK, "&aBack to Kits");
         defaults.put(LanguageKey.KITS_GUI_EDIT_SAVE, "&aSave Kit");

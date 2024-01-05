@@ -29,10 +29,12 @@ import java.util.Map;
 public class KitPreferencesInventory extends AbstractInventory {
     String kitName;
     Player player;
+    Component title;
     KitDatabase db;
     public KitPreferencesInventory(int size, Component title, Plugin plugin, String kitName, Player toBeShownPlayer) {
         super(size, title, plugin);
         this.kitName = kitName;
+        this.title = title;
         this.player = toBeShownPlayer;
         PureKitPvP pureKitPvP = (PureKitPvP) this.plugin;
         db = pureKitPvP.getKitDatabase();
@@ -72,6 +74,12 @@ public class KitPreferencesInventory extends AbstractInventory {
 
         for (int i = 41; i < 54; i++) inv.setItem(i, redStainedGlass);
 
+        ItemStack barrier = new ItemStack(Material.BARRIER, 1);
+        ItemMeta resetMeta = barrier.getItemMeta();
+        resetMeta.displayName(LanguageConfig.lang.get(LanguageKey.KITS_GUI_PREFS_RESET.toString()));
+        barrier.setItemMeta(resetMeta);
+        inv.setItem(50, barrier);
+
         ItemStack greenConcrete = new ItemStack(Material.GREEN_CONCRETE, 1);
         ItemMeta saveMeta = greenConcrete.getItemMeta();
         saveMeta.displayName(LanguageConfig.lang.get(LanguageKey.KITS_GUI_PREFS_SAVE.toString()));
@@ -94,6 +102,19 @@ public class KitPreferencesInventory extends AbstractInventory {
         }
         if (e.getSlot() >= 41) { // red panes
             e.setCancelled(true);
+        }
+        if (e.getSlot() == 50){ // reset layout
+            try {
+                if(db.hasEntry(player, kitName)){
+                    db.updateEntry(player, kitName, new HashMap<>());
+                    inv.close();
+                    KitPreferencesInventory kitPreferencesInventory = new KitPreferencesInventory(54, title, plugin, kitName, player);
+                    kitPreferencesInventory.openInventory(player);
+
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         }
         if (e.getSlot() == 48){ // back button
             KitPreviewInventory kitPreviewInventory = new KitPreviewInventory(54,
@@ -137,13 +158,29 @@ public class KitPreferencesInventory extends AbstractInventory {
 
     @EventHandler
     public void onInventoryMove(InventoryClickEvent e){
-        System.out.println(e.getRawSlot());
 
         if (!e.getView().getTopInventory().equals(inv)) return;
         if (!e.getView().getBottomInventory().getType().equals(InventoryType.PLAYER)) return;
-
-        if (e.getRawSlot() >= 54){ // TODO
+        if (e.getRawSlot() >= 54)
             e.setCancelled(true);
+        // I hate this - BUG PRONE (am i missing an InventoryAction - if so > report immediately)
+        if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY)
+            e.setCancelled(true);
+        if(e.getAction() == InventoryAction.HOTBAR_SWAP)
+            e.setCancelled(true);
+        if(e.getClickedInventory() != e.getView().getTopInventory())
+            e.setCancelled(true);
+
+    }
+    @EventHandler
+    // Should prevent issue https://www.spigotmc.org/threads/cancelling-inventoryclickevent-being-inconsistent.631817/
+    public void onInventoryDrag(InventoryDragEvent e){
+        if (!e.getView().getTopInventory().equals(inv)) return;
+        if (!e.getView().getBottomInventory().getType().equals(InventoryType.PLAYER)) return;
+        for (int slot : e.getRawSlots()){
+            if (slot >= 54){
+                e.setCancelled(true);
+            }
         }
     }
 
