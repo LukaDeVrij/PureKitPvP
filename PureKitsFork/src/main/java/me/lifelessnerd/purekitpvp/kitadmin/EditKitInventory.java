@@ -44,11 +44,11 @@ public class EditKitInventory extends AbstractInventory {
         glassMeta.displayName(Component.text(""));
         redStainedGlass.setItemMeta(glassMeta);
 
-        for (int i = 45; i < 54; i++) inv.setItem(i, redStainedGlass);
+        for (int i = 41; i < 54; i++) inv.setItem(i, redStainedGlass);
 
         ItemStack greenConcrete = new ItemStack(Material.GREEN_CONCRETE, 1);
         ItemMeta saveMeta = greenConcrete.getItemMeta();
-        saveMeta.displayName(LanguageConfig.lang.get("KITS_GUI_EDIT_SAVE"));
+        saveMeta.displayName(LanguageConfig.lang.get(LanguageKey.KITS_GUI_PREFS_SAVE.toString()));
         saveMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "KITS_GUI_EDIT_ITEM"), PersistentDataType.STRING, "Save");
         saveMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "KITS_GUI_EDIT_ITEM_KIT"), PersistentDataType.STRING, kitName);
         greenConcrete.setItemMeta(saveMeta);
@@ -59,7 +59,7 @@ public class EditKitInventory extends AbstractInventory {
     @Override
     public void onInventoryClickLogic(InventoryClickEvent e) {
 
-        if (e.getSlot() >= 45){ // red panes
+        if (e.getSlot() >= 41){ // red panes
             e.setCancelled(true);
         }
         if (e.getSlot() == 49){ // save icon
@@ -68,7 +68,7 @@ public class EditKitInventory extends AbstractInventory {
             ItemStack[] kitContents = inv.getContents();
             int index = 0;
             for (ItemStack item : inv.getContents()){
-                if (index >= 45) {
+                if (index >= 41) {
                     kitContents[index] = null;
                 }
 
@@ -79,6 +79,7 @@ public class EditKitInventory extends AbstractInventory {
             KitConfig.reload();
 
             e.getWhoClicked().sendMessage(LanguageConfig.lang.get(LanguageKey.KITS_GUI_EDIT_SAVED.toString()));
+            inv.close();
 
         }
 

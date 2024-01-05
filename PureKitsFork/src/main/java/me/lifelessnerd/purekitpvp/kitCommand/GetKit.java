@@ -1,5 +1,8 @@
 package me.lifelessnerd.purekitpvp.kitCommand;
 
+import me.lifelessnerd.purekitpvp.PureKitPvP;
+import me.lifelessnerd.purekitpvp.database.KitDatabase;
+import me.lifelessnerd.purekitpvp.database.entities.PlayerKitPreferences;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.KitStatsConfig;
 import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
@@ -20,8 +23,11 @@ import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GetKit implements TabExecutor, Listener {
     Plugin plugin;
@@ -94,13 +100,25 @@ public class GetKit implements TabExecutor, Listener {
         for (PotionEffect effect : player.getActivePotionEffects())
             player.removePotionEffect(effect.getType());
 
+        Map<Integer, Integer> playerPrefs = new HashMap<>();
+        PureKitPvP pureKitPvP = (PureKitPvP) plugin;
+        KitDatabase db = pureKitPvP.getKitDatabase();
+        try {
+            if(db.hasEntry(player, kitNameArg)){
+                PlayerKitPreferences playerKitPreferences = db.getEntry(player, kitNameArg);
+                playerPrefs = playerKitPreferences.getPreferences();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         //Give items
         for (int index = 0; index < kitItems.size(); index++) {
             ItemStack item = kitItems.get(index);
             if (item == null) {
                 item = new ItemStack(Material.AIR);
             }
-            player.getInventory().setItem(index, item);
+            player.getInventory().setItem(playerPrefs.getOrDefault(index, index), item);
         }
 
 

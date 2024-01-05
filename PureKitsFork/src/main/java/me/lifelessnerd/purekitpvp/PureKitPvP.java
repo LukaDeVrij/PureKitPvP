@@ -4,6 +4,7 @@ import me.lifelessnerd.purekitpvp.combathandlers.leveling.PlayerLevelChat;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.Suicide;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.OnPlayerSpawnMob;
 import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
+import me.lifelessnerd.purekitpvp.database.KitDatabase;
 import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
 import me.lifelessnerd.purekitpvp.globalevents.events.DoubleHealthListeners;
 import me.lifelessnerd.purekitpvp.scoreboards.SidebarScoreboard;
@@ -26,10 +27,14 @@ import me.lifelessnerd.purekitpvp.kitCommand.KitsGUI;
 import me.lifelessnerd.purekitpvp.noncombatstats.commands.GetStats;
 import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ArrowsShotStat;
 import me.lifelessnerd.purekitpvp.noncombatstats.listeners.ProjectilesThrownStat;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.sql.SQLException;
 
 public final class PureKitPvP extends JavaPlugin {
 
+    private KitDatabase kitDatabase;
     @Override
     public void onEnable() {
         PerkFireHandler.plugin = this; //idk? fixes npe?
@@ -39,13 +44,23 @@ public final class PureKitPvP extends JavaPlugin {
         getConfig().options().copyDefaults();
         saveConfig();
 
+        //Database
+        try {
+            // Ensure the plugin's data folder exists
+            if (!getDataFolder().exists()) {
+                getDataFolder().mkdirs();
+            }
+
+            kitDatabase = new KitDatabase(getDataFolder().getAbsolutePath() + "/kitdatabase.db");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to connect to database! " + e.getMessage());
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
+
         //Kits config
         KitConfig.setup();
         KitConfig.get().addDefault("kits", "");
-        //Might create problems, I tried to just keep value null but then the entire value didn't show up until I created a kit
-        //Which is not too bad either so whatever, if there are any problems ever change this and hope for the best
-        //Otherwise find a way to make a path without a value, like: kits: , instead of kits: ''
-        //: fix this with createConfiguration if I feel like it, tbf it works fine (IT DOES)
 
         KitConfig.get().options().copyDefaults(true);
         KitConfig.save();
@@ -126,5 +141,8 @@ public final class PureKitPvP extends JavaPlugin {
         getLogger().info("Goodbye!");
     }
 
+    public KitDatabase getKitDatabase() {
+        return kitDatabase;
+    }
 
 }

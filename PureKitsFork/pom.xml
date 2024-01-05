@@ -111,6 +111,7 @@
             <id>sonatype-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
+
     </repositories>
 
     <dependencies>
@@ -125,5 +126,12 @@
             <artifactId>bukkit-sidebar</artifactId>
             <version>6.2.5-SNAPSHOT</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-jdbc -->
+        <dependency>
+            <groupId>com.j256.ormlite</groupId>
+            <artifactId>ormlite-jdbc</artifactId>
+            <version>6.1</version>
+        </dependency>
+
     </dependencies>
 </project>

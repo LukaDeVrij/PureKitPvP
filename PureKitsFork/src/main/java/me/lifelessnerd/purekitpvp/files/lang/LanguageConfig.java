@@ -149,6 +149,11 @@ public class LanguageConfig {
         defaults.put(LanguageKey.KITS_GUI_PREVIEW_TITLE, "&aKit Preview > &b%KIT%");
         defaults.put(LanguageKey.KITS_GUI_PREVIEW_TEXT, "&aRight click to preview.");
         defaults.put(LanguageKey.KITS_GUI_PREVIEW_STATS, "&6Global Stats");
+        defaults.put(LanguageKey.KITS_GUI_PREVIEW_PREFS, "&6Customize layout");
+        defaults.put(LanguageKey.KITS_GUI_PREFS_TITLE, "&6Customizing > &b%KIT%");
+        defaults.put(LanguageKey.KITS_GUI_PREFS_SAVE, "&6Save custom layout");
+        defaults.put(LanguageKey.KITS_GUI_PREFS_SAVED, "&6Custom layout saved!");
+        defaults.put(LanguageKey.KITS_GUI_PREFS_BACK, "&6Back to kit preview");
         defaults.put(LanguageKey.KITS_GUI_PREVIEW_SELECT, "&aSelect Kit");
         defaults.put(LanguageKey.KITS_GUI_PREVIEW_BACK, "&aBack to Kits");
         defaults.put(LanguageKey.KITS_GUI_EDIT_SAVE, "&aSave Kit");

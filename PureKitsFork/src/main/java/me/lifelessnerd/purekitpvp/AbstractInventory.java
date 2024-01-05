@@ -6,8 +6,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 
@@ -17,7 +19,7 @@ public abstract class AbstractInventory implements Listener {
 
     public AbstractInventory(int size, Component title, Plugin plugin) {
         this.plugin = plugin;
-        // Create a new inventory, with no owner (as this isn't a real inventory), a size of nine, called example
+        // Create a new inventory, with no owner (as this isn't a real inventory)
         inv = Bukkit.createInventory(null, size, title);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -31,6 +33,10 @@ public abstract class AbstractInventory implements Listener {
         ent.openInventory(inv);
     }
 
+    public void unregisterEvents(){
+        HandlerList.unregisterAll(this);
+
+    }
     // Check for clicks on items
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
@@ -45,5 +51,11 @@ public abstract class AbstractInventory implements Listener {
         onInventoryClickLogic(e);
     }
     public abstract void onInventoryClickLogic(final InventoryClickEvent e);
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent e){
+        if (!e.getInventory().equals(inv)) return;
+        HandlerList.unregisterAll(this);
+    }
 
 }

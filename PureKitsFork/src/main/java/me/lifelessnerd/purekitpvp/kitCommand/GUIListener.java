@@ -51,7 +51,7 @@ public class GUIListener implements Listener {
                             KitPreviewInventory kitPreviewInventory = new KitPreviewInventory(54,
                                     LanguageConfig.lang.get("KITS_GUI_PREVIEW_TITLE").replaceText(ComponentUtils.replaceConfig("%KIT%", displayName)),
                                     plugin,
-                                    displayName);
+                                    displayName, player);
                             kitPreviewInventory.openInventory(player);
                             return;
                         }
