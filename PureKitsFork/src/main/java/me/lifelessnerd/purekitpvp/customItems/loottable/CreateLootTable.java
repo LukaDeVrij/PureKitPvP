@@ -4,6 +4,7 @@ import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -67,14 +68,13 @@ public class CreateLootTable extends Subcommand {
 
         Block targetBlock = player.getTargetBlock(null, 10);
 
-        if(!(targetBlock.getType() == Material.CHEST)){
-            player.sendMessage(Component.text("Please look at a chest!"));
-            return true;
-        }
+        Inventory chestInventory;
 
-        if (!(targetBlock.getState() instanceof Chest targetChest)){
-            player.sendMessage(Component.text("Please look at a chest!"));
-            return true;
+        if (targetBlock.getState() instanceof Chest targetChest){
+            chestInventory = targetChest.getBlockInventory();
+        } else {
+            chestInventory = player.getInventory();
+            player.sendMessage(Component.text("Inventory contents used for loottable creation.", NamedTextColor.GRAY));
         }
 
         FileConfiguration lootTables = LootTablesConfig.get();
@@ -85,8 +85,6 @@ public class CreateLootTable extends Subcommand {
         lootTables.set(name + ".guaranteed.enabled", false);
         lootTables.set(name + ".guaranteed.items", 3);
         ConfigurationSection itemContent = lootTables.createSection(name + ".content");
-
-        Inventory chestInventory = targetChest.getBlockInventory();
 
         int index = 0;
         for (ItemStack item : chestInventory.getContents()){
@@ -99,10 +97,10 @@ public class CreateLootTable extends Subcommand {
             }
         }
 
-        player.sendMessage(
-                "Loot table created. \nTo specify chances per item, and add multi-word lore" +
-                        " please use the loottables.yml config!");
-        player.sendMessage("When manually editing loottables.yml, remember to back it up if it contains a lot of information.");
+        player.sendMessage(Component.text("Loot table created. \nTo specify chances per item, and add multi-word lore" +
+                " please use the loottables.yml config!"));
+        player.sendMessage(Component.text("When manually editing loottables.yml, remember to back it up if it " +
+                "contains a lot of information."));
 
         LootTablesConfig.save();
         LootTablesConfig.reload();

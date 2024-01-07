@@ -33,7 +33,7 @@ public class KitSupercommand extends Subcommand {
 
     @Override
     public String getSyntax() {
-        return "/purekitpvp kit <create/delete/edit/setkillitem> <identifier>";
+        return "/purekitpvp kit <create/delete/edit/setkillitem> <optional-identifiers>";
     }
 
     @Override

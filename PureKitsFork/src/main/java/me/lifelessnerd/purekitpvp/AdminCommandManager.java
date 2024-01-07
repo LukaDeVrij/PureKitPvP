@@ -145,73 +145,98 @@ public class AdminCommandManager implements TabExecutor {
                 return arguments;
             }
         }
-        if (args[0].equalsIgnoreCase("setkillitem")) {
+        if (args[0].equalsIgnoreCase("kit")){
 
-            if (args.length == 2) {
-                List<String> autoComplete = new ArrayList<>();
-                for (String key : KitConfig.get().getConfigurationSection("kits.").getKeys(false)) {
-                    key = key.toLowerCase();
-                    autoComplete.add(key);
+            if (args.length == 2){
+                List<String> arguments = new ArrayList<>();
+                arguments.add("setkillitem");
+                arguments.add("delete");
+                arguments.add("create");
+                arguments.add("edit");
+                return arguments;
+            }
+
+            if (args[1].equalsIgnoreCase("setkillitem")) {
+
+                if (args.length == 3) {
+                    List<String> autoComplete = new ArrayList<>();
+                    for (String key : KitConfig.get().getConfigurationSection("kits.").getKeys(false)) {
+                        key = key.toLowerCase();
+                        autoComplete.add(key);
+                    }
+                    ;
+                    return autoComplete;
                 }
-                ;
-                return autoComplete;
             }
-        }
-        if (args[0].equalsIgnoreCase("deletekit")) {
+            if (args[1].equalsIgnoreCase("delete")) {
 
-            if (args.length == 2) {
-                List<String> autoComplete = new ArrayList<>();
-                for (String key : KitConfig.get().getConfigurationSection("kits.").getKeys(false)) {
-                    key = key.toLowerCase();
-                    autoComplete.add(key);
+                if (args.length == 3) {
+                    List<String> autoComplete = new ArrayList<>();
+                    for (String key : KitConfig.get().getConfigurationSection("kits.").getKeys(false)) {
+                        key = key.toLowerCase();
+                        autoComplete.add(key);
+                    }
+
+                    return autoComplete;
                 }
+            }
+            if (args[1].equalsIgnoreCase("create")) {
 
-                return autoComplete;
-            }
-        }
-        if (args[0].equalsIgnoreCase("createkit")) {
+                if (args.length == 3) {
+                    List<String> arguments = new ArrayList<>();
+                    arguments.add("<kitName>");
+                    return arguments;
+                }
+                if (args.length == 4) {
+                    List<String> arguments = new ArrayList<>();
+                    arguments.add("black");
+                    arguments.add("dark_blue");
+                    arguments.add("dark_green");
+                    arguments.add("dark_aqua");
+                    arguments.add("dark_red");
+                    arguments.add("dark_purple");
+                    arguments.add("gold");
+                    arguments.add("gray");
+                    arguments.add("dark_gray");
+                    arguments.add("blue");
+                    arguments.add("green");
+                    arguments.add("aqua");
+                    arguments.add("red");
+                    arguments.add("light_purple");
+                    arguments.add("yellow");
+                    arguments.add("white");
 
-            if (args.length == 2) {
-                List<String> arguments = new ArrayList<>();
-                arguments.add("<kitName>");
-                return arguments;
-            }
-            if (args.length == 3) {
-                List<String> arguments = new ArrayList<>();
-                arguments.add("black");
-                arguments.add("dark_blue");
-                arguments.add("dark_green");
-                arguments.add("dark_aqua");
-                arguments.add("dark_red");
-                arguments.add("dark_purple");
-                arguments.add("gold");
-                arguments.add("gray");
-                arguments.add("dark_gray");
-                arguments.add("blue");
-                arguments.add("green");
-                arguments.add("aqua");
-                arguments.add("red");
-                arguments.add("light_purple");
-                arguments.add("yellow");
-                arguments.add("white");
+                    return arguments;
+                }
+                if (args.length == 5) {
+                    KitIcon kitIconLib = new KitIcon();
 
-                return arguments;
-            }
-            if (args.length == 4) {
-                KitIcon kitIconLib = new KitIcon();
+                    return Arrays.asList(kitIconLib.materialList);
+                }
+                if (args.length == 6) {
+                    List<String> arguments = new ArrayList<>();
+                    arguments.add("kit.other");
 
-                return Arrays.asList(kitIconLib.materialList);
+                    return arguments;
+                }
+                if (args.length == 7) {
+                    KitIcon kitIconLib = new KitIcon();
+                    return Arrays.asList(kitIconLib.materialList);
+                }
             }
-            if (args.length == 5) {
-                List<String> arguments = new ArrayList<>();
-                arguments.add("kit.other");
+            if (args[1].equalsIgnoreCase("edit")){
+                if (args.length == 3) {
+                    List<String> autoComplete = new ArrayList<>();
+                    for (String key : KitConfig.get().getConfigurationSection("kits.").getKeys(false)) {
+                        key = key.toLowerCase();
+                        autoComplete.add(key);
+                    }
 
-                return arguments;
+                    return autoComplete;
+                }
             }
-            if (args.length == 6) {
-                KitIcon kitIconLib = new KitIcon();
-                return Arrays.asList(kitIconLib.materialList);
-            }
+
+
         }
         if (args[0].equalsIgnoreCase("custommob")) {
             if (args.length == 2) {

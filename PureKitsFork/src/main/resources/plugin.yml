@@ -24,7 +24,7 @@ commands:
       - pvpstats
   purekitpvp:
     description: All admin commands. See documentation for help
-    usage: /purekitpvp <createkit/deletekit/kitstats/setkillitem/getcustomitem/createloottable/reload/help/info>
+    usage: /purekitpvp <createloottable/custommob/event/getcustomitem/help/info/kit/kitstats/reload/resetkit>
     aliases:
       - kitpvp
       - pkpvp

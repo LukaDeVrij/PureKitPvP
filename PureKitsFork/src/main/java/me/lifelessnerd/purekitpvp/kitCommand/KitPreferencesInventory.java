@@ -164,6 +164,8 @@ public class KitPreferencesInventory extends AbstractInventory {
         if (e.getRawSlot() >= 54)
             e.setCancelled(true);
         // I hate this - BUG PRONE (am i missing an InventoryAction - if so > report immediately)
+//        if (e.getAction() != InventoryAction.PICKUP_ALL || e.getAction() != InventoryAction.DROP_ALL_SLOT)
+//            e.setCancelled(true);
         if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY)
             e.setCancelled(true);
         if(e.getAction() == InventoryAction.HOTBAR_SWAP)
