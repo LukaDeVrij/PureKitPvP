@@ -184,6 +184,12 @@ public class LanguageConfig {
         defaults.put(LanguageKey.SCOREBOARD_GLOBAL_KILLS, "  &dKills");
         defaults.put(LanguageKey.SCOREBOARD_GLOBAL_KD, "  &dK/D Ratio");
         defaults.put(LanguageKey.SCOREBOARD_GLOBAL_LEVEL, "&dLevel");
+        defaults.put(LanguageKey.STATS_NO_STATS, "That player has no stats attached to them!");
+        defaults.put(LanguageKey.STATS_TITLE, "%PLAYER% &bStatistics");
+        defaults.put(LanguageKey.STATS_LEVEL_UP, "&6You leveled up to LEVEL %VALUE%!");
+        defaults.put(LanguageKey.COMBAT_YOU_DIED, "&c&lYou died!");
+        defaults.put(LanguageKey.COMBAT_DEATH_RECAP, "&7Death Recap");
+        defaults.put(LanguageKey.COMBAT_DEATH_CAUSE, "&7- &e%CAUSE% &7did &a%VALUE%%");
 
         SortedMap<String, Object> defaultsString = new TreeMap<>();
         for (LanguageKey key : defaults.keySet()){

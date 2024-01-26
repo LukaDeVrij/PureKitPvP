@@ -142,6 +142,10 @@ public class GlobalEventManager {
     }
 
     public Component pauseResumeTimer() {
+        if (currentEvent == null){
+            return Component.text("There is no event running, you may not pause now!").color(NamedTextColor.RED);
+            // TODO temp fix; this should be possible but for some reason NPES everywhere if we dont do this also double events?
+        }
         if (paused) {
             currentEvent.pauseResumePasser(true);
             paused = false;
@@ -162,7 +166,6 @@ public class GlobalEventManager {
 
                 }
             }.runTaskTimer(plugin, 0, 20);
-
 
             return Component.text("Global event loop resumed.").color(NamedTextColor.GREEN);
         } else {

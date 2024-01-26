@@ -6,17 +6,20 @@ import me.lifelessnerd.purekitpvp.combathandlers.libs.DamageCauseLib;
 import me.lifelessnerd.purekitpvp.combathandlers.mobhandler.MobRemover;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillEffect;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsListeners.KillMessage;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
 import me.lifelessnerd.purekitpvp.globalevents.EventDataClass;
 import me.lifelessnerd.purekitpvp.globalevents.events.JuggernautListeners;
 import me.lifelessnerd.purekitpvp.perks.perkfirehandler.PerkFireHandler;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import me.lifelessnerd.purekitpvp.utils.DoubleUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -129,8 +132,9 @@ public class DeathHandler implements Listener {
         // Get all damage info and print to killed player
         NamespacedKey key = new NamespacedKey(plugin, "damageDistributionInfo");
         PlayerDamageDistribution damageData = player.getPersistentDataContainer().get(key, new PlayerDamageDistributionDataType());
-        player.sendMessage(Component.text("You died!").color(NamedTextColor.RED).decoration(TextDecoration.BOLD, true));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Death Recap:"));
+        player.sendMessage(LanguageConfig.lang.get(LanguageKey.COMBAT_YOU_DIED.toString()));
+        player.sendMessage(LanguageConfig.lang.get(LanguageKey.COMBAT_DEATH_RECAP.toString()));
+
         // Printing process and formatting
         int totalDamageDone = 0;
         for (String hashmapKey : damageData.damageDistributionMap.keySet()){
@@ -139,19 +143,11 @@ public class DeathHandler implements Listener {
         for (String hashmapKey : damageData.damageDistributionMap.keySet()){
             int damageValue = damageData.damageDistributionMap.get(hashmapKey);
             double damagePercentage = (double) damageValue / (double) totalDamageDone * 100.0;
-
-            if (damageCauseLib.damageCauseTranslations.containsKey(hashmapKey)){
-                // hashMapKey is a damageCause object
-                String damageCauseTranslation = damageCauseLib.damageCauseTranslations.get(hashmapKey);
-                String format = "&7-&e" + damageCauseTranslation + "&7 did &a" + (int) damagePercentage + "%";
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', format));
-
-            }
-            else {
-                String format = "&7- &a" + hashmapKey + "&7 did &a" + (int) damagePercentage + "%";
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', format));
-
-            }
+            int damagePercentageInt = (int) damagePercentage;
+            String damageCause = damageCauseLib.damageCauseTranslations.getOrDefault(hashmapKey, hashmapKey);
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.COMBAT_DEATH_CAUSE.toString()).
+                    replaceText(ComponentUtils.replaceConfig("%CAUSE%", damageCause)).
+                    replaceText(ComponentUtils.replaceConfig("%VALUE%", String.valueOf(damagePercentageInt))));
         }
 
         //Broadcasting and stuff
@@ -206,8 +202,7 @@ public class DeathHandler implements Listener {
             }
         }
 
-        
-        Component mainTitle = Component.text("You died!").color(TextColor.color(230,60,60));
+        Component mainTitle = LanguageConfig.lang.get(LanguageKey.COMBAT_YOU_DIED.toString());
         Title title = Title.title(mainTitle, Component.text(""));
         player.showTitle(title);
 
@@ -296,8 +291,6 @@ public class DeathHandler implements Listener {
 
         //update level
         PlayerLeveling.createLevelXPPath(player.getName());
-//            PlayerLeveling.addExperience(player, 1, "Death"); // 1 for DEATH// Ah no: can be exploited
-//            PlayerLeveling.updateLevels();
 
         //remove any mobs player spawned
         MobRemover.removeMobs(player);
@@ -402,6 +395,7 @@ public class DeathHandler implements Listener {
 
         }
 
+        // If there is an assistor, we need to do some stuff for that player
         if (assistor != null){
             FileConfiguration assistorStats = PlayerStatsConfig.get();
             if (assistorStats.isSet(assistor.getName())){
@@ -517,10 +511,15 @@ public class DeathHandler implements Listener {
             return; // Prevents NPE's
         } else if (event.getDamager() instanceof Firework && event.getEntity() instanceof Player){
             Firework fw = (Firework) event.getDamager();
+            if (fw.hasMetadata("nodamage")) {
+                event.setCancelled(true);
+                return;
+            }
             if (fw.getShooter() instanceof Player){
                 player = (Player) event.getEntity();
                 damager = (Player) fw.getShooter();
             }
+
         }
         else {
             //If we end up here idk what happened but nothing relevant (probably a zombie hitting a pig or something)

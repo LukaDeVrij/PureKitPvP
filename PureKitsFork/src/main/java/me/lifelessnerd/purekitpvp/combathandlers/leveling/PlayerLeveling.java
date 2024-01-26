@@ -1,6 +1,9 @@
 package me.lifelessnerd.purekitpvp.combathandlers.leveling;
 
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -52,7 +55,8 @@ public class PlayerLeveling {
             int level = xpValue / 100;
             if (!(level == playerStats.getInt(key + ".level"))){
                 Player player = Bukkit.getPlayerExact(key);
-                player.sendMessage(ChatColor.GOLD + "You leveled up to LEVEL " + level);
+                player.sendMessage(LanguageConfig.lang.get(LanguageKey.STATS_LEVEL_UP.toString()).
+                        replaceText(ComponentUtils.replaceConfig("%VALUE%", String.valueOf(level))));
 
             }
             playerStats.set(key + ".level", level);

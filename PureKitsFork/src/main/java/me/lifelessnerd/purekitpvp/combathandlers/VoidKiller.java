@@ -34,9 +34,7 @@ public class VoidKiller implements Listener {
                     for (PotionEffect effect : p.getActivePotionEffects()) {
                         p.removePotionEffect(effect.getType());
                     }
-                    p.setHealth(1);
-                    Location tpLoc = new Location(loc.getWorld(), loc.getX(), loc.getY() - 150, loc.getZ());
-                    p.teleport(tpLoc);
+                    p.chat("/suicide");
                 }
             } catch (Exception ex) {
                 plugin.getLogger().log(Level.SEVERE, "Please set voidY in the config!");

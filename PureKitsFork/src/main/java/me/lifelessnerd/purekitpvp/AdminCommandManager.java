@@ -41,7 +41,6 @@ public class AdminCommandManager implements TabExecutor {
     public AdminCommandManager(Plugin plugin) {
         subcommands.add(new KitSupercommand((PureKitPvP) plugin));
         subcommands.add(new ResetKit());
-        subcommands.add(new SetKillItem(plugin));
         subcommands.add(new GetKitStats(plugin));
         this.globalEventManager = new GlobalEventManager(plugin);
         subcommands.add(new EventCommand(plugin, this.globalEventManager));
@@ -155,7 +154,6 @@ public class AdminCommandManager implements TabExecutor {
                 arguments.add("edit");
                 return arguments;
             }
-
             if (args[1].equalsIgnoreCase("setkillitem")) {
 
                 if (args.length == 3) {

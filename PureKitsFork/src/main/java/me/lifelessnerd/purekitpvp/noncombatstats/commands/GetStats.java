@@ -1,11 +1,17 @@
 package me.lifelessnerd.purekitpvp.noncombatstats.commands;
 
 import me.lifelessnerd.purekitpvp.files.PlayerStatsConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -37,33 +43,22 @@ public class GetStats implements TabExecutor {
 
         Set<String> allKeys = playerStatsConfig.getKeys(true);
         if (!(allKeys.contains(argumentPlayer))){
-            player.sendMessage("That player does not have any stats attached to them.");
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.STATS_NO_STATS.toString()));
             return true;
         }
 
+        player.sendMessage(LanguageConfig.lang.get(LanguageKey.STATS_TITLE.toString()).
+                replaceText(ComponentUtils.replaceConfig("%PLAYER%", argumentPlayer)));
 
-        player.sendMessage(argumentPlayer + "'s " + ChatColor.BLUE + "Statistics");
-        for (String key : allKeys){
-            if (key.split("\\.").length == 1){
-                continue;
-            }
-            if (key.split("\\.")[0].equalsIgnoreCase(argumentPlayer)) {
+        ConfigurationSection playerStatsSection = PlayerStatsConfig.get().getConfigurationSection(argumentPlayer);
 
-                //Only children of player
-                if (key.split("\\.")[1].equalsIgnoreCase("kdratio")) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a    " +
-                            MyStringUtils.itemCamelCase(key.split("\\.")[1]) + "&c- &r" + playerStatsConfig.getDouble(key)));
-                } else if (key.split("\\.")[1].equalsIgnoreCase("current_kit")){
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a    " +
-                            MyStringUtils.itemCamelCase(key.split("\\.")[1]) + "&c- &r" + playerStatsConfig.getString(key)));
-                } else {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a    " +
-                            MyStringUtils.itemCamelCase(key.split("\\.")[1]) + "&c- &r" + playerStatsConfig.getInt(key)));
-                }
-            }
+        for (String key : playerStatsSection.getKeys(false)){
+            player.sendMessage(
+                Component.text("    " + MyStringUtils.itemCamelCase(key)).color(NamedTextColor.GREEN).append(
+                Component.text("- ").color(NamedTextColor.RED).append(
+                Component.text(playerStatsSection.get(key).toString()).color(NamedTextColor.WHITE)
+            )));
         }
-
-
 
         return true;
     }

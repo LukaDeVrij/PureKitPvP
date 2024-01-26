@@ -2,6 +2,7 @@ package me.lifelessnerd.purekitpvp.noncombatstats.commands;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.KitStatsConfig;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -70,7 +71,7 @@ public class GetKitStats extends Subcommand {
 
         for(String key : sortedMap.keySet()){
 
-            sender.sendMessage(key + " - " + kitStats.getInt(key));
+            sender.sendMessage(Component.text(key + " - " + kitStats.getInt(key)));
 
         }
         return true;

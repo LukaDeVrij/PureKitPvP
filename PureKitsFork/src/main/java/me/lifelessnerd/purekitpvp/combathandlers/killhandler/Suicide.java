@@ -50,8 +50,7 @@ public class Suicide implements CommandExecutor {
             }
             PlayerDamageDistribution damageData = player.getPersistentDataContainer().get(key, new PlayerDamageDistributionDataType());
             damageData.lastOtherDamager = "SUICIDE"; // NPE lies
-            damageData.lastPlayerDamager = null;
-            damageData.damageDistributionMap.put("SUICIDE", Integer.MAX_VALUE);
+            damageData.damageDistributionMap.put("SUICIDE", 100000);
             player.getPersistentDataContainer().set(key, new PlayerDamageDistributionDataType(), damageData);
 
         }  catch (Exception e){

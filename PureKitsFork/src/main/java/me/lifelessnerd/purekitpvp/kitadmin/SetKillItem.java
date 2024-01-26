@@ -2,7 +2,10 @@ package me.lifelessnerd.purekitpvp.kitadmin;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
 import me.lifelessnerd.purekitpvp.utils.MyStringUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -46,25 +49,25 @@ public class SetKillItem extends Subcommand {
         Player player = (Player) sender;
 
         if (!player.hasPermission("purekitpvp.admin.createkit")){
-            player.sendMessage(ChatColor.RED + "No permission!");
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.GENERIC_NO_PERMISSION.toString()));
             return true;
         }
 
         if (!(args.length >= 2)){
-            player.sendMessage(ChatColor.RED + "Please provide arguments!");
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.GENERIC_LACK_OF_ARGS.toString()));
             return false;
         }
 
         String kitNameArg = MyStringUtils.camelCaseWord(args[1]);
 
         if (!(KitConfig.get().isSet("kits." + kitNameArg))){
-            player.sendMessage(ChatColor.GRAY + "That kit does not exist.");
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.KITS_DOES_NOT_EXIST.toString()));
             return true;
         }
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         KitConfig.get().set("kits." + kitNameArg + ".killitem", itemStack);
-        player.sendMessage("Set the kill item of the kit " + kitNameArg + " to " + itemStack.getType());
+        player.sendMessage(Component.text("Set the kill item of the kit " + kitNameArg + " to " + itemStack.getType()));
         KitConfig.save();
         KitConfig.reload();
 

@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp.globalevents.events;
 
 import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
 import me.lifelessnerd.purekitpvp.globalevents.EventDataClass;
 import me.lifelessnerd.purekitpvp.utils.PlayerUtils;
 import net.kyori.adventure.text.Component;
@@ -28,7 +29,7 @@ public class DoubleHealthEvent extends AbstractEvent{
 
     @Override
     public Component getEventDescription() {
-        return LanguageConfig.lang.get("EVENTS_DOUBLE_DESC"); // TODO add lang defs
+        return LanguageConfig.lang.get(LanguageKey.EVENTS_DOUBLE_DESC.toString());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp;
 
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -43,7 +44,8 @@ public class InfoCommand extends Subcommand{
                 &6Developer: &ohttps://twitter.com/LukaDeVrij
                 &rIf you have any problems, bugs or glitches, please do reach out to me via any of the links above.
                 """;
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
+        sender.sendMessage(serializer.deserialize(message));
 
         return true;
     }
