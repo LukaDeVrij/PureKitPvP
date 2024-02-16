@@ -30,7 +30,7 @@ public class DoubleHealthListeners implements Listener {
             AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
             attribute.setBaseValue(40.0D);
             player.setHealth(40.0D);
-            // TODO and set HP to be max instantly DO THIS EVERYWHERE
+            // xTODO and set HP to be max instantly DO THIS EVERYWHERE THINK I DID
         }
 
     }

@@ -47,6 +47,7 @@ public class KitSupercommand extends Subcommand {
 
         if (args.length < 2){
             player.sendMessage(LanguageConfig.lang.get("GENERIC_LACK_OF_ARGS"));
+            return true;
         }
 
         String suboption = args[1];

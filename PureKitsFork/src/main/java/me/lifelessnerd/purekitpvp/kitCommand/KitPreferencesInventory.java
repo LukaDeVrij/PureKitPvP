@@ -22,6 +22,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,9 @@ public class KitPreferencesInventory extends AbstractInventory {
         ItemStack greenConcrete = new ItemStack(Material.GREEN_CONCRETE, 1);
         ItemMeta saveMeta = greenConcrete.getItemMeta();
         saveMeta.displayName(LanguageConfig.lang.get(LanguageKey.KITS_GUI_PREFS_SAVE.toString()));
+        ArrayList<Component> lore = new ArrayList<>();
+        lore.add(LanguageConfig.lang.get(LanguageKey.KITS_GUI_PREFS_INFO.toString()));
+        saveMeta.lore(lore);
         greenConcrete.setItemMeta(saveMeta);
         inv.setItem(49, greenConcrete);
 

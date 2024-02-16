@@ -1,5 +1,8 @@
 package me.lifelessnerd.purekitpvp.combathandlers.killhandler;
 
+import com.google.common.collect.ImmutableMap;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,6 +12,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.EnumMap;
 
 public class Suicide implements CommandExecutor {
     Plugin plugin;
@@ -30,7 +35,7 @@ public class Suicide implements CommandExecutor {
         }
 
         if (!(plugin.getConfig().getBoolean("suicide-command"))){
-            player.sendMessage("This is disabled.");
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.GENERIC_FEATURE_DISABLED.toString()));
             return true;
         }
 
@@ -58,7 +63,6 @@ public class Suicide implements CommandExecutor {
         }
 
         player.setHealth(0);
-        player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.SUICIDE, 1));
 
 
         return true;

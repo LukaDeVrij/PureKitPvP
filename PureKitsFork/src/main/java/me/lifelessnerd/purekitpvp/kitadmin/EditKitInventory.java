@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EditKitInventory extends AbstractInventory {
@@ -49,6 +50,9 @@ public class EditKitInventory extends AbstractInventory {
         ItemStack greenConcrete = new ItemStack(Material.GREEN_CONCRETE, 1);
         ItemMeta saveMeta = greenConcrete.getItemMeta();
         saveMeta.displayName(LanguageConfig.lang.get(LanguageKey.KITS_GUI_PREFS_SAVE.toString()));
+        ArrayList<Component> lore = new ArrayList<>();
+        lore.add(LanguageConfig.lang.get(LanguageKey.KITS_GUI_PREFS_INFO.toString()));
+        saveMeta.lore(lore);
         saveMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "KITS_GUI_EDIT_ITEM"), PersistentDataType.STRING, "Save");
         saveMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "KITS_GUI_EDIT_ITEM_KIT"), PersistentDataType.STRING, kitName);
         greenConcrete.setItemMeta(saveMeta);

@@ -131,7 +131,7 @@ public class CreateKit extends Subcommand {
                 Component.text("Kit Permission: ", NamedTextColor.GOLD).append(Component.text(kitPermission).color(NamedTextColor.WHITE).appendNewline().append(
                 Component.text("Kill Item: ", NamedTextColor.GOLD).append(Component.text(killItem).color(NamedTextColor.WHITE)
                 )))))))))); // Component LUL
-        player.sendMessage("You can change these in the kits.yml file, but remember to back-up the file when manually editing.");
+        player.sendMessage(Component.text("You can change these in the kits.yml file, but remember to back-up the file when manually editing."));
 
         return true;
 

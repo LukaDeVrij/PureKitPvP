@@ -1,6 +1,7 @@
 package me.lifelessnerd.purekitpvp;
 
 import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -76,7 +77,7 @@ public class AdminHelpCommand extends Subcommand {
 
             } else {
                 TextReplacementConfig config = ComponentUtils.replaceConfig("%ARG%", args[1]);
-                sender.sendMessage(LanguageConfig.lang.get("GENERIC_WRONG_ARGS").replaceText(config));
+                sender.sendMessage(LanguageConfig.lang.get(LanguageKey.GENERIC_WRONG_ARGS.toString()).replaceText(config));
             }
 
         }

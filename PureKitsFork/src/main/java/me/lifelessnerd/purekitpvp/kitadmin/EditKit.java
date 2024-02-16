@@ -2,6 +2,8 @@ package me.lifelessnerd.purekitpvp.kitadmin;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -47,12 +49,12 @@ public class EditKit extends Subcommand {
     public boolean perform(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         if (!player.hasPermission("purekitpvp.admin.editkit")){
-            player.sendMessage(ChatColor.RED + "No permission!");
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.GENERIC_NO_PERMISSION.toString()));
             return true;
         }
 
         if (!(args.length >= 2)){
-            player.sendMessage(ChatColor.RED + "Please provide arguments!");
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.GENERIC_LACK_OF_ARGS.toString()));
             return false;
         }
 
@@ -61,7 +63,7 @@ public class EditKit extends Subcommand {
 
         if(KitConfig.get().get("kits." + kitName) == null){
 
-            player.sendMessage(ChatColor.GRAY + "That kit does not exist.");
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.KITS_DOES_NOT_EXIST.toString()));
             return true;
         }
 

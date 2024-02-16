@@ -51,6 +51,7 @@ public class LanguageConfig {
                 &a/perks &r- &eSelect perks
                 &bFor admin commands, see &a/pkpvp help 2&b!
                 """);
+        defaults.put(LanguageKey.GENERIC_FEATURE_DISABLED, "&cThis feature is disabled.");
         defaults.put(LanguageKey.PERKS_ALREADY_SELECTED, "&cYou can only change perks when you have no kit selected!");
         defaults.put(LanguageKey.PERKS_GUI_TITLE, "&6Perks Menu");
         defaults.put(LanguageKey.PERKS_GUI_INFO_TITLE, "&cPerks Info");
@@ -152,6 +153,7 @@ public class LanguageConfig {
         defaults.put(LanguageKey.KITS_GUI_PREVIEW_PREFS, "&6Customize layout");
         defaults.put(LanguageKey.KITS_GUI_PREFS_TITLE, "&6Customizing > &b%KIT%");
         defaults.put(LanguageKey.KITS_GUI_PREFS_SAVE, "&6Save custom layout");
+        defaults.put(LanguageKey.KITS_GUI_PREFS_INFO, "&7The slot above resembles the off-hand.");
         defaults.put(LanguageKey.KITS_GUI_PREFS_SAVED, "&6Custom layout saved!");
         defaults.put(LanguageKey.KITS_GUI_PREFS_BACK, "&6Back to kit preview");
         defaults.put(LanguageKey.KITS_GUI_PREFS_RESET, "&cReset your layout");

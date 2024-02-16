@@ -2,6 +2,8 @@ package me.lifelessnerd.purekitpvp.kitadmin;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
@@ -45,12 +47,12 @@ public class DeleteKit extends Subcommand {
     public boolean perform(CommandSender sender, String[] args) {
 
         if (!sender.hasPermission("purekitpvp.admin.deletekit")){
-            sender.sendMessage(ChatColor.RED + "No permission!");
+            sender.sendMessage(LanguageConfig.lang.get(LanguageKey.GENERIC_NO_PERMISSION.toString()));
             return true;
         }
 
         if (!(args.length >= 2)){
-            sender.sendMessage(ChatColor.RED + "Please provide arguments!");
+            sender.sendMessage(LanguageConfig.lang.get(LanguageKey.GENERIC_LACK_OF_ARGS.toString()));
             return false;
         }
 
@@ -59,7 +61,7 @@ public class DeleteKit extends Subcommand {
 
         if(KitConfig.get().get("kits." + kitName) == null){
 
-            sender.sendMessage(ChatColor.GRAY + "That kit does not exist.");
+            sender.sendMessage(LanguageConfig.lang.get(LanguageKey.KITS_DOES_NOT_EXIST.toString()));
             return true;
         }
 

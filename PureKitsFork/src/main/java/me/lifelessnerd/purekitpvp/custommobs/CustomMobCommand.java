@@ -3,7 +3,10 @@ package me.lifelessnerd.purekitpvp.custommobs;
 import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.MobSpawnConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
+import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -109,7 +112,8 @@ public class CustomMobCommand extends Subcommand {
             return true;
         }
         else {
-            player.sendMessage("Invalid argument!");
+            TextReplacementConfig config = ComponentUtils.replaceConfig("%ARG%",args[1]);
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.GENERIC_WRONG_ARGS.toString()).replaceText(config));
         }
 
         return true;
