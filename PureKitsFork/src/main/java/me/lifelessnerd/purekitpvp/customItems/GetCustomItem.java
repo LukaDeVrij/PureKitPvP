@@ -1,5 +1,6 @@
 package me.lifelessnerd.purekitpvp.customItems;
 
+import com.google.common.collect.Lists;
 import me.lifelessnerd.purekitpvp.PluginGetter;
 import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.LootTablesConfig;
@@ -56,17 +57,17 @@ public class GetCustomItem extends Subcommand {
         Plugin plugin = PluginGetter.Plugin();
         if (args[1].equalsIgnoreCase("golden_head")){
 
-
             ItemStack goldenHead = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) goldenHead.getItemMeta();
             meta.displayName(Component.text("Golden Head").decoration(TextDecoration.ITALIC, false));
             PersistentDataContainer itemContainer = meta.getPersistentDataContainer();
             itemContainer.set(new NamespacedKey(plugin, "golden_head"), PersistentDataType.BOOLEAN, true);
-            // Deprecated lore system
+            // TODO Deprecated lore system
                 String[] loreList = {"Healing Item"};
                 meta.setLore(Arrays.asList(loreList));
             //
             meta.setOwningPlayer(Bukkit.getOfflinePlayer("PhantomTupac"));
+//            meta.setPlaceableKeys(null); // Block can not be placed on anything no workie
             goldenHead.setItemMeta(meta);
 
             player.getInventory().addItem(goldenHead);

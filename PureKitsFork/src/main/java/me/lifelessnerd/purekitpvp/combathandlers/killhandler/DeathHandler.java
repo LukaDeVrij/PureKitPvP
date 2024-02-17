@@ -245,7 +245,6 @@ public class DeathHandler implements Listener {
         // Player was killed, all damage info reset
         player.getPersistentDataContainer().remove(key);
 
-
         //Sound effects and such
         player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_HURT, 1,0);
 

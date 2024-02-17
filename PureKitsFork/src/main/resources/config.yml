@@ -1,11 +1,11 @@
 # PureKitPvP by LifelessNerd
 # Made to work with PureKits kit files
-# 2022 - 2023
+# 2022 - 2024
 
 # World in which the plugin should be active: i.e. kits, deaths, stats and such
 world: pvp
 
-# Clear inventory after player is killed (EXPERIMENTAL when setting this to false, not sure what consequences it has!)
+# Clear inventory after player is killed, default is true (BETA feature)
 inventory-clear: true
 
 # After you are killed, with what delay /kit should automatically be ran (-1 to disable this feature entirely)
@@ -99,6 +99,7 @@ double-health-length: 60
 # Scoreboard is in BETA; reloading the plugin might not fully reload scoreboard or it might introduce bugs
 # When any bugs relating to the scoreboard arise, reloading will most likely solve them.
 # If bugs are persistent; report them please -> /purekitpvp info
+# NOT WORKING ON 1.20.4!!! Library I depend on is yet to be updated to 1.20.4 - ViaVersion might solve this
 # Scoreboard Sidebar - enabled?
 scoreboard-enabled: true
 
@@ -120,7 +121,7 @@ global-stats-components:
   - KD
 
 # Amount of places for players per component:
-# !! If all components above are enabled 2 IS MAX HERE!
+# !! If all components above are enabled 2 IS MAX HERE - otherwise stuff wont fit
 global-stats-place-amount: 2
 
 # What components of the personal stats should be displayed

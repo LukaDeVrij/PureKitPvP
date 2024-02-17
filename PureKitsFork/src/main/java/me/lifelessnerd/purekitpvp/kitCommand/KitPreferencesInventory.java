@@ -7,6 +7,7 @@ import me.lifelessnerd.purekitpvp.database.entities.PlayerKitPreferences;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
 import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
 import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
+import me.lifelessnerd.purekitpvp.kitadmin.NamespacedKeys;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -62,7 +63,7 @@ public class KitPreferencesInventory extends AbstractInventory {
             if (item == null) continue;
             ItemMeta meta = item.getItemMeta();
             // Sets defaults indices as PDC - only after this we shift stuff around
-            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "KITS_GUI_PREFS_INDEX"), PersistentDataType.INTEGER, index);
+            meta.getPersistentDataContainer().set(NamespacedKeys.prefsIndexInstance, PersistentDataType.INTEGER, index);
             item.setItemMeta(meta);
 
             inv.setItem(playerPrefs.getOrDefault(index, index), item);
@@ -142,7 +143,7 @@ public class KitPreferencesInventory extends AbstractInventory {
                 ItemMeta itemMeta = item.getItemMeta();
                 int oldIndex = itemMeta.getPersistentDataContainer().get(new NamespacedKey(plugin, "KITS_GUI_PREFS_INDEX"), PersistentDataType.INTEGER);
                 if (oldIndex != index){ // Change is different from standard!
-                    System.out.println("change! item that was on " + oldIndex + " now on " + index);
+//                    System.out.println("change! item that was on " + oldIndex + " now on " + index);
                     newPrefs.put(oldIndex, index);
                 }
                 index++;

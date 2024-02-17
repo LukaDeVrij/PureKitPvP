@@ -2,12 +2,17 @@ package me.lifelessnerd.purekitpvp.kitadmin;
 
 import me.lifelessnerd.purekitpvp.Subcommand;
 import me.lifelessnerd.purekitpvp.files.KitConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
+import me.lifelessnerd.purekitpvp.files.lang.LanguageKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
@@ -49,12 +54,12 @@ public class CreateKit extends Subcommand {
         Player player = (Player) sender;
 
         if (!player.hasPermission("purekitpvp.admin.createkit")){
-            player.sendMessage(Component.text("No permission!", NamedTextColor.RED));
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.GENERIC_NO_PERMISSION.toString()));
             return true;
         }
 
         if (!(args.length > 3)){
-            player.sendMessage(Component.text("Please provide arguments!", NamedTextColor.RED));
+            player.sendMessage(LanguageConfig.lang.get(LanguageKey.GENERIC_LACK_OF_ARGS.toString()));
             return false;
         }
         //Store default arguments
@@ -104,6 +109,22 @@ public class CreateKit extends Subcommand {
         }
 
         ItemStack[] kitContents = player.getInventory().getContents();
+        int i = 0;
+        for (ItemStack item : kitContents) {
+            // This terribleness prevents a bug with the playerPrefs; when making a kit when you have the items of
+            // another kit (with certain PDC values) this hecks up the mechanism; thus we remove the PDC value associated
+            if (item == null){
+                i++;
+                continue;
+            }
+            ItemMeta itemMeta = item.getItemMeta();
+            itemMeta.getPersistentDataContainer().remove(NamespacedKeys.prefsIndexInstance);
+            // and it also has to be the exact instance of the NamespacedKey, and its quite far way thus the static class ;-;
+            item.setItemMeta(itemMeta);
+            kitContents[i] = item;
+//            System.out.println(item.getItemMeta().getPersistentDataContainer().getKeys());
+            i++;
+        }
 
         //Create kit in config
         KitConfig.get().createSection("kits." + kitName);
