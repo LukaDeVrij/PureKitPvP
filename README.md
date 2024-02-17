@@ -1,14 +1,14 @@
 
 ![\[Banner\]](https://i.imgur.com/tl2TQuw.png)
-# PureKitPvP (1.2)
+# PureKitPvP (1.3)
 
-PureKitPvP lets you create a kit pvp environment quickly, with your own custom kits. These kits work similar to the plugin PureKits, but since that plugin is abandoned, I decided to extend it with other features. A quick overview of all features:
+PureKitPvP lets you create a kit pvp environment quickly, with your own custom kits. A quick overview of all features:
 - Death Recaps
 - Kill Credit on void/environmental damage
 - Assist credit
 - Tracks Killstreaks, Kills, Deaths and a lot more stats
 - Level system based on kills, deaths and assists
-- Kits can be made in-game
+- Kits can be made in-game, layout customizable per player
 - Kits can have a kill item, an item that will be aquired on kill
 - Pick only one kit per minecraft life (reset after death)
 - Per kit permissions
@@ -23,26 +23,30 @@ PureKitPvP lets you create a kit pvp environment quickly, with your own custom k
 - Quickly die when falling in the void
 - 14 Perks, with GUI selection
 - Cosmetics: Projectile Trails, Kill Effect, Kill/Death Message
+- Global PvP-related Events
+- Customizable language file: most player-visible messages can be changed
 
 ## Commands
 All commands can be seen in-game via _/purekitpvp help_.
 
 ### Admin commands
-* **/purekitpvp createkit \<kitName> \<displayColor> \<kitIcon> \<kitPermission> \<killItem>** 
-	* Create a kit with the contents of your inventory
-		* \<kitIcon> / \<killItem> - _All material names within the autocomplete menu_
-			* Use _air_ if you don't want a kill item  
-		
-* **/purekitpvp deletekit\<kitName>** 
-	*  Remove a kit 
+All admin commands are preceded with /purekitpvp.
+* **/purekitpvp kit <create/delete/edit/setkillitem>**
+	* **create**  \<kitName> \<displayColor> \<kitIcon> \<kitPermission> \<killItem>
+		* Create a kit with the contents of your inventory
+			* \<kitIcon> / \<killItem> - _All material names within the autocomplete menu_
+				* Use _air_ if you don't want a kill item 
+	*  **delete** \<kitName>
+		*  Remove a kit 
+	*  **edit** \<kitName>
+		*  Edit a kit's contents in a GUI 
+	*  **setkillitem** \<kitName>
+		* Set the killitem to the item in your hand
 
-* **/purekitpvp resetkit** 
-	* Reset your kit (dying will also reset your kit)
+* **/purekitpvp resetkit**
+	* Resets kit, if the executor has the sufficient permission.
 
-* **/purekitpvp setkillitem \<kitName>** 
-	* Set the killitem to the item in your hand
-
-* **/purekitpvp createloottable \<name> \<lore> \<displayName>** 
+* **/purekitpvp createloottable** **\<name> \<lore> \<displayName>** 
 	* Create a loottable of the chest you are looking at
 		* \<lore> - _The lore on the item chest that will be right clicked for the random items_
 		* \<displayName> -_The displayname on the item chest that will be right clicked for the random items_
@@ -55,35 +59,47 @@ All commands can be seen in-game via _/purekitpvp help_.
 		* \<custom_mob> requires a custom mob name
 
 * **/purekitpvp custommob \<create/set/delete>**
-	* \<create> \<name> \<type>
+	* **create** \<name> \<type>
 		* Creates custom mob with a certain type, can be any entity (mobs are officially supported)
-	* \<set \<name> \<mainhand/offhand/boots/leggings/chestplate/helmet/child> 
+	* **set** \<name> \<mainhand/offhand/boots/leggings/chestplate/helmet/child> 
 		* Sets a property of a mob to the item in hand, or with the child property; true or false must be specified
-	* \<delete> \<name>
+	* **delete** \<name>
 		* Deletes a custom mob
+
+* **/purekitpvp event \<start/stop/pause>**
+	* **start** \<eventName>
+		* You may only start one event at a time. Timer can be skipped to the end of the event timer.
+	* **stop** \<eventName>
+		* Stops current event.
+	*  **pause** 
+		* Pauses the global event loop timer. Events already active stay active. If you want the global event loop to stop, you may disable it in the config, or pause when no event is active to keep any events from triggering.
 
 * **/purekitpvp getkitstats** 
 	* Outputs kit usage stats to see what kit is most popular (for balancing)
 
 * **/purekitpvp \<help/info/reload>** 
-	* Self explanatory
+	* Reload does not fully reload the config file; any settings pertaining to the event loop are not updated, because the event loop is continuous.
 
 ### Player commands
 * **/kit** 
 	* Show Kit GUI
 ![\[IMG\]](https://i.imgur.com/JLFvel3.png)
+Kits can be customized per player; see video:
+Per Player Preferences feature showcase - https://youtu.be/wVQJzBPUlQU
+
+
 * **/perks** 
-	* Show Perk GUI, click on a slot to change the perk in that slot (see img2)
+	* Show Perk GUI, click on a slot to change the perk in that slot (see image)
 ![\[IMG\]](https://i.imgur.com/Yau99d1.png)
 ![\[IMG\]](https://i.imgur.com/DB81qVL.png)
 * **/cosmetics**
 	* Brings up cosmetics menu
 	* In this menu, the kill effect, death/kill message and projectile trail can be changed
 
-* **/getkit <kitName>** 
+* **/getkit \<kitName>** 
 	* Get a kit directly
 
-* **/stats <player>** 
+* **/stats \<player>** 
 	* Show stats of any player
 
 ![enter image description here](https://i.imgur.com/ATOzlVD.png)
@@ -93,9 +109,11 @@ All commands can be seen in-game via _/purekitpvp help_.
 	* Enabling this improves accuracy of death messages 
 
 ## Files
-There are several files, most are used internally to track stats and such. The config has some feature toggles that are explained there. 
-I would recommend not editing the kits.yml unless you know how to check if your YAML is valid, because the file may reset when wrong YAML is parsed (don't ask me why).
-For the loottables.yml, follow the format that is provided in the example in the file. Write lore bare, and the displayname with single apostrophes (like so: '&6Lootchest'). 
+There are several files, most are used internally to track stats and such. The **config.yml** has some feature toggles that are explained there. 
+I would recommend not editing the **kits.yml** unless you know how to check if your YAML is valid, because the file may reset when wrong YAML is parsed (don't ask me why).
+For the **loottables.yml**, follow the format that is provided in the example in the file. Write lore bare, and the displayname with single apostrophes (like so: '&6Lootchest'). 
+The **lang.yml** file has a plethora of language keys, each of which corresponds with a single or more instances of text in-game. Most text that is visible to a default player - that is a non-admin - is customizable. Item tooltips in GUI's, scoreboard text, all perk explanations et cetera. Be sure to follow the format of each key individually, since some are made for single-line text (such as a display name of an item), and others for multiple lines of lore (think perk explanations). Resetting a value is as easy as deleting it from the file and reloading: missing values are always added back in with their default values. Text that pertains to the kill messages is currently not customizable; the system is not made for this and I question whether the two systems can live side-by-side. 
+If you have any questions please reach out via Discord (see #Support).
 
 ## How to create a kit
 *Also see the video that covers this topic below.*
@@ -123,8 +141,11 @@ https://youtu.be/wZcZ4DcRfgU - Create Kits and Loot tables
 
 https://youtu.be/tLelKptr6wA - Custom Mobs and how to use them
 
-## Known issues
+https://youtu.be/wVQJzBPUlQU - Per Player Kit Preferences feature showcase 
+
+## Known issues & Support
+Issues can be found [here](https://github.com/LifelessNerd/PureKitPvP/issues).
 I am sure there will be issues, but finding all of them takes a lot of testing time. Please submit any problems!
 
-If there are any problems, create a message on [Spigot](https://bit.ly/PureKitPvPSpigotMC), add them on GitHub, [here](https://github.com/LifelessNerd/PureKitPvP), or DM me on [Twitter](https://twitter.com/lukadevrij).
+If there are any problems, create a message on [Spigot](https://bit.ly/PureKitPvPSpigotMC), add them on GitHub, [here](https://github.com/LifelessNerd/PureKitPvP), or DM me on [Twitter](https://twitter.com/lukadevrij). For direct support you may also join the support [Discord server](https://discord.com/invite/8n65jSEkVf).
 
