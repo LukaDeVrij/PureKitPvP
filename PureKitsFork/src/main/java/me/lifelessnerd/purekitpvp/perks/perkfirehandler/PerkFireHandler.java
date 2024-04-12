@@ -6,6 +6,7 @@ import me.lifelessnerd.purekitpvp.files.PerkData;
 import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -218,11 +219,12 @@ public class PerkFireHandler {
                     //Main logic
                     double damageDealt = event.getDamage();
                     double regen = damageDealt / 2;
-
-                    if (player.getHealth() + regen <= 20){
+                    double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                    System.out.println(maxHealth);
+                    if (player.getHealth() + regen <= maxHealth){
                         player.setHealth(player.getHealth() + regen);
                     } else {
-                        player.setHealth(20);
+                        player.setHealth(maxHealth);
                     }
 
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 1,0);
