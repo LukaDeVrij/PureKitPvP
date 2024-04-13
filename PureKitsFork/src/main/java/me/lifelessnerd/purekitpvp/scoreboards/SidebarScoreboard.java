@@ -45,11 +45,13 @@ public class SidebarScoreboard implements Listener {
             switch(panel){
                 case "GlobalStats":
                     Sidebar<Component> globalStatsSidebar = ProtocolSidebar.newAdventureSidebar(titleComponent, plugin);
+                    globalStatsSidebar.getObjective().scoreNumberFormatBlank();
                     fillGlobalSidebar(globalStatsSidebar);
                     enabledSidebars.add(globalStatsSidebar);
                     break;
                 case "PersonalStats":
                     Sidebar<Component> personalStatsSidebar = ProtocolSidebar.newAdventureSidebar(titleComponent, plugin);
+                    personalStatsSidebar.getObjective().scoreNumberFormatBlank();
                     fillPersonalSidebar(personalStatsSidebar);
                     enabledSidebars.add(personalStatsSidebar);
                     break;
@@ -96,6 +98,7 @@ public class SidebarScoreboard implements Listener {
             switch(component) {
                 case "Killstreak":
                     sidebar.addLine(LanguageConfig.lang.get("SCOREBOARD_GLOBAL_KILLSTREAK"));
+
                     createdLeaderboard = createLeaderboard(".killstreak", places);
 
                     break;

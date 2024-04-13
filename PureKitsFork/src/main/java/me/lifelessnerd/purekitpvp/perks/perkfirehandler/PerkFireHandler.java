@@ -220,7 +220,7 @@ public class PerkFireHandler {
                     double damageDealt = event.getDamage();
                     double regen = damageDealt / 2;
                     double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-                    System.out.println(maxHealth);
+//                    System.out.println(maxHealth);
                     if (player.getHealth() + regen <= maxHealth){
                         player.setHealth(player.getHealth() + regen);
                     } else {
