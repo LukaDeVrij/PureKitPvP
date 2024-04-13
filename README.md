@@ -1,6 +1,6 @@
 
 ![\[Banner\]](https://i.imgur.com/tl2TQuw.png)
-# PureKitPvP (1.3)
+# PureKitPvP (1.3.1)
 
 PureKitPvP lets you create a kit pvp environment quickly, with your own custom kits. A quick overview of all features:
 - Death Recaps
