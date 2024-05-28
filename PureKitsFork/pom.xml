@@ -49,7 +49,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <outputDirectory>F:\Minecraft\Servers\MC 1.20.4 Server\plugins</outputDirectory>
+                    <outputDirectory>F:\Minecraft\Servers\MC 1.20.6 Server\plugins</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
@@ -74,7 +74,6 @@
             <id>sonatype-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
-
     </repositories>
 
     <dependencies>
@@ -88,7 +87,8 @@
         <dependency>
             <groupId>me.catcoder</groupId>
             <artifactId>bukkit-sidebar</artifactId>
-            <version>6.2.6-SNAPSHOT</version>
+            <version>6.2.7-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-jdbc -->
         <dependency>
@@ -96,6 +96,13 @@
             <artifactId>ormlite-jdbc</artifactId>
             <version>6.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.steveice10/opennbt -->
+        <dependency>
+            <groupId>com.github.steveice10</groupId>
+            <artifactId>opennbt</artifactId>
+            <version>1.6</version>
+        </dependency>
+
 
     </dependencies>
 </project>
