@@ -94,6 +94,7 @@ public final class PureKitPvP extends JavaPlugin {
         LanguageConfig.save();
         LanguageConfig.loadLanguage();
 
+
         SidebarScoreboard scoreboard = new SidebarScoreboard(this);
 
         getCommand("getkit").setExecutor(new GetKit(this));

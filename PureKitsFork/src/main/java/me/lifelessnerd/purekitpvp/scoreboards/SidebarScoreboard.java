@@ -8,6 +8,7 @@ import me.lifelessnerd.purekitpvp.utils.ComponentUtils;
 import me.lifelessnerd.purekitpvp.utils.DoubleUtils;
 import me.lifelessnerd.purekitpvp.utils.PlayerUtils;
 
+import me.lifelessnerd.purekitpvp.versioning.MinecraftVersion;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -28,6 +29,7 @@ public class SidebarScoreboard implements Listener {
         if (plugin.getConfig().getBoolean("scoreboard-enabled")){
             refreshLeaderboard();
         }
+        System.out.println(MinecraftVersion.getVersion());
 
     }
 
