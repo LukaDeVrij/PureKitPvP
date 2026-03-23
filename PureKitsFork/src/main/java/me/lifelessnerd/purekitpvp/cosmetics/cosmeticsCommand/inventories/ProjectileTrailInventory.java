@@ -40,7 +40,7 @@ public class ProjectileTrailInventory implements Listener {
         for (String projectileTrail : lib.trailEffects.keySet()) {
             ItemStack effectItem = new ItemStack(lib.trailEffects.get(projectileTrail), 1);
             ItemMeta itemMeta = effectItem.getItemMeta();
-            itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+            itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             Component displayName = Component.text(MyStringUtils.cosmeticIdToItemName(projectileTrail));
@@ -58,7 +58,7 @@ public class ProjectileTrailInventory implements Listener {
             if (configValue.equalsIgnoreCase(projectileTrail)){
                 displayName = displayName.color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false);
                 displayName = displayName.decoration(TextDecoration.BOLD, true);
-                itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+                itemMeta.addEnchant(Enchantment.SHARPNESS, 1, true);
             } else {
                 displayName = displayName.color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false);;
             }

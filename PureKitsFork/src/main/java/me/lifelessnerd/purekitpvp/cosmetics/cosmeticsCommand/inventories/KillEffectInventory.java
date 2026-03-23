@@ -41,7 +41,7 @@ public class KillEffectInventory implements Listener {
         for (String killEffect : lib.killEffects.keySet()) {
             ItemStack effectItem = new ItemStack(lib.killEffects.get(killEffect), 1);
             ItemMeta itemMeta = effectItem.getItemMeta();
-            itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+            itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             Component displayName = Component.text(MyStringUtils.cosmeticIdToItemName(killEffect));
@@ -59,7 +59,7 @@ public class KillEffectInventory implements Listener {
             if (configValue.equalsIgnoreCase(killEffect)){
                 displayName = displayName.color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false);
                 displayName = displayName.decoration(TextDecoration.BOLD, true);
-                itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+                itemMeta.addEnchant(Enchantment.SHARPNESS, 1, true);
             } else {
                 displayName = displayName.color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false);;
             }

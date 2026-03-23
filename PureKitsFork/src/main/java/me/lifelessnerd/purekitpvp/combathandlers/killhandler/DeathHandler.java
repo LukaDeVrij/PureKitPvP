@@ -103,7 +103,7 @@ public class DeathHandler implements Listener {
             player.setExp(0f);
             player.setLevel(0);
             player.setArrowsInBody(0);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5, 254)); //Kinda jank, works tho
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 5, 254)); //Kinda jank, works tho
             player.setFireTicks(0);
             player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 5, 1));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10 , 1));

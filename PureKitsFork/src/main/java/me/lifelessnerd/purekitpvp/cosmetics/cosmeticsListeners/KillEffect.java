@@ -81,7 +81,7 @@ public class KillEffect implements Listener {
 
     public static void firework(Location location) {
         location = location.add(0,1.4,0);
-        Firework fw = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+        Firework fw = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK_ROCKET);
         FireworkMeta fwm = fw.getFireworkMeta();
         fwm.addEffect(FireworkEffect.builder().withColor(Color.RED).withColor(Color.WHITE).flicker(true).build());
         fw.setMetadata("nodamage", new FixedMetadataValue(plugin, true));
@@ -104,7 +104,7 @@ public class KillEffect implements Listener {
         for (float i = 0.5f; i < 1.8f; i += 0.1) {
             float rndFloat = rnd.nextFloat() / 10;
             location.getWorld().spawnParticle(
-                    Particle.BLOCK_CRACK,
+                    Particle.BLOCK,
                     location.add(rndFloat,i,rndFloat),
                     20,
                     Material.REDSTONE_BLOCK.createBlockData()

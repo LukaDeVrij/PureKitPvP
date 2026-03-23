@@ -102,7 +102,7 @@ public class KitsGUI implements TabExecutor {
 
             ItemStack itemStack = new ItemStack(Material.BARRIER);
             ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+            itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
             // Set gui item
@@ -160,14 +160,14 @@ public class KitsGUI implements TabExecutor {
                     String amount = String.valueOf(item.getAmount());
                     lore.add(Component.text(amount + "x ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false).append(
                             Component.text(MyStringUtils.itemCamelCase(item.getType().toString()), NamedTextColor.YELLOW)));
-                    lore.add(Component.text("    " + MyStringUtils.itemMetaToEffects(item.getItemMeta().toString()), NamedTextColor.GRAY));
+                    lore.add(Component.text("    " + MyStringUtils.potionMetaToEffects(item.getItemMeta()), NamedTextColor.GRAY));
 
                 } else if (item.getType().toString().equalsIgnoreCase("POTION")){
                     //Do stuff with potions
                     String amount = String.valueOf(item.getAmount());
                     lore.add(Component.text(amount + "x ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false).append(
                             Component.text(MyStringUtils.itemCamelCase(item.getType().toString()), NamedTextColor.YELLOW)));
-                    lore.add(Component.text("    " + MyStringUtils.itemMetaToEffects(item.getItemMeta().toString()), NamedTextColor.GRAY));
+                    lore.add(Component.text("    " + MyStringUtils.potionMetaToEffects(item.getItemMeta()), NamedTextColor.GRAY));
 
                 } else if (item.getType().toString().equalsIgnoreCase("PLAYER_HEAD")){
 
@@ -189,7 +189,7 @@ public class KitsGUI implements TabExecutor {
                             Component.text(MyStringUtils.itemCamelCase(item.getType().toString()), NamedTextColor.YELLOW)));
                     //If it has enchants, view them
                     if (!(item.getEnchantments().isEmpty())){
-                        lore.add(Component.text("    " + MyStringUtils.mapStringToEnchantment(item.getEnchantments().toString()), NamedTextColor.GRAY));
+                        lore.add(Component.text("    " + MyStringUtils.mapEnchantmentsToString(item.getEnchantments()), NamedTextColor.GRAY));
                     }
 
                 }

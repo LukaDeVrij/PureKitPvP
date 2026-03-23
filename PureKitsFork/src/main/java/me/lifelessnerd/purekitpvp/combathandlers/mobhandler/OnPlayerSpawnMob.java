@@ -33,7 +33,7 @@ public class OnPlayerSpawnMob implements Listener {
     }
 
     @EventHandler
-    public void playerUseSpawnEgg(PlayerInteractEvent e){
+    public void playerUseSpawnEgg(PlayerInteractEvent e) {
 
         Player player = e.getPlayer();
 
@@ -41,26 +41,25 @@ public class OnPlayerSpawnMob implements Listener {
             return;
         }
 
-        if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK))  {
+        if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
             return;
 
         }
 
-        if (!(player.getInventory().getItemInMainHand().getType().toString().contains("_SPAWN_EGG"))){
+        if (!(player.getInventory().getItemInMainHand().getType().toString().contains("_SPAWN_EGG"))) {
             return;
         }
 
         EntityType entityTypeTBS;
         ItemStack item = player.getInventory().getItemInMainHand();
         boolean customMob = false;
-        if (item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "custom_mob_id"), PersistentDataType.STRING)){
+        if (item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "custom_mob_id"), PersistentDataType.STRING)) {
             // Custom Mob has been attempted to spawn
             String customMobId = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "custom_mob_id"), PersistentDataType.STRING);
             String mobType = MobSpawnConfig.get().getString(customMobId + ".type");
             entityTypeTBS = EntityType.valueOf(mobType);
             customMob = true;
-        }
-        else {
+        } else {
             String[] entityToBeSpawnedList = item.getType().toString().split("_SPAWN_EGG");
             String entityToBeSpawned = entityToBeSpawnedList[0];
 
@@ -71,8 +70,8 @@ public class OnPlayerSpawnMob implements Listener {
         Location lookPlace = e.getInteractionPoint();
         Entity spawnedEntity = player.getWorld().spawnEntity(lookPlace, entityTypeTBS);
 
-        if (spawnedEntity instanceof Chicken){
-            if (plugin.getConfig().getBoolean("chicken-prevention")){
+        if (spawnedEntity instanceof Chicken) {
+            if (plugin.getConfig().getBoolean("chicken-prevention")) {
                 player.sendMessage(Component.text("ChickenPrevention prevented your chicken from spawning.").color(NamedTextColor.RED));
                 return;
             }
@@ -94,7 +93,7 @@ public class OnPlayerSpawnMob implements Listener {
         if (customMob) {
             String customModId = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "custom_mob_id"), PersistentDataType.STRING);
 //            System.out.println(customModId);
-            if (spawnedEntity instanceof Mob){
+            if (spawnedEntity instanceof Mob) {
                 ItemStack mainHand = MobSpawnConfig.get().getItemStack(customModId + ".mainhand");
                 ((Mob) spawnedEntity).getEquipment().setItemInMainHand(mainHand);
                 ItemStack offHand = MobSpawnConfig.get().getItemStack(customModId + ".offhand");
@@ -141,12 +140,13 @@ public class OnPlayerSpawnMob implements Listener {
 
 
     }
+
     // Stolen from https://www.spigotmc.org/threads/how-do-i-get-the-nearest-player.506654/
     public static @Nullable Player getNearestPlayer(Player player) {
         World world = player.getWorld();
         Location location = player.getLocation();
         ArrayList<Player> playersInWorld = new ArrayList<>(world.getEntitiesByClass(Player.class));
-        if(playersInWorld.size()==1) return null;
+        if (playersInWorld.size() == 1) return null;
         playersInWorld.remove(player); //Removes player itself
         playersInWorld.sort(Comparator.comparingDouble(o -> o.getLocation().distanceSquared(location)));
         return playersInWorld.get(0);
@@ -160,13 +160,13 @@ public class OnPlayerSpawnMob implements Listener {
         if (!(entity.getWorld().getName().equalsIgnoreCase(plugin.getConfig().getString("world")))) {
             return;
         }
-        if(toBeCancelled){
+        if (toBeCancelled) {
             e.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void mobTargetEvent(EntityTargetEvent e){
+    public void mobTargetEvent(EntityTargetEvent e) {
 
         Entity entity = e.getEntity();
         Entity target = e.getTarget();
@@ -180,9 +180,11 @@ public class OnPlayerSpawnMob implements Listener {
         String entityName = entity.getName();
         String playerName = entityName.split("'s")[0]; // Gets name of player who spawned it
         Player player = Bukkit.getPlayerExact(playerName); // TODOX: This is quite janky, requires testing: seems to work!
-        Player closestPlayer = getNearestPlayer(player); // NPE has no effect it seems; target becomes null and zombie is fine with that
-        ((Monster) entity).setTarget(closestPlayer);
+        if (player != null) {
+            Player closestPlayer = getNearestPlayer(player); // NPE has no effect it seems; target becomes null and zombie is fine with that
+            ((Monster) entity).setTarget(closestPlayer);
 //        System.out.println(entity + "'s target set to " + closestPlayer);
+        }
 
 
     }

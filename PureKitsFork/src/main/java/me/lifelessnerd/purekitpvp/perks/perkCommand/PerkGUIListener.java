@@ -74,7 +74,7 @@ public class PerkGUIListener implements Listener {
 
                     ItemStack icon = new ItemStack(perkLib.perkIcons.get(perk));
                     ItemMeta itemMeta = icon.getItemMeta();
-                    itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                    itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
                     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                     itemMeta.displayName(Component.text(perk).color(TextColor.color(200, 0, 0)).decoration(TextDecoration.ITALIC, false));
 
@@ -82,7 +82,7 @@ public class PerkGUIListener implements Listener {
                     for(String selectedPerkKey : PerkData.get().getConfigurationSection(player.getName()).getKeys(false)){
                         String selectedPerk = PerkData.get().getString(player.getName() + "." + selectedPerkKey);
                         if (perk.equals(selectedPerk)){
-                            itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+                            itemMeta.addEnchant(Enchantment.SHARPNESS, 1, true);
                             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                             itemMeta.displayName(Component.text(perk).color(TextColor.color(50, 200, 0)).decoration(TextDecoration.BOLD, true).decoration(TextDecoration.ITALIC, false));
                         }

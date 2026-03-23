@@ -7,7 +7,6 @@ import me.lifelessnerd.purekitpvp.combathandlers.killhandler.DeathHandler;
 import me.lifelessnerd.purekitpvp.database.KitDatabase;
 import me.lifelessnerd.purekitpvp.files.lang.LanguageConfig;
 import me.lifelessnerd.purekitpvp.globalevents.events.DoubleHealthListeners;
-import me.lifelessnerd.purekitpvp.scoreboards.SidebarScoreboard;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsCommand;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.CosmeticsGUIListener;
 import me.lifelessnerd.purekitpvp.cosmetics.cosmeticsCommand.inventories.KillEffectInventory;
@@ -93,8 +92,6 @@ public final class PureKitPvP extends JavaPlugin {
         LanguageConfig.get().options().copyDefaults(true);
         LanguageConfig.save();
         LanguageConfig.loadLanguage();
-
-        SidebarScoreboard scoreboard = new SidebarScoreboard(this);
 
         getCommand("getkit").setExecutor(new GetKit(this));
         getCommand("kit").setExecutor(new KitsGUI(this));

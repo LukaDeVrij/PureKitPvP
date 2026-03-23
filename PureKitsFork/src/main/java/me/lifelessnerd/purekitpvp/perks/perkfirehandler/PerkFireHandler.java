@@ -60,7 +60,7 @@ public class PerkFireHandler {
                     break;
                 case "BULLDOZER":
 
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 60, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 60, 1));
                     break;
                 case "KNOWLEDGE":
 
@@ -72,7 +72,7 @@ public class PerkFireHandler {
                     ItemMeta weaponMeta = weapon.getItemMeta();
                     if (weaponMeta == null){continue;} // If weapon is hand TODO maybe - check if it is a weapon?
                     if (weapon.getType() == Material.BOW){continue;} // meh
-                    int sharpnessLevel = weaponMeta.getEnchantLevel(Enchantment.DAMAGE_ALL);
+                    int sharpnessLevel = weaponMeta.getEnchantLevel(Enchantment.SHARPNESS);
 
                     double rnd = Math.random();
                     if(rnd * 100 <= (100 - plugin.getConfig().getInt("notoriety-chance-decrease") * sharpnessLevel)) {
@@ -84,8 +84,8 @@ public class PerkFireHandler {
                                 continue;
                             }
                         }
-                        weaponMeta.removeEnchant(Enchantment.DAMAGE_ALL);
-                        weaponMeta.addEnchant(Enchantment.DAMAGE_ALL, sharpnessLevel + 1, true);
+                        weaponMeta.removeEnchant(Enchantment.SHARPNESS);
+                        weaponMeta.addEnchant(Enchantment.SHARPNESS, sharpnessLevel + 1, true);
                         weapon.setItemMeta(weaponMeta);
                         player.sendMessage(LanguageConfig.lang.get("PERKS_PERK_NOTORIETY_UPGRADE").
                                 replaceText(ComponentUtils.replaceConfig("%CHANCE%",
@@ -110,7 +110,7 @@ public class PerkFireHandler {
                     ItemMeta weaponMarksmanMeta = weaponMarksman.getItemMeta();
                     if (weaponMarksman.getType() != Material.BOW){continue;}
                     if (weaponMarksmanMeta == null){continue;} // If weapon is hand
-                    int powerLevel = weaponMarksmanMeta.getEnchantLevel(Enchantment.ARROW_DAMAGE);
+                    int powerLevel = weaponMarksmanMeta.getEnchantLevel(Enchantment.POWER);
 
                     double rnd2 = Math.random();
                     if(rnd2 * 100 <= (100 - plugin.getConfig().getInt("notoriety-chance-decrease") * powerLevel)) {
@@ -123,8 +123,8 @@ public class PerkFireHandler {
                                 continue;
                             }
                         }
-                        weaponMarksmanMeta.removeEnchant(Enchantment.ARROW_DAMAGE);
-                        weaponMarksmanMeta.addEnchant(Enchantment.ARROW_DAMAGE, powerLevel + 1, true);
+                        weaponMarksmanMeta.removeEnchant(Enchantment.POWER);
+                        weaponMarksmanMeta.addEnchant(Enchantment.POWER, powerLevel + 1, true);
                         weaponMarksman.setItemMeta(weaponMarksmanMeta);
                         player.sendMessage(LanguageConfig.lang.get("PERKS_PERK_MARKSMAN_UPGRADE").
                                 replaceText(ComponentUtils.replaceConfig("%CHANCE%",
@@ -245,7 +245,7 @@ public class PerkFireHandler {
             switch(perk){
                 case "SNOWMAN":
                     if (event.getEntity() instanceof Snowball) {
-                        damaged.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
+                        damaged.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 60, 0));
                     }
                     break;
                 case "DISRUPTOR":

@@ -186,6 +186,7 @@ public class LanguageConfig {
         defaults.put(LanguageKey.SCOREBOARD_GLOBAL_KILLS, "  &dKills");
         defaults.put(LanguageKey.SCOREBOARD_GLOBAL_KD, "  &dK/D Ratio");
         defaults.put(LanguageKey.SCOREBOARD_GLOBAL_LEVEL, "&dLevel");
+
         defaults.put(LanguageKey.STATS_NO_STATS, "That player has no stats attached to them!");
         defaults.put(LanguageKey.STATS_TITLE, "%PLAYER% &bStatistics");
         defaults.put(LanguageKey.STATS_LEVEL_UP, "&6You leveled up to LEVEL %VALUE%!");

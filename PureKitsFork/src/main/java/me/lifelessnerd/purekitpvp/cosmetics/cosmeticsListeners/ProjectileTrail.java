@@ -106,16 +106,16 @@ public class ProjectileTrail implements Listener {
                         location.getWorld().spawnParticle(Particle.END_ROD, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, null, true);
                         break;
                     case "water_drip":
-                        location.getWorld().spawnParticle(Particle.DRIP_WATER, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, null, true);
+                        location.getWorld().spawnParticle(Particle.DRIPPING_WATER, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, null, true);
                         break;
                     case "heart":
                         location.getWorld().spawnParticle(Particle.HEART, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, null, true);
                         break;
                     case "firework":
-                        location.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, null, true);
+                        location.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, null, true);
                         break;
                     case "totem":
-                        location.getWorld().spawnParticle(Particle.TOTEM, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, null, true);
+                        location.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, null, true);
                         break;
                     case "smoke":
                         location.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, location, plugin.getConfig().getInt("projectile-trail-count"), 0.1, 0.1, 0.1, 0.001, null, true);

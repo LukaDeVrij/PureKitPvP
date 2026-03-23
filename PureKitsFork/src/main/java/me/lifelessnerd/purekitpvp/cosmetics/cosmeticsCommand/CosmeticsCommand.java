@@ -51,7 +51,7 @@ public CosmeticsCommand(Plugin plugin) {
         // Kill cosmetics button
         ItemStack killEffectButton = new ItemStack(Material.DIAMOND_SWORD);
         ItemMeta killEffectButtonMeta = killEffectButton.getItemMeta();
-        killEffectButtonMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        killEffectButtonMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         killEffectButtonMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         killEffectButtonMeta.displayName(Component.text("Kill Effect").color(TextColor.color(200, 152, 0)).decoration(TextDecoration.ITALIC, false));
         List<Component> loreList2 = new ArrayList<>();
